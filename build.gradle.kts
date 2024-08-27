@@ -3,6 +3,7 @@ plugins {
     idea
     id("org.springframework.boot") version "3.3.3"
     id("io.spring.dependency-management") version "1.1.6"
+    id("com.diffplug.spotless") version "6.25.0"
 }
 
 group = "dev.paw565pl"
@@ -18,6 +19,19 @@ idea {
     module {
         isDownloadJavadoc = true
         isDownloadSources = true
+    }
+}
+
+spotless {
+    java {
+        googleJavaFormat("1.23.0").reflowLongStrings()
+        importOrder()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+        indentWithSpaces()
+        formatAnnotations()
+        toggleOffOn()
     }
 }
 
