@@ -31,14 +31,18 @@ repositories {
     mavenCentral()
 }
 
+val springdocVersion = "2.6.0"
+val modelMapperVersion = "3.2.1"
+val modelMapperRecordVersion = "1.0.0"
+
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.6.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:${springdocVersion}")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-validation")
-    implementation("org.modelmapper:modelmapper:3.2.1")
-    implementation("org.modelmapper:modelmapper-module-record:1.0.0")
+    implementation("org.modelmapper:modelmapper:${modelMapperVersion}")
+    implementation("org.modelmapper:modelmapper-module-record:${modelMapperRecordVersion}")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
     compileOnly("org.projectlombok:lombok")
