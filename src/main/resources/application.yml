@@ -12,3 +12,10 @@ springdoc:
     path: /api/docs
   swagger-ui:
     path: /swagger-ui.html
+
+server:
+  compression:
+    enabled: true
+  error:
+    include-message: always
+    include-stacktrace: never
