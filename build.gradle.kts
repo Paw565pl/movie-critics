@@ -24,7 +24,7 @@ idea {
 
 spotless {
     java {
-        googleJavaFormat("1.23.0").reflowLongStrings()
+        googleJavaFormat("1.23.0").aosp().reflowLongStrings()
         importOrder()
         removeUnusedImports()
         trimTrailingWhitespace()
