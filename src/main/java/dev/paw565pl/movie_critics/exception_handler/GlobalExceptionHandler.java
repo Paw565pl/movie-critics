@@ -1,4 +1,4 @@
-package dev.paw565pl.movie_critics.handler;
+package dev.paw565pl.movie_critics.exception_handler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
