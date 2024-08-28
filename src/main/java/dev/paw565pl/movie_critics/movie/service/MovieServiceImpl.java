@@ -1,12 +1,11 @@
 package dev.paw565pl.movie_critics.movie.service;
 
 import dev.paw565pl.movie_critics.movie.dto.MovieDto;
+import dev.paw565pl.movie_critics.movie.dto.MovieFilterDto;
 import dev.paw565pl.movie_critics.movie.mapper.MovieMapper;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie.specification.MovieSpecification;
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -26,31 +25,20 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Page<MovieResponse> findAll(
-            Pageable pageable,
-            String title,
-            String rated,
-            LocalDate startReleasedDate,
-            LocalDate endReleasedDate,
-            List<Long> genresIds,
-            List<Long> directorsIds,
-            List<Long> writersIds,
-            List<Long> actorsIds,
-            String language,
-            String country) {
-        var filters =
-                Specification.where(MovieSpecification.titleContainsIgnoreCase(title))
-                        .and(MovieSpecification.ratedEqualsIgnoreCase(rated))
-                        .and(MovieSpecification.releasedAfterOrEquals(startReleasedDate))
-                        .and(MovieSpecification.releasedBeforeOrEquals(endReleasedDate))
-                        .and(MovieSpecification.genresIdsContains(genresIds))
-                        .and(MovieSpecification.directorsIdsContains(directorsIds))
-                        .and(MovieSpecification.writersIdsContains(writersIds))
-                        .and(MovieSpecification.actorsIdsContains(actorsIds))
-                        .and(MovieSpecification.languageContainsIgnoreCase(language))
-                        .and(MovieSpecification.countryContainsIgnoreCase(country));
+    public Page<MovieResponse> findAll(MovieFilterDto filters, Pageable pageable) {
+        var specification =
+                Specification.where(MovieSpecification.titleContainsIgnoreCase(filters.title()))
+                        .and(MovieSpecification.ratedEqualsIgnoreCase(filters.rated()))
+                        .and(MovieSpecification.releasedAfterOrEquals(filters.startReleasedDate()))
+                        .and(MovieSpecification.releasedBeforeOrEquals(filters.endReleasedDate()))
+                        .and(MovieSpecification.genresIdsContains(filters.genresIds()))
+                        .and(MovieSpecification.directorsIdsContains(filters.directorsIds()))
+                        .and(MovieSpecification.writersIdsContains(filters.writersIds()))
+                        .and(MovieSpecification.actorsIdsContains(filters.actorsIds()))
+                        .and(MovieSpecification.languageContainsIgnoreCase(filters.language()))
+                        .and(MovieSpecification.countryContainsIgnoreCase(filters.country()));
 
-        return movieRepository.findAll(filters, pageable).map(movieMapper::toResponseDto);
+        return movieRepository.findAll(specification, pageable).map(movieMapper::toResponseDto);
     }
 
     @Override
