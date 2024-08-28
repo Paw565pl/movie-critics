@@ -5,6 +5,8 @@ import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie.service.MovieService;
 import jakarta.validation.Valid;
+import java.time.LocalDate;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -21,8 +23,15 @@ public class MovieRestController {
     }
 
     @GetMapping
-    public Page<MovieResponse> findAll(Pageable pageable) {
-        return movieService.findAll(pageable);
+    public Page<MovieResponse> findAll(
+            Pageable pageable,
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String rated,
+            @RequestParam(required = false) LocalDate startReleasedDate,
+            @RequestParam(required = false) LocalDate endReleasedDate,
+            @RequestParam(required = false) List<Long> genresIds) {
+        return movieService.findAll(
+                pageable, title, rated, startReleasedDate, endReleasedDate, genresIds);
     }
 
     @GetMapping("/{id}")
