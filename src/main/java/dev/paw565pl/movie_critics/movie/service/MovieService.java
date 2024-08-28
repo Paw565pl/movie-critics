@@ -1,5 +1,6 @@
 package dev.paw565pl.movie_critics.movie.service;
 
+import dev.paw565pl.movie_critics.movie.dto.MovieDto;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -10,4 +11,6 @@ public interface MovieService {
     Page<MovieResponse> findAll(Pageable pageable);
 
     Optional<MovieResponse> findById(Long id);
+
+    MovieResponse create(MovieDto dto);
 }
