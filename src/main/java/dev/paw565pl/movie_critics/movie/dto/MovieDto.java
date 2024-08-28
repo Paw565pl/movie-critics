@@ -1,6 +1,7 @@
 package dev.paw565pl.movie_critics.movie.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.Year;
@@ -20,7 +21,8 @@ public class MovieDto {
     private Year year;
     private String rated;
 
-    @NonNull private List<Long> genresIds;
+    @NonNull @NotEmpty(message = "GenresIds cannot be empty.")
+    private List<Long> genresIds;
 
     private List<Long> directorsIds;
     private List<Long> writersIds;
