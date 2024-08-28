@@ -7,6 +7,7 @@ import dev.paw565pl.movie_critics.movie.repository.DirectorRepository;
 import dev.paw565pl.movie_critics.movie.repository.GenreRepository;
 import dev.paw565pl.movie_critics.movie.repository.WriterRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
+import java.util.ArrayList;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -36,13 +37,16 @@ public class MovieMapperImpl implements MovieMapper {
     public Movie toEntity(MovieDto dto) {
         var movie = modelMapper.map(dto, Movie.class);
 
-        var actors = actorRepository.findAllById(dto.getActorsIds());
-        if (actors.size() != dto.getActorsIds().size()) {
+        var actorsIds = dto.getActorsIds() != null ? dto.getActorsIds() : new ArrayList<Long>();
+        var actors = actorRepository.findAllById(actorsIds);
+        if (actors.size() != actorsIds.size()) {
             throw new IllegalArgumentException("Invalid actors ids.");
         }
 
-        var directors = directorRepository.findAllById(dto.getDirectorsIds());
-        if (directors.size() != dto.getDirectorsIds().size()) {
+        var directorsIds =
+                dto.getDirectorsIds() != null ? dto.getDirectorsIds() : new ArrayList<Long>();
+        var directors = directorRepository.findAllById(directorsIds);
+        if (directors.size() != directorsIds.size()) {
             throw new IllegalArgumentException("Invalid directors ids.");
         }
 
@@ -51,8 +55,9 @@ public class MovieMapperImpl implements MovieMapper {
             throw new IllegalArgumentException("Invalid genres ids.");
         }
 
-        var writers = writerRepository.findAllById(dto.getWritersIds());
-        if (writers.size() != dto.getWritersIds().size()) {
+        var writersIds = dto.getWritersIds() != null ? dto.getWritersIds() : new ArrayList<Long>();
+        var writers = writerRepository.findAllById(writersIds);
+        if (writers.size() != writersIds.size()) {
             throw new IllegalArgumentException("Invalid writers ids.");
         }
 
