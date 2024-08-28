@@ -18,4 +18,4 @@ server:
     enabled: true
   error:
     include-message: always
-    include-stacktrace: never
+    include-path: never
