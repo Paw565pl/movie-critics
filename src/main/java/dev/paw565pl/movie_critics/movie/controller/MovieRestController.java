@@ -29,9 +29,24 @@ public class MovieRestController {
             @RequestParam(required = false) String rated,
             @RequestParam(required = false) LocalDate startReleasedDate,
             @RequestParam(required = false) LocalDate endReleasedDate,
-            @RequestParam(required = false) List<Long> genresIds) {
+            @RequestParam(required = false) List<Long> genresIds,
+            @RequestParam(required = false) List<Long> directorsIds,
+            @RequestParam(required = false) List<Long> writersIds,
+            @RequestParam(required = false) List<Long> actorsIds,
+            @RequestParam(required = false) String language,
+            @RequestParam(required = false) String country) {
         return movieService.findAll(
-                pageable, title, rated, startReleasedDate, endReleasedDate, genresIds);
+                pageable,
+                title,
+                rated,
+                startReleasedDate,
+                endReleasedDate,
+                genresIds,
+                directorsIds,
+                writersIds,
+                actorsIds,
+                language,
+                country);
     }
 
     @GetMapping("/{id}")

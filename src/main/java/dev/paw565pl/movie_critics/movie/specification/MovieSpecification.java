@@ -61,4 +61,58 @@ public class MovieSpecification {
             return root.get("genres").get("id").in(genresIds);
         };
     }
+
+    public static Specification<Movie> directorsIdsContains(List<Long> directorsIds) {
+        return (root, query, builder) -> {
+            if (directorsIds == null || directorsIds.isEmpty()) {
+                return null;
+            }
+
+            return root.get("directors").get("id").in(directorsIds);
+        };
+    }
+
+    public static Specification<Movie> writersIdsContains(List<Long> writersIds) {
+        return (root, query, builder) -> {
+            if (writersIds == null || writersIds.isEmpty()) {
+                return null;
+            }
+
+            return root.get("writers").get("id").in(writersIds);
+        };
+    }
+
+    public static Specification<Movie> actorsIdsContains(List<Long> actorsIds) {
+        return (root, query, builder) -> {
+            if (actorsIds == null || actorsIds.isEmpty()) {
+                return null;
+            }
+
+            return root.get("actors").get("id").in(actorsIds);
+        };
+    }
+
+    public static Specification<Movie> languageContainsIgnoreCase(String language) {
+        return (root, query, builder) -> {
+            if (language == null) {
+                return null;
+            }
+
+            return builder.like(
+                    builder.lower(root.get("language")),
+                    builder.lower(builder.literal("%" + language + "%")));
+        };
+    }
+
+    public static Specification<Movie> countryContainsIgnoreCase(String country) {
+        return (root, query, builder) -> {
+            if (country == null) {
+                return null;
+            }
+
+            return builder.like(
+                    builder.lower(root.get("country")),
+                    builder.lower(builder.literal("%" + country + "%")));
+        };
+    }
 }

@@ -16,7 +16,12 @@ public interface MovieService {
             String rated,
             LocalDate startReleasedDate,
             LocalDate endReleasedDate,
-            List<Long> genresIds);
+            List<Long> genresIds,
+            List<Long> directorsIds,
+            List<Long> writersIds,
+            List<Long> actorsIds,
+            String language,
+            String country);
 
     Optional<MovieResponse> findById(Long id);
 

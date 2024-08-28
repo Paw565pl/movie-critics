@@ -32,13 +32,23 @@ public class MovieServiceImpl implements MovieService {
             String rated,
             LocalDate startReleasedDate,
             LocalDate endReleasedDate,
-            List<Long> genresIds) {
+            List<Long> genresIds,
+            List<Long> directorsIds,
+            List<Long> writersIds,
+            List<Long> actorsIds,
+            String language,
+            String country) {
         var filters =
                 Specification.where(MovieSpecification.titleContainsIgnoreCase(title))
                         .and(MovieSpecification.ratedEqualsIgnoreCase(rated))
                         .and(MovieSpecification.releasedAfterOrEquals(startReleasedDate))
                         .and(MovieSpecification.releasedBeforeOrEquals(endReleasedDate))
-                        .and(MovieSpecification.genresIdsContains(genresIds));
+                        .and(MovieSpecification.genresIdsContains(genresIds))
+                        .and(MovieSpecification.directorsIdsContains(directorsIds))
+                        .and(MovieSpecification.writersIdsContains(writersIds))
+                        .and(MovieSpecification.actorsIdsContains(actorsIds))
+                        .and(MovieSpecification.languageContainsIgnoreCase(language))
+                        .and(MovieSpecification.countryContainsIgnoreCase(country));
 
         return movieRepository.findAll(filters, pageable).map(movieMapper::toResponseDto);
     }
