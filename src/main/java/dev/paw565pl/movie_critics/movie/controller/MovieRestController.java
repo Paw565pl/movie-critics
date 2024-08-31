@@ -36,4 +36,9 @@ public class MovieRestController {
     public MovieResponse create(@Valid @RequestBody MovieDto dto) {
         return movieService.create(dto);
     }
+
+    @PutMapping("/{id}")
+    public MovieResponse update(@PathVariable Long id, @Valid @RequestBody MovieDto dto) {
+        return movieService.update(id, dto);
+    }
 }

@@ -14,4 +14,6 @@ public interface MovieService {
     Optional<MovieResponse> findById(Long id);
 
     MovieResponse create(MovieDto dto);
+
+    MovieResponse update(Long id, MovieDto dto);
 }
