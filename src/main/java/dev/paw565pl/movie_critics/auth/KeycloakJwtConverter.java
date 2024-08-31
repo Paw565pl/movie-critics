@@ -25,19 +25,9 @@ public class KeycloakJwtConverter implements Converter<Jwt, AbstractAuthenticati
                                 jwtGrantedAuthoritiesConverter.convert(jwt).stream(),
                                 extractRoles(jwt).stream())
                         .toList();
+        var subject = jwt.getClaimAsString(JwtClaimNames.SUB);
 
-        return new JwtAuthenticationToken(jwt, authorities, getPrincipalClaimName(jwt));
-    }
-
-    private String getPrincipalClaimName(@NonNull Jwt jwt) {
-        var principalAttribute = "preferred_username";
-        var claimName = jwt.getClaimAsString(principalAttribute);
-
-        if (claimName == null) {
-            return JwtClaimNames.SUB;
-        }
-
-        return claimName;
+        return new JwtAuthenticationToken(jwt, authorities, subject);
     }
 
     private Collection<? extends GrantedAuthority> extractRoles(@NonNull Jwt jwt) {
