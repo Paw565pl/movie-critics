@@ -1,5 +1,6 @@
 package dev.paw565pl.movie_critics.movie.controller;
 
+import dev.paw565pl.movie_critics.auth.annotation.IsAdmin;
 import dev.paw565pl.movie_critics.movie.dto.MovieDto;
 import dev.paw565pl.movie_critics.movie.dto.MovieFilterDto;
 import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
@@ -31,17 +32,20 @@ public class MovieRestController {
         return movieService.findById(id).orElseThrow(MovieNotFoundException::new);
     }
 
+    @IsAdmin
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MovieResponse create(@Valid @RequestBody MovieDto dto) {
         return movieService.create(dto);
     }
 
+    @IsAdmin
     @PutMapping("/{id}")
     public MovieResponse update(@PathVariable Long id, @Valid @RequestBody MovieDto dto) {
         return movieService.update(id, dto);
     }
 
+    @IsAdmin
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
