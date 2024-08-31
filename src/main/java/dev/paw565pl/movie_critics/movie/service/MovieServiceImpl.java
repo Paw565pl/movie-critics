@@ -48,6 +48,7 @@ public class MovieServiceImpl implements MovieService {
         return movieRepository.findById(id).map(movieMapper::toResponseDto);
     }
 
+    @Transactional
     @Override
     public MovieResponse create(MovieDto dto) {
         var movie = movieMapper.toEntity(dto);
