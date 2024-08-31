@@ -75,4 +75,11 @@ public class MovieServiceImpl implements MovieService {
             throw new DataIntegrityViolationException("Movie with given title already exists.");
         }
     }
+
+    @Transactional
+    @Override
+    public void delete(Long id) {
+        movieRepository.findById(id).orElseThrow(MovieNotFoundException::new);
+        movieRepository.deleteById(id);
+    }
 }

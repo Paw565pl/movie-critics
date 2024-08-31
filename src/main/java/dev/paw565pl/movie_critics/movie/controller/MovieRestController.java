@@ -41,4 +41,10 @@ public class MovieRestController {
     public MovieResponse update(@PathVariable Long id, @Valid @RequestBody MovieDto dto) {
         return movieService.update(id, dto);
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        movieService.delete(id);
+    }
 }
