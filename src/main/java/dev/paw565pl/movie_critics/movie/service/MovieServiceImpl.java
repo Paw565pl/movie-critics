@@ -7,7 +7,6 @@ import dev.paw565pl.movie_critics.movie.mapper.MovieMapper;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie.specification.MovieSpecification;
-import java.util.Optional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,8 +43,11 @@ public class MovieServiceImpl implements MovieService {
     }
 
     @Override
-    public Optional<MovieResponse> findById(Long id) {
-        return movieRepository.findById(id).map(movieMapper::toResponseDto);
+    public MovieResponse findById(Long id) {
+        return movieRepository
+                .findById(id)
+                .map(movieMapper::toResponseDto)
+                .orElseThrow(MovieNotFoundException::new);
     }
 
     @Transactional

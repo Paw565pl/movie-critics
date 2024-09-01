@@ -11,7 +11,7 @@ public interface MovieService {
 
     Page<MovieResponse> findAll(MovieFilterDto filters, Pageable pageable);
 
-    Optional<MovieResponse> findById(Long id);
+    MovieResponse findById(Long id);
 
     MovieResponse create(MovieDto dto);
 

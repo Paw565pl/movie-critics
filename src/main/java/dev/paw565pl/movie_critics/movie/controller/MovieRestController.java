@@ -29,7 +29,7 @@ public class MovieRestController {
 
     @GetMapping("/{id}")
     public MovieResponse findById(@PathVariable Long id) {
-        return movieService.findById(id).orElseThrow(MovieNotFoundException::new);
+        return movieService.findById(id);
     }
 
     @IsAdmin
