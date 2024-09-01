@@ -1,5 +1,6 @@
 package dev.paw565pl.movie_critics.movie.model;
 
+import dev.paw565pl.movie_critics.rating.model.Rating;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.Year;
@@ -64,6 +65,9 @@ public class Movie {
             joinColumns = {@JoinColumn(name = "movie_id")},
             inverseJoinColumns = {@JoinColumn(name = "actor_id")})
     private List<Actor> actors;
+
+    @OneToMany(mappedBy = "movie")
+    private List<Rating> ratings;
 
     @Column(name = "plot", columnDefinition = "TEXT")
     private String plot;
