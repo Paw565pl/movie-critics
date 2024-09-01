@@ -29,4 +29,6 @@ public class MovieResponse {
     private String dvd;
     private String boxOffice;
     private String website;
+    private Long ratingsCount;
+    private Double averageRating;
 }
