@@ -56,7 +56,7 @@ public class MovieServiceImpl implements MovieService {
         var movie = movieMapper.toEntity(dto);
 
         try {
-            var savedMovie = movieRepository.save(movie);
+            var savedMovie = movieRepository.saveAndFlush(movie);
             return movieMapper.toResponseDto(savedMovie);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Movie with given title already exists.");
@@ -72,7 +72,7 @@ public class MovieServiceImpl implements MovieService {
         updatedMovie.setId(id);
 
         try {
-            var savedMovie = movieRepository.save(updatedMovie);
+            var savedMovie = movieRepository.saveAndFlush(updatedMovie);
             return movieMapper.toResponseDto(savedMovie);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Movie with given title already exists.");
