@@ -4627,3 +4627,9 @@ values (1, 1),
        (250, 31),
        (250, 441),
        (250, 442);
+
+SELECT setval('actors_seq', (SELECT MAX(id) FROM actors));
+SELECT setval('directors_seq', (SELECT MAX(id) FROM directors));
+SELECT setval('genres_seq', (SELECT MAX(id) FROM genres));
+SELECT setval('movies_seq', (SELECT MAX(id) FROM movies));
+SELECT setval('writers_seq', (SELECT MAX(id) FROM writers));
