@@ -2,7 +2,7 @@ package dev.paw565pl.movie_critics.config;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
-import dev.paw565pl.movie_critics.auth.KeycloakJwtConverter;
+import dev.paw565pl.movie_critics.auth.jwt.KeycloakJwtConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
