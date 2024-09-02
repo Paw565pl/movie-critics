@@ -5,9 +5,8 @@ import jakarta.persistence.*;
 import java.util.UUID;
 import lombok.*;
 
-@AllArgsConstructor
-@RequiredArgsConstructor
 @NoArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 @Entity

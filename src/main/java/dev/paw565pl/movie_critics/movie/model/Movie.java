@@ -7,9 +7,8 @@ import java.time.Year;
 import java.util.List;
 import lombok.*;
 
-@AllArgsConstructor
-@RequiredArgsConstructor
 @NoArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 @Entity
