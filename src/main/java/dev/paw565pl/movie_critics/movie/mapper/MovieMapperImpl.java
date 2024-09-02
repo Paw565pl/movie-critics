@@ -37,25 +37,24 @@ public class MovieMapperImpl implements MovieMapper {
     public Movie toEntity(MovieDto dto) {
         var movie = modelMapper.map(dto, Movie.class);
 
-        var actorsIds = dto.getActorsIds() != null ? dto.getActorsIds() : new ArrayList<Long>();
+        var actorsIds = dto.actorsIds() != null ? dto.actorsIds() : new ArrayList<Long>();
         var actors = actorRepository.findAllById(actorsIds);
         if (actors.size() != actorsIds.size()) {
             throw new IllegalArgumentException("Invalid actors ids.");
         }
 
-        var directorsIds =
-                dto.getDirectorsIds() != null ? dto.getDirectorsIds() : new ArrayList<Long>();
+        var directorsIds = dto.directorsIds() != null ? dto.directorsIds() : new ArrayList<Long>();
         var directors = directorRepository.findAllById(directorsIds);
         if (directors.size() != directorsIds.size()) {
             throw new IllegalArgumentException("Invalid directors ids.");
         }
 
-        var genres = genreRepository.findAllById(dto.getGenresIds());
-        if (genres.size() != dto.getGenresIds().size()) {
+        var genres = genreRepository.findAllById(dto.genresIds());
+        if (genres.size() != dto.genresIds().size()) {
             throw new IllegalArgumentException("Invalid genres ids.");
         }
 
-        var writersIds = dto.getWritersIds() != null ? dto.getWritersIds() : new ArrayList<Long>();
+        var writersIds = dto.writersIds() != null ? dto.writersIds() : new ArrayList<Long>();
         var writers = writerRepository.findAllById(writersIds);
         if (writers.size() != writersIds.size()) {
             throw new IllegalArgumentException("Invalid writers ids.");
@@ -69,7 +68,7 @@ public class MovieMapperImpl implements MovieMapper {
         return movie;
     }
 
-    public MovieResponse toResponseDto(Movie movie) {
+    public MovieResponse toResponse(Movie movie) {
         var response = modelMapper.map(movie, MovieResponse.class);
 
         var ratingsCount = movieRepository.countRatingsByMovieId(movie.getId());

@@ -6,39 +6,27 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
-@Data
-@NoArgsConstructor
-public class MovieDto {
-
-    @NonNull @NotBlank(message = "Title cannot be empty.")
-    @Size(min = 2, max = 150, message = "Title must be between 2 and 255 characters.")
-    private String title;
-
-    private Year year;
-    private String rated;
-
-    @NonNull @NotEmpty(message = "GenresIds cannot be empty.")
-    private List<Long> genresIds;
-
-    private List<Long> directorsIds;
-    private List<Long> writersIds;
-    private List<Long> actorsIds;
-    private LocalDate released;
-    private String runtime;
-
-    @Size(min = 10, max = 1000, message = "Plot must be between 10 and 1000 characters.")
-    private String plot;
-
-    private String language;
-    private String country;
-    private String awards;
-    private String poster;
-    private String metaScore;
-    private String dvd;
-    private String boxOffice;
-    private String website;
-}
+public record MovieDto(
+        @NonNull @NotBlank(message = "Title cannot be empty.")
+                @Size(min = 2, max = 150, message = "Title must be between 2 and 255 characters.")
+                String title,
+        Year year,
+        String rated,
+        @NonNull @NotEmpty(message = "GenresIds cannot be empty.") List<Long> genresIds,
+        List<Long> directorsIds,
+        List<Long> writersIds,
+        List<Long> actorsIds,
+        LocalDate released,
+        String runtime,
+        @Size(min = 10, max = 1000, message = "Plot must be between 10 and 1000 characters.")
+                String plot,
+        String language,
+        String country,
+        String awards,
+        String poster,
+        String metaScore,
+        String dvd,
+        String boxOffice,
+        String website) {}

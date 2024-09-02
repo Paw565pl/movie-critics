@@ -8,5 +8,5 @@ public interface MovieMapper {
 
     Movie toEntity(MovieDto dto);
 
-    MovieResponse toResponseDto(Movie movie);
+    MovieResponse toResponse(Movie movie);
 }

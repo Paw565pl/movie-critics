@@ -4,6 +4,7 @@ import dev.paw565pl.movie_critics.movie.dto.MovieDto;
 import dev.paw565pl.movie_critics.movie.dto.MovieFilterDto;
 import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
 import dev.paw565pl.movie_critics.movie.mapper.MovieMapper;
+import dev.paw565pl.movie_critics.movie.model.Movie;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie.specification.MovieSpecification;
@@ -25,6 +26,10 @@ public class MovieServiceImpl implements MovieService {
         this.movieMapper = movieMapper;
     }
 
+    private Movie findMovie(Long id) {
+        return movieRepository.findById(id).orElseThrow(MovieNotFoundException::new);
+    }
+
     @Override
     public Page<MovieResponse> findAll(MovieFilterDto filters, Pageable pageable) {
         var specification =
@@ -39,15 +44,13 @@ public class MovieServiceImpl implements MovieService {
                         .and(MovieSpecification.languageContainsIgnoreCase(filters.language()))
                         .and(MovieSpecification.countryContainsIgnoreCase(filters.country()));
 
-        return movieRepository.findAll(specification, pageable).map(movieMapper::toResponseDto);
+        return movieRepository.findAll(specification, pageable).map(movieMapper::toResponse);
     }
 
     @Override
     public MovieResponse findById(Long id) {
-        return movieRepository
-                .findById(id)
-                .map(movieMapper::toResponseDto)
-                .orElseThrow(MovieNotFoundException::new);
+        var movie = findMovie(id);
+        return movieMapper.toResponse(movie);
     }
 
     @Transactional
@@ -57,7 +60,7 @@ public class MovieServiceImpl implements MovieService {
 
         try {
             var savedMovie = movieRepository.saveAndFlush(movie);
-            return movieMapper.toResponseDto(savedMovie);
+            return movieMapper.toResponse(savedMovie);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Movie with given title already exists.");
         }
@@ -66,14 +69,14 @@ public class MovieServiceImpl implements MovieService {
     @Transactional
     @Override
     public MovieResponse update(Long id, MovieDto dto) {
-        movieRepository.findById(id).orElseThrow(MovieNotFoundException::new);
+        findMovie(id);
 
         var updatedMovie = movieMapper.toEntity(dto);
         updatedMovie.setId(id);
 
         try {
             var savedMovie = movieRepository.saveAndFlush(updatedMovie);
-            return movieMapper.toResponseDto(savedMovie);
+            return movieMapper.toResponse(savedMovie);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Movie with given title already exists.");
         }
@@ -82,7 +85,7 @@ public class MovieServiceImpl implements MovieService {
     @Transactional
     @Override
     public void delete(Long id) {
-        movieRepository.findById(id).orElseThrow(MovieNotFoundException::new);
+        findMovie(id);
         movieRepository.deleteById(id);
     }
 }
