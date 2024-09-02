@@ -1,5 +1,6 @@
 package dev.paw565pl.movie_critics.movie.model;
 
+import dev.paw565pl.movie_critics.comment.model.Comment;
 import dev.paw565pl.movie_critics.rating.model.Rating;
 import jakarta.persistence.*;
 import java.time.LocalDate;
@@ -67,6 +68,9 @@ public class Movie {
 
     @OneToMany(mappedBy = "movie")
     private List<Rating> ratings;
+
+    @OneToMany(mappedBy = "movie")
+    private List<Comment> comments;
 
     @Column(name = "plot", columnDefinition = "TEXT")
     private String plot;
