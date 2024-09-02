@@ -1,4 +1,4 @@
-package dev.paw565pl.movie_critics.auth;
+package dev.paw565pl.movie_critics.auth.jwt;
 
 import java.util.Collection;
 import java.util.List;
@@ -34,7 +34,9 @@ public class KeycloakJwtConverter implements Converter<Jwt, AbstractAuthenticati
         try {
             var realmAccess = jwt.getClaimAsMap("realm_access");
             var roles = (List<String>) realmAccess.get("roles");
-            return roles.stream().map((r) -> new SimpleGrantedAuthority("ROLE_" + r)).toList();
+            return roles.stream()
+                    .map((r) -> new SimpleGrantedAuthority("ROLE_" + r.toUpperCase()))
+                    .toList();
         } catch (IllegalArgumentException | NullPointerException e) {
             return List.of();
         }
