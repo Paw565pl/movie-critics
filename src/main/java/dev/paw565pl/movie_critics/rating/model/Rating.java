@@ -2,8 +2,10 @@ package dev.paw565pl.movie_critics.rating.model;
 
 import dev.paw565pl.movie_critics.movie.model.Movie;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -25,10 +27,17 @@ public class Rating {
     @NonNull @Column(name = "value", nullable = false)
     private Byte value;
 
-    @NonNull @Column(name = "user_id", nullable = false)
+    @NonNull @Column(name = "author", nullable = false, updatable = false)
+    private String author;
+
+    @NonNull @Column(name = "user_id", nullable = false, updatable = false)
     private UUID userId;
 
     @NonNull @ManyToOne
-    @JoinColumn(name = "movie_id", nullable = false)
+    @JoinColumn(name = "movie_id", nullable = false, updatable = false)
     private Movie movie;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 }
