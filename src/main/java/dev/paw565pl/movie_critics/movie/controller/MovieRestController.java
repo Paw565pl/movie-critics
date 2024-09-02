@@ -92,8 +92,6 @@ public class MovieRestController {
     @IsAuthenticated
     @DeleteMapping("/{movieId}/rate")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteRating(@PathVariable Long id, Authentication auth) {
-        ratingService.delete(id, UUID.fromString(auth.getName()));
     public void deleteRating(@PathVariable Long movieId, @AuthenticationPrincipal Jwt jwt) {
         ratingService.delete(movieId, jwt);
     }
