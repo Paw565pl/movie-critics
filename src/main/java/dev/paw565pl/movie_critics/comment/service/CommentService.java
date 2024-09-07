@@ -1,8 +1,9 @@
 package dev.paw565pl.movie_critics.comment.service;
 
-import static dev.paw565pl.movie_critics.auth.utils.AuthUtils.isAdmin;
+import static dev.paw565pl.movie_critics.auth.utils.AuthUtils.hasRole;
 
-import dev.paw565pl.movie_critics.auth.UserDetailsImpl;
+import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
+import dev.paw565pl.movie_critics.auth.role.Role;
 import dev.paw565pl.movie_critics.comment.dto.CommentDto;
 import dev.paw565pl.movie_critics.comment.mapper.CommentMapper;
 import dev.paw565pl.movie_critics.comment.model.Comment;
@@ -90,7 +91,7 @@ public class CommentService {
         var user = UserDetailsImpl.fromJwt(jwt);
 
         var isAuthor = comment.getUserId().equals(user.getId());
-        var isAdmin = isAdmin(user.getAuthorities());
+        var isAdmin = hasRole(user.getAuthorities(), Role.ADMIN);
         if (!(isAuthor || isAdmin)) {
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "You are not allowed to delete this comment.");

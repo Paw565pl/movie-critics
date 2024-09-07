@@ -1,6 +1,6 @@
 package dev.paw565pl.movie_critics.rating.service;
 
-import dev.paw565pl.movie_critics.auth.UserDetailsImpl;
+import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.rating.dto.RatingDto;
