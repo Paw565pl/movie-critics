@@ -3,7 +3,6 @@ package dev.paw565pl.movie_critics.comment.service;
 import static dev.paw565pl.movie_critics.auth.utils.AuthUtils.hasRole;
 
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
-import dev.paw565pl.movie_critics.auth.repository.UserRepository;
 import dev.paw565pl.movie_critics.auth.role.Role;
 import dev.paw565pl.movie_critics.comment.dto.CommentDto;
 import dev.paw565pl.movie_critics.comment.mapper.CommentMapper;
@@ -12,6 +11,7 @@ import dev.paw565pl.movie_critics.comment.repository.CommentRepository;
 import dev.paw565pl.movie_critics.comment.response.CommentResponse;
 import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
+import dev.paw565pl.movie_critics.user.repository.UserRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

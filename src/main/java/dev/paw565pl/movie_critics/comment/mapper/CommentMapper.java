@@ -1,10 +1,10 @@
 package dev.paw565pl.movie_critics.comment.mapper;
 
-import dev.paw565pl.movie_critics.auth.model.User;
 import dev.paw565pl.movie_critics.comment.dto.CommentDto;
 import dev.paw565pl.movie_critics.comment.model.Comment;
 import dev.paw565pl.movie_critics.comment.response.CommentResponse;
 import dev.paw565pl.movie_critics.movie.model.Movie;
+import dev.paw565pl.movie_critics.user.model.User;
 import org.springframework.stereotype.Component;
 
 @Component

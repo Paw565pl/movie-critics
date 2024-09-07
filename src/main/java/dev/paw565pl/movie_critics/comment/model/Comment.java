@@ -1,7 +1,7 @@
 package dev.paw565pl.movie_critics.comment.model;
 
-import dev.paw565pl.movie_critics.auth.model.User;
 import dev.paw565pl.movie_critics.movie.model.Movie;
+import dev.paw565pl.movie_critics.user.model.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.*;

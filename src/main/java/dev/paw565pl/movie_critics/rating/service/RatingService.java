@@ -1,13 +1,13 @@
 package dev.paw565pl.movie_critics.rating.service;
 
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
-import dev.paw565pl.movie_critics.auth.repository.UserRepository;
 import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.rating.dto.RatingDto;
 import dev.paw565pl.movie_critics.rating.model.Rating;
 import dev.paw565pl.movie_critics.rating.repository.RatingRepository;
 import dev.paw565pl.movie_critics.rating.response.RatingResponse;
+import dev.paw565pl.movie_critics.user.repository.UserRepository;
 import java.util.UUID;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
