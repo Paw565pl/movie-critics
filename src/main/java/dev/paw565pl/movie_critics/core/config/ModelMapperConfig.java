@@ -1,4 +1,4 @@
-package dev.paw565pl.movie_critics.config;
+package dev.paw565pl.movie_critics.core.config;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.record.RecordModule;
