@@ -13,6 +13,6 @@ public interface MovieRepository
     @Query("SELECT COUNT(r) FROM Rating r WHERE r.movie.id = :movieId")
     Long countRatingsByMovieId(@Param("movieId") Long movieId);
 
-    @Query("SELECT AVG(r.value) FROM Rating r WHERE r.movie.id = :movieId")
+    @Query("SELECT ROUND(AVG(r.value), 2) FROM Rating r WHERE r.movie.id = :movieId")
     Optional<Double> findAverageRatingByMovieId(@Param("movieId") Long movieId);
 }

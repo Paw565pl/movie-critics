@@ -72,11 +72,7 @@ public class MovieMapperImpl implements MovieMapper {
         var response = modelMapper.map(movie, MovieResponse.class);
 
         var ratingsCount = movieRepository.countRatingsByMovieId(movie.getId());
-        var averageRating =
-                movieRepository
-                        .findAverageRatingByMovieId(movie.getId())
-                        .map((value) -> Math.round(value * 100.0) / 100.0)
-                        .orElse(null);
+        var averageRating = movieRepository.findAverageRatingByMovieId(movie.getId()).orElse(null);
 
         response.setRatingsCount(ratingsCount);
         response.setAverageRating(averageRating);
