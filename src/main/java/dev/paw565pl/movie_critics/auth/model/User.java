@@ -1,6 +1,7 @@
 package dev.paw565pl.movie_critics.auth.model;
 
 import dev.paw565pl.movie_critics.auth.provider.OAuthProvider;
+import dev.paw565pl.movie_critics.comment.model.Comment;
 import dev.paw565pl.movie_critics.rating.model.Rating;
 import jakarta.persistence.*;
 import java.util.List;
@@ -31,4 +32,7 @@ public class User {
 
     @OneToMany(mappedBy = "author")
     private List<Rating> ratings;
+
+    @OneToMany(mappedBy = "author")
+    private List<Comment> comments;
 }

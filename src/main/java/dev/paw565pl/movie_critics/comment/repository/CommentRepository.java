@@ -1,4 +1,4 @@
-package dev.paw565pl.movie_critics.comment.respository;
+package dev.paw565pl.movie_critics.comment.repository;
 
 import dev.paw565pl.movie_critics.comment.model.Comment;
 import java.util.Optional;

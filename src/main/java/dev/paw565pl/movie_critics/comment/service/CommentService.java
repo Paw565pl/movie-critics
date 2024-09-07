@@ -3,12 +3,13 @@ package dev.paw565pl.movie_critics.comment.service;
 import static dev.paw565pl.movie_critics.auth.utils.AuthUtils.hasRole;
 
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
+import dev.paw565pl.movie_critics.auth.repository.UserRepository;
 import dev.paw565pl.movie_critics.auth.role.Role;
 import dev.paw565pl.movie_critics.comment.dto.CommentDto;
 import dev.paw565pl.movie_critics.comment.mapper.CommentMapper;
 import dev.paw565pl.movie_critics.comment.model.Comment;
+import dev.paw565pl.movie_critics.comment.repository.CommentRepository;
 import dev.paw565pl.movie_critics.comment.response.CommentResponse;
-import dev.paw565pl.movie_critics.comment.respository.CommentRepository;
 import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -24,14 +25,17 @@ import org.springframework.web.server.ResponseStatusException;
 public class CommentService {
 
     private final MovieRepository movieRepository;
+    private final UserRepository userRepository;
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
 
     public CommentService(
             MovieRepository movieRepository,
+            UserRepository userRepository,
             CommentRepository commentRepository,
             CommentMapper commentMapper) {
         this.movieRepository = movieRepository;
+        this.userRepository = userRepository;
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
     }
@@ -54,9 +58,9 @@ public class CommentService {
     @Transactional
     public CommentResponse create(Long movieId, Jwt jwt, CommentDto dto) {
         var movie = movieRepository.findById(movieId).orElseThrow(MovieNotFoundException::new);
-        var user = UserDetailsImpl.fromJwt(jwt);
+        var user = userRepository.findById(UserDetailsImpl.fromJwt(jwt).getId()).orElseThrow();
 
-        var comment = commentMapper.toEntity(dto, movie, user.getId(), user.getUsername());
+        var comment = commentMapper.toEntity(dto, user, movie);
         comment.setId(null);
 
         try {
@@ -73,7 +77,7 @@ public class CommentService {
         var comment = findComment(id, movieId);
         var user = UserDetailsImpl.fromJwt(jwt);
 
-        var isAuthor = comment.getUserId().equals(user.getId());
+        var isAuthor = comment.getAuthor().getId().equals(user.getId());
         if (!isAuthor) {
             throw new ResponseStatusException(
                     HttpStatus.FORBIDDEN, "You are not allowed to update this comment.");
@@ -90,7 +94,7 @@ public class CommentService {
         var comment = findComment(id, movieId);
         var user = UserDetailsImpl.fromJwt(jwt);
 
-        var isAuthor = comment.getUserId().equals(user.getId());
+        var isAuthor = comment.getAuthor().getId().equals(user.getId());
         var isAdmin = hasRole(user.getAuthorities(), Role.ADMIN);
         if (!(isAuthor || isAdmin)) {
             throw new ResponseStatusException(
