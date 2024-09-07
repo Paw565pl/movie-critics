@@ -1,6 +1,4 @@
-package dev.paw565pl.movie_critics.config;
-
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+package dev.paw565pl.movie_critics.auth.config;
 
 import dev.paw565pl.movie_critics.auth.jwt.KeycloakJwtConverter;
 import org.springframework.context.annotation.Bean;
@@ -11,10 +9,18 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    private final KeycloakJwtConverter keycloakJwtConverter;
+
+    public SecurityConfig(KeycloakJwtConverter keycloakJwtConverter) {
+        this.keycloakJwtConverter = keycloakJwtConverter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -22,10 +28,7 @@ public class SecurityConfig {
 
         http.oauth2ResourceServer(
                 (oauth2) ->
-                        oauth2.jwt(
-                                (jwt) ->
-                                        jwt.jwtAuthenticationConverter(
-                                                new KeycloakJwtConverter())));
+                        oauth2.jwt((jwt) -> jwt.jwtAuthenticationConverter(keycloakJwtConverter)));
 
         http.csrf(AbstractHttpConfigurer::disable);
         http.sessionManagement((session) -> session.sessionCreationPolicy(STATELESS));
