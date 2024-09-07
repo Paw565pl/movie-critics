@@ -2391,7 +2391,7 @@ values (1, 'Nominated for 7 Oscars. 21 wins & 42 nominations total', '$28,767,18
         'https://m.media-amazon.com/images/M/MV5BZTM3ZjA3NTctZThkYy00ODYyLTk2ZjItZmE0MmZlMTk3YjQwXkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_SX300.jpg',
         'R', '1993-01-08', '156 min', 'Scent of a Woman', null, 1992);
 
-insert into public.movies_has_actors (movie_id, actor_id)
+insert into public.movie_actors (movie_id, actor_id)
 values (1, 1),
        (1, 2),
        (1, 3),
@@ -3143,7 +3143,7 @@ values (1, 1),
        (250, 586),
        (250, 587);
 
-insert into public.movies_has_directors (movie_id, director_id)
+insert into public.movie_directors (movie_id, director_id)
 values (1, 1),
        (2, 2),
        (3, 3),
@@ -3425,7 +3425,7 @@ values (1, 1),
        (249, 176),
        (250, 177);
 
-insert into public.movies_has_genres (movie_id, genre_id)
+insert into public.movie_genres (movie_id, genre_id)
 values (1, 1),
        (2, 1),
        (2, 2),
@@ -4066,7 +4066,7 @@ values (1, 1),
        (249, 15),
        (250, 1);
 
-insert into public.movies_has_writers (movie_id, writer_id)
+insert into public.movie_writers (movie_id, writer_id)
 values (1, 1),
        (1, 2),
        (2, 3),
