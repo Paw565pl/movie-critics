@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RatingRepository extends JpaRepository<Rating, Long> {
 
-    Optional<Rating> findByMovieIdAndUserId(Long movieId, UUID userId);
+    Optional<Rating> findByMovieIdAndAuthorId(Long movieId, UUID authorId);
 }

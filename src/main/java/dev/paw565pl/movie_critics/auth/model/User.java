@@ -1,7 +1,9 @@
 package dev.paw565pl.movie_critics.auth.model;
 
 import dev.paw565pl.movie_critics.auth.provider.OAuthProvider;
+import dev.paw565pl.movie_critics.rating.model.Rating;
 import jakarta.persistence.*;
+import java.util.List;
 import java.util.UUID;
 import lombok.*;
 
@@ -26,4 +28,7 @@ public class User {
     @NonNull @Enumerated(EnumType.STRING)
     @Column(name = "provider", nullable = false)
     private OAuthProvider provider;
+
+    @OneToMany(mappedBy = "author")
+    private List<Rating> ratings;
 }

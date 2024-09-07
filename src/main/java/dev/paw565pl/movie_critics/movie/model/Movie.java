@@ -3,11 +3,10 @@ package dev.paw565pl.movie_critics.movie.model;
 import dev.paw565pl.movie_critics.comment.model.Comment;
 import dev.paw565pl.movie_critics.rating.model.Rating;
 import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
+import lombok.*;
 
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -17,17 +16,14 @@ import java.util.List;
 @Table(
         name = "movies",
         indexes = {
-                @Index(name = "index_title", columnList = "title", unique = true),
-                @Index(name = "index_released", columnList = "released")
+            @Index(name = "index_title", columnList = "title", unique = true),
+            @Index(name = "index_released", columnList = "released")
         })
 public class Movie {
 
-    @Id
-    @GeneratedValue
-    private Long id;
+    @Id @GeneratedValue private Long id;
 
-    @NonNull
-    @Column(name = "title", nullable = false)
+    @NonNull @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "year")
@@ -42,8 +38,7 @@ public class Movie {
     @Column(name = "runtime")
     private String runtime;
 
-    @NonNull
-    @ManyToMany
+    @NonNull @ManyToMany
     @JoinTable(
             name = "movie_genres",
             joinColumns = {@JoinColumn(name = "movie_id")},
