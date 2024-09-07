@@ -2,6 +2,8 @@ package dev.paw565pl.movie_critics.auth.jwt;
 
 import java.util.Collection;
 import java.util.List;
+import static dev.paw565pl.movie_critics.auth.utils.JwtUtils.getAuthorities;
+
 import java.util.stream.Stream;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
@@ -23,22 +25,10 @@ public class KeycloakJwtConverter implements Converter<Jwt, AbstractAuthenticati
         var authorities =
                 Stream.concat(
                                 jwtGrantedAuthoritiesConverter.convert(jwt).stream(),
-                                extractRoles(jwt).stream())
+                                getAuthorities(jwt).stream())
                         .toList();
         var subject = jwt.getClaimAsString(JwtClaimNames.SUB);
 
         return new JwtAuthenticationToken(jwt, authorities, subject);
-    }
-
-    private Collection<? extends GrantedAuthority> extractRoles(@NonNull Jwt jwt) {
-        try {
-            var realmAccess = jwt.getClaimAsMap("realm_access");
-            var roles = (List<String>) realmAccess.get("roles");
-            return roles.stream()
-                    .map((r) -> new SimpleGrantedAuthority("ROLE_" + r.toUpperCase()))
-                    .toList();
-        } catch (IllegalArgumentException | NullPointerException e) {
-            return List.of();
-        }
     }
 }
