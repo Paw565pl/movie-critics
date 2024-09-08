@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/movies/{movieId}/comments")
-public class MovieCommentsRestController {
+public class MovieCommentRestController {
 
     private final CommentService commentService;
 
-    public MovieCommentsRestController(CommentService commentService) {
+    public MovieCommentRestController(CommentService commentService) {
         this.commentService = commentService;
     }
 
