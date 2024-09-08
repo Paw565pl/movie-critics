@@ -2,6 +2,7 @@ package dev.paw565pl.movie_critics.movie.model;
 
 import dev.paw565pl.movie_critics.comment.model.Comment;
 import dev.paw565pl.movie_critics.rating.model.Rating;
+import dev.paw565pl.movie_critics.user.model.User;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.Year;
@@ -98,4 +99,7 @@ public class Movie {
 
     @Column(name = "website")
     private String website;
+
+    @ManyToMany(mappedBy = "moviesToWatch")
+    private List<User> usersWhoWantToWatch;
 }

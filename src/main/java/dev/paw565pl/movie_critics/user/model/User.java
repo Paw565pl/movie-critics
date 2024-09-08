@@ -1,6 +1,7 @@
 package dev.paw565pl.movie_critics.user.model;
 
 import dev.paw565pl.movie_critics.comment.model.Comment;
+import dev.paw565pl.movie_critics.movie.model.Movie;
 import dev.paw565pl.movie_critics.rating.model.Rating;
 import dev.paw565pl.movie_critics.user.provider.OAuthProvider;
 import jakarta.persistence.*;
@@ -35,4 +36,16 @@ public class User {
 
     @OneToMany(mappedBy = "author")
     private List<Comment> comments;
+
+    @ManyToMany
+    @JoinTable(
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id"),
+            name = "user_movies_to_watch",
+            indexes =
+                    @Index(
+                            name = "one_movie_per_user",
+                            columnList = "user_id, movie_id",
+                            unique = true))
+    private List<Movie> moviesToWatch;
 }
