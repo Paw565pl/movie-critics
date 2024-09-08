@@ -17,11 +17,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class KeycloakJwtConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
-    private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter =
-            new JwtGrantedAuthoritiesConverter();
+    private final JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter;
     private final UserService userService;
 
-    public KeycloakJwtConverter(UserService userService) {
+    public KeycloakJwtConverter(
+            JwtGrantedAuthoritiesConverter jwtGrantedAuthoritiesConverter,
+            UserService userService) {
+        this.jwtGrantedAuthoritiesConverter = jwtGrantedAuthoritiesConverter;
         this.userService = userService;
     }
 
