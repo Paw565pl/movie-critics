@@ -22,4 +22,8 @@ public interface MovieRepository
     Page<Movie> findAllByUsersWhoWantToWatchId(UUID userId, Pageable pageable);
 
     Optional<Movie> findByIdAndUsersWhoWantToWatchId(Long id, UUID userId);
+
+    Page<Movie> findAllByUsersWhoFavoritedId(UUID userId, Pageable pageable);
+
+    Optional<Movie> findByIdAndUsersWhoFavoritedId(Long id, UUID userId);
 }
