@@ -8,23 +8,32 @@ import jakarta.persistence.*;
 import java.util.List;
 import java.util.UUID;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @NoArgsConstructor
 @RequiredArgsConstructor
 @Getter
 @Setter
 @Entity
-@Table(name = "users")
+@Table(
+        name = "users",
+        indexes = {
+            @Index(
+                    name = "unique_user_per_provider",
+                    columnList = "username, email, provider",
+                    unique = true)
+        })
 public class User {
 
     @Id
     @NonNull @Column(name = "id", nullable = false, unique = true, updatable = false)
     private UUID id;
 
-    @NonNull @Column(name = "username", nullable = false, unique = true)
+    @NonNull @Column(name = "username", nullable = false)
     private String username;
 
-    @NonNull @Column(name = "email", nullable = false, unique = true)
+    @NonNull @Column(name = "email", nullable = false)
     private String email;
 
     @NonNull @Enumerated(EnumType.STRING)
@@ -39,14 +48,15 @@ public class User {
 
     @ManyToMany
     @JoinTable(
+            name = "user_movies_to_watch",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "movie_id"),
-            name = "user_movies_to_watch",
             indexes =
                     @Index(
                             name = "one_movie_per_user",
                             columnList = "user_id, movie_id",
                             unique = true))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Movie> moviesToWatch;
 
     @ManyToMany
@@ -59,5 +69,6 @@ public class User {
                             name = "one_movie_per_user",
                             columnList = "user_id, movie_id",
                             unique = true))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Movie> favoriteMovies;
 }

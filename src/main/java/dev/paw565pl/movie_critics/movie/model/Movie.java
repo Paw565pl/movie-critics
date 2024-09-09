@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -44,6 +46,7 @@ public class Movie {
             name = "movie_genres",
             joinColumns = {@JoinColumn(name = "movie_id")},
             inverseJoinColumns = {@JoinColumn(name = "genre_id")})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Genre> genres;
 
     @ManyToMany
@@ -51,6 +54,7 @@ public class Movie {
             name = "movie_directors",
             joinColumns = {@JoinColumn(name = "movie_id")},
             inverseJoinColumns = {@JoinColumn(name = "director_id")})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Director> directors;
 
     @ManyToMany
@@ -58,6 +62,7 @@ public class Movie {
             name = "movie_writers",
             joinColumns = {@JoinColumn(name = "movie_id")},
             inverseJoinColumns = {@JoinColumn(name = "writer_id")})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Writer> writers;
 
     @ManyToMany
@@ -65,6 +70,7 @@ public class Movie {
             name = "movie_actors",
             joinColumns = {@JoinColumn(name = "movie_id")},
             inverseJoinColumns = {@JoinColumn(name = "actor_id")})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Actor> actors;
 
     @OneToMany(mappedBy = "movie")
@@ -101,8 +107,10 @@ public class Movie {
     private String website;
 
     @ManyToMany(mappedBy = "moviesToWatch")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<User> usersWhoWantToWatch;
 
     @ManyToMany(mappedBy = "favoriteMovies")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<User> usersWhoFavorited;
 }

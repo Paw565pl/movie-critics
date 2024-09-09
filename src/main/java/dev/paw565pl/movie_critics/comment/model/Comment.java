@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -27,12 +29,14 @@ public class Comment {
     @NonNull @Column(name = "text", nullable = false, columnDefinition = "TEXT")
     private String text;
 
-    @NonNull @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    @OnDelete(action = OnDeleteAction.SET_NULL)
     private User author;
 
     @NonNull @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false, updatable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Movie movie;
 
     @CreationTimestamp
