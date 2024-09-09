@@ -50,7 +50,8 @@ public class RatingService {
         var movie = movieRepository.findById(movieId).orElseThrow(MovieNotFoundException::new);
         var user = userRepository.findById(UserDetailsImpl.fromJwt(jwt).getId()).orElseThrow();
 
-        var rating = new Rating(dto.value(), user, movie);
+        var rating = new Rating(dto.value(), movie);
+        rating.setAuthor(user);
 
         try {
             var savedRating = ratingRepository.saveAndFlush(rating);
