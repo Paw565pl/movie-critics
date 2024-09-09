@@ -48,4 +48,16 @@ public class User {
                             columnList = "user_id, movie_id",
                             unique = true))
     private List<Movie> moviesToWatch;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_favorite_movies",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id"),
+            indexes =
+                    @Index(
+                            name = "one_movie_per_user",
+                            columnList = "user_id, movie_id",
+                            unique = true))
+    private List<Movie> favoriteMovies;
 }

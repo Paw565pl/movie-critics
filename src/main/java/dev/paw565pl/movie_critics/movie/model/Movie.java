@@ -102,4 +102,7 @@ public class Movie {
 
     @ManyToMany(mappedBy = "moviesToWatch")
     private List<User> usersWhoWantToWatch;
+
+    @ManyToMany(mappedBy = "favoriteMovies")
+    private List<User> usersWhoFavorited;
 }
