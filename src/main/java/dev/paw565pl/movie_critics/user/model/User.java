@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import java.util.List;
 import java.util.UUID;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -43,8 +44,14 @@ public class User {
     @OneToMany(mappedBy = "author")
     private List<Rating> ratings;
 
+    @Formula("(SELECT COUNT(r.id) FROM ratings r WHERE r.user_id = id)")
+    private Long ratingsCount;
+
     @OneToMany(mappedBy = "author")
     private List<Comment> comments;
+
+    @Formula("(SELECT COUNT(c.id) FROM comments c WHERE c.user_id = id)")
+    private Long commentsCount;
 
     @ManyToMany
     @JoinTable(
