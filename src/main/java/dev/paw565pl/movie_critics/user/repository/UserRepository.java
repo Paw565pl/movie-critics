@@ -15,7 +15,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
                 LEFT JOIN Comment c ON c.author = u
                 GROUP BY u.id
                 HAVING COUNT(r.id) + COUNT(c.id) > 0
-                ORDER BY COUNT(r.id) + COUNT(c.id) ASC
+                ORDER BY COUNT(r.id) + COUNT(c.id) DESC
             """)
     Page<User> findAllOrderByRatingsAndCommentsCount(Pageable pageable);
 }
