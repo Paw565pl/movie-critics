@@ -5,6 +5,7 @@ import dev.paw565pl.movie_critics.auth.annotation.IsAdmin;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class AdminRestController {
 
     @IsAdmin
     @GetMapping("/export-movies")
-    public ResponseEntity<?> exportMovies() {
+    public ResponseEntity<ByteArrayResource> exportMovies() {
         var file = adminService.createMoviesExportBytes();
         var formattedDateTime =
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
