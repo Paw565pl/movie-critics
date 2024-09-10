@@ -4,10 +4,8 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 public class MovieResponse {
 
     private Long id;
