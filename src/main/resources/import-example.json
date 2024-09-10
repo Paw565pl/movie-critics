@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Die hard 5",
+    "year": "2006",
+    "rated": "R",
+    "released": "2006-03-24",
+    "runtime": "179 min",
+    "genres": [
+      {
+        "name": "Drama"
+      },
+      {
+        "name": "Crime"
+      }
+    ],
+    "directors": [
+      {
+        "name": "Francis Ford Coppola"
+      }
+    ],
+    "writers": [
+      {
+        "name": "Mario Puzo"
+      },
+      {
+        "name": "Francis Ford Coppola"
+      }
+    ],
+    "actors": [
+      {
+        "name": "Marlon Brando"
+      },
+      {
+        "name": "Al Pacino"
+      },
+      {
+        "name": "James Caan"
+      }
+    ],
+    "plot": null,
+    "language": "English",
+    "country": "United States",
+    "awards": null,
+    "poster": null,
+    "metaScore": "94",
+    "dvd": null,
+    "boxOffice": null,
+    "website": null
+  }
+]
