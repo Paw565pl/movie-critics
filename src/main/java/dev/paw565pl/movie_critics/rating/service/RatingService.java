@@ -4,6 +4,7 @@ import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.rating.dto.RatingDto;
+import dev.paw565pl.movie_critics.rating.mapper.RatingMapper;
 import dev.paw565pl.movie_critics.rating.model.Rating;
 import dev.paw565pl.movie_critics.rating.repository.RatingRepository;
 import dev.paw565pl.movie_critics.rating.response.RatingResponse;
@@ -19,17 +20,20 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class RatingService {
 
-    private final RatingRepository ratingRepository;
     private final UserRepository userRepository;
     private final MovieRepository movieRepository;
+    private final RatingRepository ratingRepository;
+    private final RatingMapper ratingMapper;
 
     public RatingService(
-            RatingRepository ratingRepository,
             UserRepository userRepository,
-            MovieRepository movieRepository) {
-        this.ratingRepository = ratingRepository;
+            MovieRepository movieRepository,
+            RatingRepository ratingRepository,
+            RatingMapper ratingMapper) {
         this.userRepository = userRepository;
         this.movieRepository = movieRepository;
+        this.ratingRepository = ratingRepository;
+        this.ratingMapper = ratingMapper;
     }
 
     private Rating findRating(Long movieId, UUID userId) {
@@ -42,7 +46,7 @@ public class RatingService {
         var user = UserDetailsImpl.fromJwt(jwt);
         var rating = findRating(movieId, user.getId());
 
-        return new RatingResponse(rating.getValue());
+        return ratingMapper.toResponse(rating);
     }
 
     @Transactional
@@ -50,12 +54,11 @@ public class RatingService {
         var movie = movieRepository.findById(movieId).orElseThrow(MovieNotFoundException::new);
         var user = userRepository.findById(UserDetailsImpl.fromJwt(jwt).getId()).orElseThrow();
 
-        var rating = new Rating(dto.value(), movie);
-        rating.setAuthor(user);
+        var rating = ratingMapper.toEntity(dto, movie, user);
 
         try {
             var savedRating = ratingRepository.saveAndFlush(rating);
-            return new RatingResponse(savedRating.getValue());
+            return ratingMapper.toResponse(savedRating);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("You have already rated this movie.");
         }
@@ -69,7 +72,7 @@ public class RatingService {
         rating.setValue(dto.value());
 
         var savedRating = ratingRepository.save(rating);
-        return new RatingResponse(savedRating.getValue());
+        return ratingMapper.toResponse(savedRating);
     }
 
     @Transactional
