@@ -2,7 +2,10 @@ package dev.paw565pl.movie_critics.movie.mapper;
 
 import dev.paw565pl.movie_critics.movie.dto.MovieDto;
 import dev.paw565pl.movie_critics.movie.model.Movie;
-import dev.paw565pl.movie_critics.movie.repository.*;
+import dev.paw565pl.movie_critics.movie.repository.ActorRepository;
+import dev.paw565pl.movie_critics.movie.repository.DirectorRepository;
+import dev.paw565pl.movie_critics.movie.repository.GenreRepository;
+import dev.paw565pl.movie_critics.movie.repository.WriterRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import java.util.ArrayList;
 import org.modelmapper.ModelMapper;
@@ -13,7 +16,6 @@ public class MovieMapperImpl implements MovieMapper {
 
     private final ModelMapper modelMapper;
 
-    private final MovieRepository movieRepository;
     private final ActorRepository actorRepository;
     private final DirectorRepository directorRepository;
     private final GenreRepository genreRepository;
@@ -21,13 +23,11 @@ public class MovieMapperImpl implements MovieMapper {
 
     public MovieMapperImpl(
             ModelMapper modelMapper,
-            MovieRepository movieRepository,
             ActorRepository actorRepository,
             DirectorRepository directorRepository,
             GenreRepository genreRepository,
             WriterRepository writerRepository) {
         this.modelMapper = modelMapper;
-        this.movieRepository = movieRepository;
         this.actorRepository = actorRepository;
         this.directorRepository = directorRepository;
         this.genreRepository = genreRepository;
@@ -69,14 +69,6 @@ public class MovieMapperImpl implements MovieMapper {
     }
 
     public MovieResponse toResponse(Movie movie) {
-        var response = modelMapper.map(movie, MovieResponse.class);
-
-        var ratingsCount = movieRepository.countRatingsByMovieId(movie.getId());
-        var averageRating = movieRepository.findAverageRatingByMovieId(movie.getId()).orElse(null);
-
-        response.setRatingsCount(ratingsCount);
-        response.setAverageRating(averageRating);
-
-        return response;
+        return modelMapper.map(movie, MovieResponse.class);
     }
 }

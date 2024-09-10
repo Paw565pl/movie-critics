@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
 import lombok.*;
+import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -75,6 +76,14 @@ public class Movie {
 
     @OneToMany(mappedBy = "movie")
     private List<Rating> ratings;
+
+    @Setter(AccessLevel.NONE)
+    @Formula("(SELECT COUNT(r.id) FROM ratings r WHERE r.movie_id = id)")
+    private Long ratingsCount;
+
+    @Setter(AccessLevel.NONE)
+    @Formula("(SELECT ROUND(AVG(r.value), 2) FROM ratings r WHERE r.movie_id = id)")
+    private Double averageRating;
 
     @OneToMany(mappedBy = "movie")
     private List<Comment> comments;
