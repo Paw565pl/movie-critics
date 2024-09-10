@@ -14,6 +14,7 @@ public class CommentMapper {
     public Comment toEntity(CommentDto dto, User author, Movie movie) {
         var comment = new Comment(dto.text(), movie);
         comment.setAuthor(author);
+
         return comment;
     }
 
