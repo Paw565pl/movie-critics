@@ -20,6 +20,7 @@ services:
     environment:
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HOSTNAME: localhost
       KC_HTTP_PORT: 9000
     volumes:
       - keycloak-data:/opt/keycloak/data
