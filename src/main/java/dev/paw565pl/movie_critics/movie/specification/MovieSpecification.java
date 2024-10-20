@@ -1,8 +1,10 @@
 package dev.paw565pl.movie_critics.movie.specification;
 
 import dev.paw565pl.movie_critics.movie.model.Movie;
+import dev.paw565pl.movie_critics.user.model.User;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.data.jpa.domain.Specification;
 
 public class MovieSpecification {
@@ -113,6 +115,22 @@ public class MovieSpecification {
             return builder.like(
                     builder.lower(root.get("country")),
                     builder.lower(builder.literal("%" + country + "%")));
+        };
+    }
+
+    public static Specification<Movie> notIgnoredByUser(UUID userId) {
+        return (root, query, builder) -> {
+            if (userId == null) {
+                return null;
+            }
+
+            var subquery = query.subquery(Long.class);
+            var userRoot = subquery.from(User.class);
+            var ignoredMovies = userRoot.join("ignoredMovies");
+            subquery.select(ignoredMovies.get("id"))
+                    .where(builder.equal(userRoot.get("id"), userId));
+
+            return builder.not(root.get("id").in(subquery));
         };
     }
 }
