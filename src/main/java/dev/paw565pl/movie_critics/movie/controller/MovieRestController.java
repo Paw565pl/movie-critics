@@ -6,9 +6,12 @@ import dev.paw565pl.movie_critics.movie.dto.MovieFilterDto;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie.service.MovieService;
 import jakarta.validation.Valid;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,8 +25,9 @@ public class MovieRestController {
     }
 
     @GetMapping
-    public Page<MovieResponse> findAll(MovieFilterDto filters, Pageable pageable) {
-        return movieService.findAll(filters, pageable);
+    public Page<MovieResponse> findAll(
+            @AuthenticationPrincipal Jwt jwt, MovieFilterDto filters, Pageable pageable) {
+        return movieService.findAll(Optional.ofNullable(jwt), filters, pageable);
     }
 
     @IsAdmin

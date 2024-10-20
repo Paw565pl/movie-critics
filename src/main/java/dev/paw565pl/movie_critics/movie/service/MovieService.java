@@ -1,5 +1,6 @@
 package dev.paw565pl.movie_critics.movie.service;
 
+import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.movie.dto.MovieDto;
 import dev.paw565pl.movie_critics.movie.dto.MovieFilterDto;
 import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
@@ -8,10 +9,12 @@ import dev.paw565pl.movie_critics.movie.model.Movie;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie.specification.MovieSpecification;
+import java.util.Optional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,7 +33,8 @@ public class MovieService {
         return movieRepository.findById(id).orElseThrow(MovieNotFoundException::new);
     }
 
-    public Page<MovieResponse> findAll(MovieFilterDto filters, Pageable pageable) {
+    public Page<MovieResponse> findAll(
+            Optional<Jwt> jwt, MovieFilterDto filters, Pageable pageable) {
         var specification =
                 Specification.where(MovieSpecification.titleContainsIgnoreCase(filters.title()))
                         .and(MovieSpecification.ratedEqualsIgnoreCase(filters.rated()))
@@ -42,6 +46,11 @@ public class MovieService {
                         .and(MovieSpecification.actorsIdsContains(filters.actorsIds()))
                         .and(MovieSpecification.languageContainsIgnoreCase(filters.language()))
                         .and(MovieSpecification.countryContainsIgnoreCase(filters.country()));
+
+        if (jwt.isPresent()) {
+            var userId = UserDetailsImpl.fromJwt(jwt.get()).getId();
+            specification = specification.and(MovieSpecification.notIgnoredByUser(userId));
+        }
 
         return movieRepository.findAll(specification, pageable).map(movieMapper::toResponse);
     }
