@@ -78,4 +78,17 @@ public class User {
                             unique = true))
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Movie> favoriteMovies;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_ignored_movies",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id"),
+            indexes =
+                    @Index(
+                            name = "one_movie_per_user",
+                            columnList = "user_id, movie_id",
+                            unique = true))
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<Movie> ignoredMovies;
 }

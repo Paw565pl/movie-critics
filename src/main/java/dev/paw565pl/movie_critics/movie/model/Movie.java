@@ -122,4 +122,8 @@ public class Movie {
     @ManyToMany(mappedBy = "favoriteMovies")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<User> usersWhoFavorited;
+
+    @ManyToMany(mappedBy = "ignoredMovies")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private List<User> usersWhoIgnored;
 }
