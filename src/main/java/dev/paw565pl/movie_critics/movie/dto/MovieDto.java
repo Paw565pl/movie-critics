@@ -26,7 +26,7 @@ public record MovieDto(
         String country,
         String awards,
         String poster,
-        String metaScore,
+        Short metaScore,
         String dvd,
         String boxOffice,
         String website) {}

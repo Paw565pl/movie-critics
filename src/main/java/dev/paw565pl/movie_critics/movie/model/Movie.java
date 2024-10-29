@@ -104,7 +104,7 @@ public class Movie {
     private String poster;
 
     @Column(name = "metascore")
-    private String metaScore;
+    private Short metaScore;
 
     @Column(name = "dvd")
     private String dvd;

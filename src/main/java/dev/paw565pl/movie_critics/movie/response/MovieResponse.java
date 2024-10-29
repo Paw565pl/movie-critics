@@ -23,7 +23,7 @@ public class MovieResponse {
     private String country;
     private String awards;
     private String poster;
-    private String metaScore;
+    private Short metaScore;
     private String dvd;
     private String boxOffice;
     private String website;
