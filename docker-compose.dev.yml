@@ -2,11 +2,11 @@ services:
   database:
     image: postgres:17-alpine
     restart: always
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: movie_critics
-    ports:
-      - "5432:5432"
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
@@ -22,9 +22,6 @@ services:
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_HOSTNAME: localhost
       KC_HTTP_PORT: 9000
-    volumes:
-      - keycloak-data:/opt/keycloak/data
 
 volumes:
   postgres-data:
-  keycloak-data:
