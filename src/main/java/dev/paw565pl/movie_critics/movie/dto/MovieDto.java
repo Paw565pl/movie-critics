@@ -13,11 +13,11 @@ public record MovieDto(
                 @Size(min = 2, max = 150, message = "Title must be between 2 and 255 characters.")
                 String title,
         Year year,
-        String rated,
-        @NonNull @NotEmpty(message = "GenresIds cannot be empty.") List<Long> genresIds,
-        List<Long> directorsIds,
-        List<Long> writersIds,
-        List<Long> actorsIds,
+        String ageRating,
+        @NonNull @NotEmpty(message = "Genre ids cannot be empty.") List<Long> genreIds,
+        List<Long> directorIds,
+        List<Long> writerIds,
+        List<Long> actorIds,
         LocalDate released,
         String runtime,
         @Size(min = 10, max = 1000, message = "Plot must be between 10 and 1000 characters.")

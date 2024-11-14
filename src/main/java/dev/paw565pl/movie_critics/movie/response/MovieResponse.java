@@ -11,7 +11,7 @@ public class MovieResponse {
     private Long id;
     private String title;
     private Year year;
-    private String rated;
+    private String ageRating;
     private LocalDate released;
     private String runtime;
     private List<GenreResponse> genres;

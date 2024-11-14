@@ -23,14 +23,15 @@ public class MovieSpecification {
         };
     }
 
-    public static Specification<Movie> ratedEqualsIgnoreCase(String rated) {
+    public static Specification<Movie> ageRatingEqualsIgnoreCase(String ageRating) {
         return (root, query, builder) -> {
-            if (rated == null) {
+            if (ageRating == null) {
                 return null;
             }
 
             return builder.equal(
-                    builder.lower(root.get("rated")), builder.lower(builder.literal(rated)));
+                    builder.lower(root.get("ageRating")),
+                    builder.lower(builder.literal(ageRating)));
         };
     }
 

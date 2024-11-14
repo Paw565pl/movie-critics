@@ -36,27 +36,27 @@ public class MovieMapper {
     public Movie toEntity(MovieDto dto) {
         var movie = modelMapper.map(dto, Movie.class);
 
-        var actorsIds = dto.actorsIds() != null ? dto.actorsIds() : new ArrayList<Long>();
-        var actors = actorRepository.findAllById(actorsIds);
-        if (actors.size() != actorsIds.size()) {
-            throw new IllegalArgumentException("Invalid actors ids.");
+        var actorIds = dto.actorIds() != null ? dto.actorIds() : new ArrayList<Long>();
+        var actors = actorRepository.findAllById(actorIds);
+        if (actors.size() != actorIds.size()) {
+            throw new IllegalArgumentException("Invalid actor ids.");
         }
 
-        var directorsIds = dto.directorsIds() != null ? dto.directorsIds() : new ArrayList<Long>();
-        var directors = directorRepository.findAllById(directorsIds);
-        if (directors.size() != directorsIds.size()) {
-            throw new IllegalArgumentException("Invalid directors ids.");
+        var directorIds = dto.directorIds() != null ? dto.directorIds() : new ArrayList<Long>();
+        var directors = directorRepository.findAllById(directorIds);
+        if (directors.size() != directorIds.size()) {
+            throw new IllegalArgumentException("Invalid director ids.");
         }
 
-        var genres = genreRepository.findAllById(dto.genresIds());
-        if (genres.size() != dto.genresIds().size()) {
-            throw new IllegalArgumentException("Invalid genres ids.");
+        var genres = genreRepository.findAllById(dto.genreIds());
+        if (genres.size() != dto.genreIds().size()) {
+            throw new IllegalArgumentException("Invalid genre ids.");
         }
 
-        var writersIds = dto.writersIds() != null ? dto.writersIds() : new ArrayList<Long>();
-        var writers = writerRepository.findAllById(writersIds);
-        if (writers.size() != writersIds.size()) {
-            throw new IllegalArgumentException("Invalid writers ids.");
+        var writerIds = dto.writerIds() != null ? dto.writerIds() : new ArrayList<Long>();
+        var writers = writerRepository.findAllById(writerIds);
+        if (writers.size() != writerIds.size()) {
+            throw new IllegalArgumentException("Invalid writer ids.");
         }
 
         movie.setActors(actors);

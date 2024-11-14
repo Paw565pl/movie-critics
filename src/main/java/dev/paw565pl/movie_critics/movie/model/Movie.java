@@ -33,8 +33,8 @@ public class Movie {
     @Column(name = "year")
     private Year year;
 
-    @Column(name = "rating")
-    private String rated;
+    @Column(name = "ageRating")
+    private String ageRating;
 
     @Column(name = "released")
     private LocalDate released;

@@ -5,7 +5,7 @@ import java.util.List;
 
 public record MovieFilterDto(
         String title,
-        String rated,
+        String ageRating,
         LocalDate startReleasedDate,
         LocalDate endReleasedDate,
         List<Long> genreIds,

@@ -37,7 +37,7 @@ public class MovieService {
             Optional<Jwt> jwt, MovieFilterDto filters, Pageable pageable) {
         var specification =
                 Specification.where(MovieSpecification.titleContainsIgnoreCase(filters.title()))
-                        .and(MovieSpecification.ratedEqualsIgnoreCase(filters.rated()))
+                        .and(MovieSpecification.ageRatingEqualsIgnoreCase(filters.ageRating()))
                         .and(MovieSpecification.releasedAfterOrEquals(filters.startReleasedDate()))
                         .and(MovieSpecification.releasedBeforeOrEquals(filters.endReleasedDate()))
                         .and(MovieSpecification.genreIdsContains(filters.genreIds()))
