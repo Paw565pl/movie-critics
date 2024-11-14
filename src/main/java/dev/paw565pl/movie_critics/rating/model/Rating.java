@@ -30,7 +30,7 @@ public class Rating {
     private Byte value;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private User author;
 
