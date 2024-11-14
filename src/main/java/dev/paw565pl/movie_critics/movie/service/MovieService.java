@@ -40,10 +40,10 @@ public class MovieService {
                         .and(MovieSpecification.ratedEqualsIgnoreCase(filters.rated()))
                         .and(MovieSpecification.releasedAfterOrEquals(filters.startReleasedDate()))
                         .and(MovieSpecification.releasedBeforeOrEquals(filters.endReleasedDate()))
-                        .and(MovieSpecification.genresIdsContains(filters.genresIds()))
-                        .and(MovieSpecification.directorsIdsContains(filters.directorsIds()))
-                        .and(MovieSpecification.writersIdsContains(filters.writersIds()))
-                        .and(MovieSpecification.actorsIdsContains(filters.actorsIds()))
+                        .and(MovieSpecification.genreIdsContains(filters.genreIds()))
+                        .and(MovieSpecification.directorIdsContains(filters.directorIds()))
+                        .and(MovieSpecification.writerIdsContains(filters.writerIds()))
+                        .and(MovieSpecification.actorIdsContains(filters.actorIds()))
                         .and(MovieSpecification.languageContainsIgnoreCase(filters.language()))
                         .and(MovieSpecification.countryContainsIgnoreCase(filters.country()));
 

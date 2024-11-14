@@ -54,43 +54,43 @@ public class MovieSpecification {
         };
     }
 
-    public static Specification<Movie> genresIdsContains(List<Long> genresIds) {
+    public static Specification<Movie> genreIdsContains(List<Long> genreIds) {
         return (root, query, builder) -> {
-            if (genresIds == null || genresIds.isEmpty()) {
+            if (genreIds == null || genreIds.isEmpty()) {
                 return null;
             }
 
-            return root.get("genres").get("id").in(genresIds);
+            return root.get("genres").get("id").in(genreIds);
         };
     }
 
-    public static Specification<Movie> directorsIdsContains(List<Long> directorsIds) {
+    public static Specification<Movie> directorIdsContains(List<Long> directorIds) {
         return (root, query, builder) -> {
-            if (directorsIds == null || directorsIds.isEmpty()) {
+            if (directorIds == null || directorIds.isEmpty()) {
                 return null;
             }
 
-            return root.get("directors").get("id").in(directorsIds);
+            return root.get("directors").get("id").in(directorIds);
         };
     }
 
-    public static Specification<Movie> writersIdsContains(List<Long> writersIds) {
+    public static Specification<Movie> writerIdsContains(List<Long> writerIds) {
         return (root, query, builder) -> {
-            if (writersIds == null || writersIds.isEmpty()) {
+            if (writerIds == null || writerIds.isEmpty()) {
                 return null;
             }
 
-            return root.get("writers").get("id").in(writersIds);
+            return root.get("writers").get("id").in(writerIds);
         };
     }
 
-    public static Specification<Movie> actorsIdsContains(List<Long> actorsIds) {
+    public static Specification<Movie> actorIdsContains(List<Long> actorIds) {
         return (root, query, builder) -> {
-            if (actorsIds == null || actorsIds.isEmpty()) {
+            if (actorIds == null || actorIds.isEmpty()) {
                 return null;
             }
 
-            return root.get("actors").get("id").in(actorsIds);
+            return root.get("actors").get("id").in(actorIds);
         };
     }
 
@@ -124,7 +124,11 @@ public class MovieSpecification {
                 return null;
             }
 
-            var subquery = query.subquery(Long.class);
+            var subquery = query != null ? query.subquery(Long.class) : null;
+            if (subquery == null) {
+                return null;
+            }
+
             var userRoot = subquery.from(User.class);
             var ignoredMovies = userRoot.join("ignoredMovies");
             subquery.select(ignoredMovies.get("id"))

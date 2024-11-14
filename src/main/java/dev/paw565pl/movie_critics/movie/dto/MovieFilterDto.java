@@ -8,9 +8,9 @@ public record MovieFilterDto(
         String rated,
         LocalDate startReleasedDate,
         LocalDate endReleasedDate,
-        List<Long> genresIds,
-        List<Long> directorsIds,
-        List<Long> writersIds,
-        List<Long> actorsIds,
+        List<Long> genreIds,
+        List<Long> directorIds,
+        List<Long> writerIds,
+        List<Long> actorIds,
         String language,
         String country) {}
