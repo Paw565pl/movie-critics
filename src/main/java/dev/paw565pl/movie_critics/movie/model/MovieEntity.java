@@ -48,6 +48,33 @@ public class MovieEntity {
     @Column(name = "runtime")
     private String runtime;
 
+    @Column(name = "plot", columnDefinition = "TEXT")
+    private String plot;
+
+    @Column(name = "language")
+    private String language;
+
+    @Column(name = "country")
+    private String country;
+
+    @Column(name = "awards")
+    private String awards;
+
+    @Column(name = "poster")
+    private String poster;
+
+    @Column(name = "metascore")
+    private Short metaScore;
+
+    @Column(name = "dvd")
+    private String dvd;
+
+    @Column(name = "boxoffice")
+    private String boxOffice;
+
+    @Column(name = "website")
+    private String website;
+
     @NonNull
     @ManyToMany
     @JoinTable(
@@ -94,33 +121,6 @@ public class MovieEntity {
 
     @OneToMany(mappedBy = "movie")
     private List<Comment> comments = new ArrayList<>();
-
-    @Column(name = "plot", columnDefinition = "TEXT")
-    private String plot;
-
-    @Column(name = "language")
-    private String language;
-
-    @Column(name = "country")
-    private String country;
-
-    @Column(name = "awards")
-    private String awards;
-
-    @Column(name = "poster")
-    private String poster;
-
-    @Column(name = "metascore")
-    private Short metaScore;
-
-    @Column(name = "dvd")
-    private String dvd;
-
-    @Column(name = "boxoffice")
-    private String boxOffice;
-
-    @Column(name = "website")
-    private String website;
 
     @ManyToMany(mappedBy = "moviesToWatch")
     @OnDelete(action = OnDeleteAction.CASCADE)

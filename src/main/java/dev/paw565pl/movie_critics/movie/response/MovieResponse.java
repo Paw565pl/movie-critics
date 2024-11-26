@@ -1,9 +1,10 @@
 package dev.paw565pl.movie_critics.movie.response;
 
+import lombok.Data;
+
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
-import lombok.Data;
 
 @Data
 public class MovieResponse {
@@ -14,10 +15,6 @@ public class MovieResponse {
     private String ageRating;
     private LocalDate released;
     private String runtime;
-    private List<GenreResponse> genres;
-    private List<DirectorResponse> directors;
-    private List<WriterResponse> writers;
-    private List<ActorResponse> actors;
     private String plot;
     private String language;
     private String country;
@@ -27,6 +24,10 @@ public class MovieResponse {
     private String dvd;
     private String boxOffice;
     private String website;
+    private List<GenreResponse> genres;
+    private List<DirectorResponse> directors;
+    private List<WriterResponse> writers;
+    private List<ActorResponse> actors;
     private Long ratingsCount;
     private Double averageRating;
 }

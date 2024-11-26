@@ -16,10 +16,6 @@ public record MovieDto(
         String ageRating,
         LocalDate released,
         String runtime,
-        @NotEmpty(message = "Genre ids cannot be empty.") List<Long> genreIds,
-        List<Long> directorIds,
-        List<Long> writerIds,
-        List<Long> actorIds,
         @Size(min = 10, max = 1000, message = "Plot must be between 10 and 1000 characters.")
         String plot,
         String language,
@@ -29,5 +25,10 @@ public record MovieDto(
         Short metaScore,
         String dvd,
         String boxOffice,
-        String website) {
+        String website,
+        @NotEmpty(message = "Genre ids cannot be empty.") List<Long> genreIds,
+        List<Long> directorIds,
+        List<Long> writerIds,
+        List<Long> actorId
+) {
 }
