@@ -3,8 +3,8 @@ package dev.paw565pl.movie_critics.comment.mapper;
 import dev.paw565pl.movie_critics.comment.dto.CommentDto;
 import dev.paw565pl.movie_critics.comment.model.CommentEntity;
 import dev.paw565pl.movie_critics.comment.response.CommentResponse;
-import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.user.model.User;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -12,11 +12,14 @@ import java.util.Optional;
 @Component
 public class CommentMapper {
 
-    public CommentEntity toEntity(CommentDto commentDto, User author, MovieEntity movieEntity) {
-        var comment = new CommentEntity(commentDto.text(), movieEntity);
-        comment.setAuthor(author);
+    private final ModelMapper modelMapper;
 
-        return comment;
+    public CommentMapper(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
+
+    public CommentEntity toEntity(CommentDto commentDto) {
+        return modelMapper.map(commentDto, CommentEntity.class);
     }
 
     public CommentResponse toResponse(CommentEntity commentEntity) {
