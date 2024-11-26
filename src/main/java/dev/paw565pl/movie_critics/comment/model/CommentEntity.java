@@ -34,6 +34,7 @@ public class CommentEntity {
     @Column(name = "text", columnDefinition = "TEXT", nullable = false)
     private String text;
 
+    @NonNull
     @ManyToOne
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.SET_NULL)
