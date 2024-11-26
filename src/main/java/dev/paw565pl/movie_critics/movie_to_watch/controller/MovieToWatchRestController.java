@@ -32,8 +32,8 @@ public class MovieToWatchRestController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MovieResponse create(
-            @AuthenticationPrincipal Jwt jwt, @Valid @RequestBody MovieToWatchDto dto) {
-        return movieToWatchService.create(jwt, dto);
+            @AuthenticationPrincipal Jwt jwt, @Valid @RequestBody MovieToWatchDto movieToWatchDto) {
+        return movieToWatchService.create(jwt, movieToWatchDto);
     }
 
     @IsAuthenticated

@@ -1,14 +1,13 @@
 package dev.paw565pl.movie_critics.movie_to_watch.service;
 
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
-import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
 import dev.paw565pl.movie_critics.movie.mapper.MovieMapper;
 import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
+import dev.paw565pl.movie_critics.movie.service.MovieService;
 import dev.paw565pl.movie_critics.movie_to_watch.dto.MovieToWatchDto;
 import dev.paw565pl.movie_critics.user.repository.UserRepository;
-import java.util.UUID;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,26 +17,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.UUID;
+
 @Service
 public class MovieToWatchService {
 
-    private final UserRepository userRepository;
     private final MovieRepository movieRepository;
+    private final MovieService movieService;
     private final MovieMapper movieMapper;
+    private final UserRepository userRepository;
 
-    public MovieToWatchService(
-            UserRepository userRepository,
-            MovieRepository movieRepository,
-            MovieMapper movieMapper) {
-        this.userRepository = userRepository;
+    public MovieToWatchService(MovieRepository movieRepository, MovieService movieService, MovieMapper movieMapper, UserRepository userRepository) {
         this.movieRepository = movieRepository;
+        this.movieService = movieService;
         this.movieMapper = movieMapper;
+        this.userRepository = userRepository;
     }
 
     private MovieEntity findMovieToWatch(Long movieId, UUID userId) {
         return movieRepository
                 .findByIdAndUsersWhoWantToWatchId(movieId, userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie with given id is not in your to watch list."));
     }
 
     public Page<MovieResponse> findAll(Jwt jwt, Pageable pageable) {
@@ -50,24 +50,18 @@ public class MovieToWatchService {
     @Transactional
     public MovieResponse create(Jwt jwt, MovieToWatchDto dto) {
         var userId = UserDetailsImpl.fromJwt(jwt).getId();
-        var movie =
-                movieRepository
-                        .findById(dto.movieId())
-                        .orElseThrow(
-                                () ->
-                                        new ResponseStatusException(
-                                                HttpStatus.BAD_REQUEST,
-                                                new MovieNotFoundException().getMessage()));
-        var user = userRepository.findById(userId).orElseThrow();
+        var userEntity = userRepository.findById(userId).orElseThrow();
+        var movieEntity =
+                movieService.findEntity(dto.movieId());
 
         try {
-            user.getMoviesToWatch().add(movie);
-            userRepository.saveAndFlush(user);
+            userEntity.getMoviesToWatch().add(movieEntity);
+            userRepository.saveAndFlush(userEntity);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Movie is already in your to watch list.");
         }
 
-        return movieMapper.toResponse(movie);
+        return movieMapper.toResponse(movieEntity);
     }
 
     @Transactional
@@ -75,8 +69,9 @@ public class MovieToWatchService {
         var userId = UserDetailsImpl.fromJwt(jwt).getId();
         var movieToWatch = findMovieToWatch(movieId, userId);
 
-        var user = userRepository.findById(userId).orElseThrow();
-        user.getMoviesToWatch().remove(movieToWatch);
-        userRepository.save(user);
+        var userEntity = userRepository.findById(userId).orElseThrow();
+        userEntity.getMoviesToWatch().remove(movieToWatch);
+
+        userRepository.save(userEntity);
     }
 }
