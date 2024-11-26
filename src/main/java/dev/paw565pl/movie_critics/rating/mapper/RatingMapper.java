@@ -1,6 +1,6 @@
 package dev.paw565pl.movie_critics.rating.mapper;
 
-import dev.paw565pl.movie_critics.movie.model.Movie;
+import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.rating.dto.RatingDto;
 import dev.paw565pl.movie_critics.rating.model.Rating;
 import dev.paw565pl.movie_critics.rating.response.RatingResponse;
@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class RatingMapper {
 
-    public Rating toEntity(RatingDto dto, Movie movie, User user) {
-        var rating = new Rating(dto.value(), movie);
+    public Rating toEntity(RatingDto dto, MovieEntity movieEntity, User user) {
+        var rating = new Rating(dto.value(), movieEntity);
         rating.setAuthor(user);
 
         return rating;

@@ -34,7 +34,7 @@ public class FavoriteMovieService {
         this.movieMapper = movieMapper;
     }
 
-    private Movie findFavoriteMovie(Long movieId, UUID userId) {
+    private MovieEntity findFavoriteMovie(Long movieId, UUID userId) {
         return movieRepository
                 .findByIdAndUsersWhoFavoritedId(movieId, userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

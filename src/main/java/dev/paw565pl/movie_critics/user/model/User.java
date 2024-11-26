@@ -1,7 +1,7 @@
 package dev.paw565pl.movie_critics.user.model;
 
 import dev.paw565pl.movie_critics.comment.model.Comment;
-import dev.paw565pl.movie_critics.movie.model.Movie;
+import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.rating.model.Rating;
 import dev.paw565pl.movie_critics.user.provider.OAuthProvider;
 import jakarta.persistence.*;
@@ -64,7 +64,7 @@ public class User {
                             columnList = "user_id, movie_id",
                             unique = true))
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Movie> moviesToWatch;
+    private List<MovieEntity> moviesToWatch;
 
     @ManyToMany
     @JoinTable(
@@ -77,7 +77,7 @@ public class User {
                             columnList = "user_id, movie_id",
                             unique = true))
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Movie> favoriteMovies;
+    private List<MovieEntity> favoriteMovies;
 
     @ManyToMany
     @JoinTable(
@@ -90,5 +90,5 @@ public class User {
                             columnList = "user_id, movie_id",
                             unique = true))
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Movie> ignoredMovies;
+    private List<MovieEntity> ignoredMovies;
 }

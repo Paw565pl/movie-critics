@@ -1,9 +1,10 @@
 package dev.paw565pl.movie_critics.movie.repository;
 
-import dev.paw565pl.movie_critics.movie.model.Director;
-import java.util.Optional;
+import dev.paw565pl.movie_critics.movie.model.DirectorEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface DirectorRepository extends JpaRepository<Director, Long> {
-    Optional<Director> findByNameIgnoreCase(String name);
+import java.util.Optional;
+
+public interface DirectorRepository extends JpaRepository<DirectorEntity, Long> {
+    Optional<DirectorEntity> findByNameIgnoreCase(String name);
 }

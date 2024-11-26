@@ -4,30 +4,36 @@ import dev.paw565pl.movie_critics.comment.model.Comment;
 import dev.paw565pl.movie_critics.rating.model.Rating;
 import dev.paw565pl.movie_critics.user.model.User;
 import jakarta.persistence.*;
-import java.time.LocalDate;
-import java.time.Year;
-import java.util.List;
 import lombok.*;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-@NoArgsConstructor
-@RequiredArgsConstructor
+import java.time.LocalDate;
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
+@NoArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @Table(
         name = "movies",
         indexes = {
-            @Index(name = "index_title", columnList = "title", unique = true),
-            @Index(name = "index_released", columnList = "released")
+                @Index(name = "index_title", columnList = "title", unique = true),
+                @Index(name = "index_released", columnList = "released")
         })
-public class Movie {
+public class MovieEntity {
 
-    @Id @GeneratedValue private Long id;
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
+    private Long id;
 
-    @NonNull @Column(name = "title", nullable = false)
+    @NonNull
+    @Column(name = "title", nullable = false)
     private String title;
 
     @Column(name = "year")
@@ -42,13 +48,14 @@ public class Movie {
     @Column(name = "runtime")
     private String runtime;
 
-    @NonNull @ManyToMany
+    @NonNull
+    @ManyToMany
     @JoinTable(
             name = "movie_genres",
             joinColumns = {@JoinColumn(name = "movie_id")},
             inverseJoinColumns = {@JoinColumn(name = "genre_id")})
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Genre> genres;
+    private List<GenreEntity> genres = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -56,7 +63,7 @@ public class Movie {
             joinColumns = {@JoinColumn(name = "movie_id")},
             inverseJoinColumns = {@JoinColumn(name = "director_id")})
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Director> directors;
+    private List<DirectorEntity> directors = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -64,7 +71,7 @@ public class Movie {
             joinColumns = {@JoinColumn(name = "movie_id")},
             inverseJoinColumns = {@JoinColumn(name = "writer_id")})
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Writer> writers;
+    private List<WriterEntity> writers = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -72,10 +79,10 @@ public class Movie {
             joinColumns = {@JoinColumn(name = "movie_id")},
             inverseJoinColumns = {@JoinColumn(name = "actor_id")})
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<Actor> actors;
+    private List<ActorEntity> actors = new ArrayList<>();
 
     @OneToMany(mappedBy = "movie")
-    private List<Rating> ratings;
+    private List<Rating> ratings = new ArrayList<>();
 
     @Setter(AccessLevel.NONE)
     @Formula("(SELECT COUNT(r.id) FROM ratings r WHERE r.movie_id = id)")
@@ -86,7 +93,7 @@ public class Movie {
     private Double averageRating;
 
     @OneToMany(mappedBy = "movie")
-    private List<Comment> comments;
+    private List<Comment> comments = new ArrayList<>();
 
     @Column(name = "plot", columnDefinition = "TEXT")
     private String plot;
@@ -117,13 +124,13 @@ public class Movie {
 
     @ManyToMany(mappedBy = "moviesToWatch")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<User> usersWhoWantToWatch;
+    private List<User> usersWhoWantToWatch = new ArrayList<>();
 
     @ManyToMany(mappedBy = "favoriteMovies")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<User> usersWhoFavorited;
+    private List<User> usersWhoFavorited = new ArrayList<>();
 
     @ManyToMany(mappedBy = "ignoredMovies")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<User> usersWhoIgnored;
+    private List<User> usersWhoIgnored = new ArrayList<>();
 }

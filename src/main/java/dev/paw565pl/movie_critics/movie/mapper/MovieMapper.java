@@ -1,13 +1,15 @@
 package dev.paw565pl.movie_critics.movie.mapper;
 
 import dev.paw565pl.movie_critics.movie.dto.MovieDto;
-import dev.paw565pl.movie_critics.movie.model.Movie;
+import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.movie.repository.ActorRepository;
 import dev.paw565pl.movie_critics.movie.repository.DirectorRepository;
 import dev.paw565pl.movie_critics.movie.repository.GenreRepository;
 import dev.paw565pl.movie_critics.movie.repository.WriterRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
+
 import java.util.ArrayList;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
@@ -33,8 +35,8 @@ public class MovieMapper {
         this.writerRepository = writerRepository;
     }
 
-    public Movie toEntity(MovieDto dto) {
-        var movie = modelMapper.map(dto, Movie.class);
+    public MovieEntity toEntity(MovieDto dto) {
+        var movie = modelMapper.map(dto, MovieEntity.class);
 
         var actorIds = dto.actorIds() != null ? dto.actorIds() : new ArrayList<Long>();
         var actors = actorRepository.findAllById(actorIds);
@@ -67,7 +69,7 @@ public class MovieMapper {
         return movie;
     }
 
-    public MovieResponse toResponse(Movie movie) {
-        return modelMapper.map(movie, MovieResponse.class);
+    public MovieResponse toResponse(MovieEntity movieEntity) {
+        return modelMapper.map(movieEntity, MovieResponse.class);
     }
 }

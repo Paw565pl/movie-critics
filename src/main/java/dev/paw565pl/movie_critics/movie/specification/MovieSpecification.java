@@ -1,17 +1,20 @@
 package dev.paw565pl.movie_critics.movie.specification;
 
-import dev.paw565pl.movie_critics.movie.model.Movie;
+import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.user.model.User;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+
 import org.springframework.data.jpa.domain.Specification;
 
 public class MovieSpecification {
 
-    private MovieSpecification() {}
+    private MovieSpecification() {
+    }
 
-    public static Specification<Movie> titleContainsIgnoreCase(String title) {
+    public static Specification<MovieEntity> titleContainsIgnoreCase(String title) {
         return (root, query, builder) -> {
             if (title == null) {
                 return null;
@@ -23,7 +26,7 @@ public class MovieSpecification {
         };
     }
 
-    public static Specification<Movie> ageRatingEqualsIgnoreCase(String ageRating) {
+    public static Specification<MovieEntity> ageRatingEqualsIgnoreCase(String ageRating) {
         return (root, query, builder) -> {
             if (ageRating == null) {
                 return null;
@@ -35,7 +38,7 @@ public class MovieSpecification {
         };
     }
 
-    public static Specification<Movie> releasedAfterOrEquals(LocalDate startReleasedDate) {
+    public static Specification<MovieEntity> releasedAfterOrEquals(LocalDate startReleasedDate) {
         return (root, query, builder) -> {
             if (startReleasedDate == null) {
                 return null;
@@ -45,7 +48,7 @@ public class MovieSpecification {
         };
     }
 
-    public static Specification<Movie> releasedBeforeOrEquals(LocalDate endReleasedDate) {
+    public static Specification<MovieEntity> releasedBeforeOrEquals(LocalDate endReleasedDate) {
         return (root, query, builder) -> {
             if (endReleasedDate == null) {
                 return null;
@@ -55,7 +58,7 @@ public class MovieSpecification {
         };
     }
 
-    public static Specification<Movie> genreIdsContains(List<Long> genreIds) {
+    public static Specification<MovieEntity> genreIdsContains(List<Long> genreIds) {
         return (root, query, builder) -> {
             if (genreIds == null || genreIds.isEmpty()) {
                 return null;
@@ -65,7 +68,7 @@ public class MovieSpecification {
         };
     }
 
-    public static Specification<Movie> directorIdsContains(List<Long> directorIds) {
+    public static Specification<MovieEntity> directorIdsContains(List<Long> directorIds) {
         return (root, query, builder) -> {
             if (directorIds == null || directorIds.isEmpty()) {
                 return null;
@@ -75,7 +78,7 @@ public class MovieSpecification {
         };
     }
 
-    public static Specification<Movie> writerIdsContains(List<Long> writerIds) {
+    public static Specification<MovieEntity> writerIdsContains(List<Long> writerIds) {
         return (root, query, builder) -> {
             if (writerIds == null || writerIds.isEmpty()) {
                 return null;
@@ -85,7 +88,7 @@ public class MovieSpecification {
         };
     }
 
-    public static Specification<Movie> actorIdsContains(List<Long> actorIds) {
+    public static Specification<MovieEntity> actorIdsContains(List<Long> actorIds) {
         return (root, query, builder) -> {
             if (actorIds == null || actorIds.isEmpty()) {
                 return null;
@@ -95,7 +98,7 @@ public class MovieSpecification {
         };
     }
 
-    public static Specification<Movie> languageContainsIgnoreCase(String language) {
+    public static Specification<MovieEntity> languageContainsIgnoreCase(String language) {
         return (root, query, builder) -> {
             if (language == null) {
                 return null;
@@ -107,7 +110,7 @@ public class MovieSpecification {
         };
     }
 
-    public static Specification<Movie> countryContainsIgnoreCase(String country) {
+    public static Specification<MovieEntity> countryContainsIgnoreCase(String country) {
         return (root, query, builder) -> {
             if (country == null) {
                 return null;
@@ -119,7 +122,7 @@ public class MovieSpecification {
         };
     }
 
-    public static Specification<Movie> notIgnoredByUser(UUID userId) {
+    public static Specification<MovieEntity> notIgnoredByUser(UUID userId) {
         return (root, query, builder) -> {
             if (userId == null) {
                 return null;

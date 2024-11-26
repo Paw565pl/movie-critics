@@ -5,7 +5,7 @@ import dev.paw565pl.movie_critics.movie.dto.MovieDto;
 import dev.paw565pl.movie_critics.movie.dto.MovieFilterDto;
 import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
 import dev.paw565pl.movie_critics.movie.mapper.MovieMapper;
-import dev.paw565pl.movie_critics.movie.model.Movie;
+import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie.specification.MovieSpecification;
@@ -29,7 +29,7 @@ public class MovieService {
         this.movieMapper = movieMapper;
     }
 
-    private Movie findMovie(Long id) {
+    private MovieEntity findMovie(Long id) {
         return movieRepository.findById(id).orElseThrow(MovieNotFoundException::new);
     }
 

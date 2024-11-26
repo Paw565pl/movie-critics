@@ -6,10 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.paw565pl.movie_critics.movie.mapper.MovieMapper;
 import dev.paw565pl.movie_critics.movie.model.*;
 import dev.paw565pl.movie_critics.movie.repository.*;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,6 +14,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -78,18 +79,18 @@ public class AdminService {
         try (var inputStream = file.getInputStream()) {
             List<Map<String, Object>> jsonList = objectMapper.readValue(inputStream, List.class);
 
-            var genres = new HashSet<Genre>();
-            var directors = new HashSet<Director>();
-            var writers = new HashSet<Writer>();
-            var actors = new HashSet<Actor>();
-            var movies = new HashSet<Movie>();
+            var genres = new HashSet<GenreEntity>();
+            var directors = new HashSet<DirectorEntity>();
+            var writers = new HashSet<WriterEntity>();
+            var actors = new HashSet<ActorEntity>();
+            var movies = new HashSet<MovieEntity>();
 
             jsonList.forEach(
                     (m) -> {
-                        var currentGenres = new HashSet<Genre>();
-                        var currentDirectors = new HashSet<Director>();
-                        var currentWriters = new HashSet<Writer>();
-                        var currentActors = new HashSet<Actor>();
+                        var currentGenres = new HashSet<GenreEntity>();
+                        var currentDirectors = new HashSet<DirectorEntity>();
+                        var currentWriters = new HashSet<WriterEntity>();
+                        var currentActors = new HashSet<ActorEntity>();
 
                         var genresJson = (List<Map<String, String>>) m.get("genres");
                         genresJson.forEach(
@@ -98,7 +99,7 @@ public class AdminService {
                                     var genre =
                                             genreRepository
                                                     .findByNameIgnoreCase(genreName)
-                                                    .orElse(new Genre(genreName));
+                                                    .orElse(new GenreEntity(genreName));
 
                                     currentGenres.add(genre);
                                     genres.add(genre);
@@ -111,7 +112,7 @@ public class AdminService {
                                     var director =
                                             directorRepository
                                                     .findByNameIgnoreCase(directorName)
-                                                    .orElse(new Director(directorName));
+                                                    .orElse(new DirectorEntity(directorName));
 
                                     currentDirectors.add(director);
                                     directors.add(director);
@@ -124,7 +125,7 @@ public class AdminService {
                                     var writer =
                                             writerRepository
                                                     .findByNameIgnoreCase(writerName)
-                                                    .orElse(new Writer(writerName));
+                                                    .orElse(new WriterEntity(writerName));
 
                                     currentWriters.add(writer);
                                     writers.add(writer);
@@ -137,13 +138,13 @@ public class AdminService {
                                     var actor =
                                             actorRepository
                                                     .findByNameIgnoreCase(actorName)
-                                                    .orElse(new Actor(actorName));
+                                                    .orElse(new ActorEntity(actorName));
 
                                     currentActors.add(actor);
                                     actors.add(actor);
                                 });
 
-                        var movie = objectMapper.convertValue(m, Movie.class);
+                        var movie = objectMapper.convertValue(m, MovieEntity.class);
 
                         movie.setGenres(currentGenres.stream().toList());
                         movie.setDirectors(currentDirectors.stream().toList());

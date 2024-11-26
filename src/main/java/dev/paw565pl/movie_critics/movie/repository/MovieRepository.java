@@ -1,24 +1,29 @@
 package dev.paw565pl.movie_critics.movie.repository;
 
-import dev.paw565pl.movie_critics.movie.model.Movie;
-import java.util.Optional;
-import java.util.UUID;
+import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
+
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 
 public interface MovieRepository
-        extends JpaRepository<Movie, Long>, JpaSpecificationExecutor<Movie> {
-    Page<Movie> findAllByUsersWhoWantToWatchId(UUID userId, Pageable pageable);
+        extends JpaRepository<MovieEntity, Long>, JpaSpecificationExecutor<MovieEntity> {
+    Page<MovieEntity> findAllByUsersWhoWantToWatchId(UUID userId, Pageable pageable);
 
-    Optional<Movie> findByIdAndUsersWhoWantToWatchId(Long id, UUID userId);
+    Optional<MovieEntity> findByIdAndUsersWhoWantToWatchId(Long id, UUID userId);
 
-    Page<Movie> findAllByUsersWhoFavoritedId(UUID userId, Pageable pageable);
+    Page<MovieEntity> findAllByUsersWhoFavoritedId(UUID userId, Pageable pageable);
 
-    Optional<Movie> findByIdAndUsersWhoFavoritedId(Long id, UUID userId);
+    Optional<MovieEntity> findByIdAndUsersWhoFavoritedId(Long id, UUID userId);
 
-    Page<Movie> findAllByUsersWhoIgnoredId(UUID userId, Pageable pageable);
+    Page<MovieEntity> findAllByUsersWhoIgnoredId(UUID userId, Pageable pageable);
 
     Optional<Movie> findByIdAndUsersWhoIgnoredId(Long id, UUID userId);
+    Optional<MovieEntity> findByIdAndUsersWhoIgnoredId(Long id, UUID userId);
+
 }

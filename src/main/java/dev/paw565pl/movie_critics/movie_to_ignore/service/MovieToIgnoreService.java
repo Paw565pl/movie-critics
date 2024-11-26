@@ -3,7 +3,7 @@ package dev.paw565pl.movie_critics.movie_to_ignore.service;
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
 import dev.paw565pl.movie_critics.movie.mapper.MovieMapper;
-import dev.paw565pl.movie_critics.movie.model.Movie;
+import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie_to_ignore.dto.MovieToIgnoreDto;
@@ -33,7 +33,7 @@ public class MovieToIgnoreService {
         this.movieMapper = movieMapper;
     }
 
-    private Movie findMovieToIgnore(Long movieId, UUID userId) {
+    private MovieEntity findMovieToIgnore(Long movieId, UUID userId) {
         return movieRepository
                 .findByIdAndUsersWhoIgnoredId(movieId, userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

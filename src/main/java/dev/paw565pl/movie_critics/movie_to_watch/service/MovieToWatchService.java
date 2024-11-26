@@ -3,7 +3,7 @@ package dev.paw565pl.movie_critics.movie_to_watch.service;
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
 import dev.paw565pl.movie_critics.movie.mapper.MovieMapper;
-import dev.paw565pl.movie_critics.movie.model.Movie;
+import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie_to_watch.dto.MovieToWatchDto;
@@ -34,7 +34,7 @@ public class MovieToWatchService {
         this.movieMapper = movieMapper;
     }
 
-    private Movie findMovieToWatch(Long movieId, UUID userId) {
+    private MovieEntity findMovieToWatch(Long movieId, UUID userId) {
         return movieRepository
                 .findByIdAndUsersWhoWantToWatchId(movieId, userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

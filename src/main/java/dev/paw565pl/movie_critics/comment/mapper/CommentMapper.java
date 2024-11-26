@@ -3,16 +3,18 @@ package dev.paw565pl.movie_critics.comment.mapper;
 import dev.paw565pl.movie_critics.comment.dto.CommentDto;
 import dev.paw565pl.movie_critics.comment.model.Comment;
 import dev.paw565pl.movie_critics.comment.response.CommentResponse;
-import dev.paw565pl.movie_critics.movie.model.Movie;
+import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.user.model.User;
+
 import java.util.Optional;
+
 import org.springframework.stereotype.Component;
 
 @Component
 public class CommentMapper {
 
-    public Comment toEntity(CommentDto dto, User author, Movie movie) {
-        var comment = new Comment(dto.text(), movie);
+    public Comment toEntity(CommentDto dto, User author, MovieEntity movieEntity) {
+        var comment = new Comment(dto.text(), movieEntity);
         comment.setAuthor(author);
 
         return comment;
