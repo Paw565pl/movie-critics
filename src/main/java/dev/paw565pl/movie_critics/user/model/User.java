@@ -1,6 +1,6 @@
 package dev.paw565pl.movie_critics.user.model;
 
-import dev.paw565pl.movie_critics.comment.model.Comment;
+import dev.paw565pl.movie_critics.comment.model.CommentEntity;
 import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.rating.model.Rating;
 import dev.paw565pl.movie_critics.user.provider.OAuthProvider;
