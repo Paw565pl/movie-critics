@@ -22,15 +22,15 @@ public class MovieCommentRestController {
         this.commentService = commentService;
     }
 
-    @GetMapping("")
-    public Page<CommentResponse> findAllComments(@PathVariable Long movieId, Pageable pageable) {
-        return commentService.findAll(movieId, pageable);
+    @GetMapping
+    public Page<CommentResponse> findAllByMovieId(@PathVariable Long movieId, Pageable pageable) {
+        return commentService.findAllByMovieId(movieId, pageable);
     }
 
     @IsAuthenticated
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CommentResponse createComment(
+    public CommentResponse create(
             @PathVariable Long movieId,
             @AuthenticationPrincipal Jwt jwt,
             @Valid @RequestBody CommentDto dto) {
@@ -38,13 +38,13 @@ public class MovieCommentRestController {
     }
 
     @GetMapping("/{commentId}")
-    public CommentResponse findComment(@PathVariable Long movieId, @PathVariable Long commentId) {
+    public CommentResponse findByIdAndMovieId(@PathVariable Long movieId, @PathVariable Long commentId) {
         return commentService.findByIdAndMovieId(commentId, movieId);
     }
 
     @IsAuthenticated
     @PutMapping("/{commentId}")
-    public CommentResponse updateComment(
+    public CommentResponse update(
             @PathVariable Long movieId,
             @PathVariable Long commentId,
             @AuthenticationPrincipal Jwt jwt,
@@ -55,7 +55,7 @@ public class MovieCommentRestController {
     @IsAuthenticated
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteComment(
+    public void delete(
             @PathVariable Long movieId,
             @PathVariable Long commentId,
             @AuthenticationPrincipal Jwt jwt) {
