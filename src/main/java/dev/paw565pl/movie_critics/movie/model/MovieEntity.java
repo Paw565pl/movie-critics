@@ -1,6 +1,6 @@
 package dev.paw565pl.movie_critics.movie.model;
 
-import dev.paw565pl.movie_critics.comment.model.Comment;
+import dev.paw565pl.movie_critics.comment.model.CommentEntity;
 import dev.paw565pl.movie_critics.rating.model.Rating;
 import dev.paw565pl.movie_critics.user.model.User;
 import jakarta.persistence.*;
@@ -120,7 +120,7 @@ public class MovieEntity {
     private Double averageRating;
 
     @OneToMany(mappedBy = "movie")
-    private List<Comment> comments = new ArrayList<>();
+    private List<CommentEntity> comments = new ArrayList<>();
 
     @ManyToMany(mappedBy = "moviesToWatch")
     @OnDelete(action = OnDeleteAction.CASCADE)

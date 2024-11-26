@@ -48,7 +48,7 @@ public class User {
     private Long ratingsCount;
 
     @OneToMany(mappedBy = "author")
-    private List<Comment> comments;
+    private List<CommentEntity> comments;
 
     @Formula("(SELECT COUNT(c.id) FROM comments c WHERE c.user_id = id)")
     private Long commentsCount;

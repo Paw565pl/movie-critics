@@ -6,7 +6,7 @@ import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.auth.role.Role;
 import dev.paw565pl.movie_critics.comment.dto.CommentDto;
 import dev.paw565pl.movie_critics.comment.mapper.CommentMapper;
-import dev.paw565pl.movie_critics.comment.model.Comment;
+import dev.paw565pl.movie_critics.comment.model.CommentEntity;
 import dev.paw565pl.movie_critics.comment.repository.CommentRepository;
 import dev.paw565pl.movie_critics.comment.response.CommentResponse;
 import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
@@ -40,7 +40,7 @@ public class CommentService {
         this.commentMapper = commentMapper;
     }
 
-    private Comment findComment(Long id, Long movieId) {
+    private CommentEntity findComment(Long id, Long movieId) {
         return commentRepository
                 .findByIdAndMovieId(id, movieId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

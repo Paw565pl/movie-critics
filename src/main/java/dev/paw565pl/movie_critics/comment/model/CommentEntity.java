@@ -3,18 +3,17 @@ package dev.paw565pl.movie_critics.comment.model;
 import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.user.model.User;
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
-
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-@NoArgsConstructor
-@RequiredArgsConstructor
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
+@NoArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @Table(
         name = "comments",
@@ -24,14 +23,15 @@ import org.hibernate.annotations.OnDeleteAction;
                         columnList = "user_id, movie_id",
                         unique = true)
         })
-public class Comment {
+public class CommentEntity {
 
     @Id
     @GeneratedValue
+    @Column(name = "id")
     private Long id;
 
     @NonNull
-    @Column(name = "text", nullable = false, columnDefinition = "TEXT")
+    @Column(name = "text", columnDefinition = "TEXT", nullable = false)
     private String text;
 
     @ManyToOne
@@ -39,13 +39,13 @@ public class Comment {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private User author;
 
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
     @NonNull
     @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private MovieEntity movie;
-
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
 }

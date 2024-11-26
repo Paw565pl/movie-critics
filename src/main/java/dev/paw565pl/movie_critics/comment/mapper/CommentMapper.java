@@ -1,29 +1,28 @@
 package dev.paw565pl.movie_critics.comment.mapper;
 
 import dev.paw565pl.movie_critics.comment.dto.CommentDto;
-import dev.paw565pl.movie_critics.comment.model.Comment;
+import dev.paw565pl.movie_critics.comment.model.CommentEntity;
 import dev.paw565pl.movie_critics.comment.response.CommentResponse;
 import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.user.model.User;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
-
-import org.springframework.stereotype.Component;
 
 @Component
 public class CommentMapper {
 
-    public Comment toEntity(CommentDto dto, User author, MovieEntity movieEntity) {
-        var comment = new Comment(dto.text(), movieEntity);
+    public CommentEntity toEntity(CommentDto commentDto, User author, MovieEntity movieEntity) {
+        var comment = new CommentEntity(commentDto.text(), movieEntity);
         comment.setAuthor(author);
 
         return comment;
     }
 
-    public CommentResponse toResponse(Comment comment) {
-        var author = Optional.ofNullable(comment.getAuthor()).map(User::getUsername).orElse(null);
+    public CommentResponse toResponse(CommentEntity commentEntity) {
+        var author = Optional.ofNullable(commentEntity.getAuthor()).map(User::getUsername).orElse(null);
 
         return new CommentResponse(
-                comment.getId(), comment.getText(), author, comment.getCreatedAt());
+                commentEntity.getId(), commentEntity.getText(), author, commentEntity.getCreatedAt());
     }
 }
