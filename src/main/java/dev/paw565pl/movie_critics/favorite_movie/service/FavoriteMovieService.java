@@ -2,11 +2,11 @@ package dev.paw565pl.movie_critics.favorite_movie.service;
 
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.favorite_movie.dto.FavoriteMovieDto;
-import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
 import dev.paw565pl.movie_critics.movie.mapper.MovieMapper;
 import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
+import dev.paw565pl.movie_critics.movie.service.MovieService;
 import dev.paw565pl.movie_critics.user.repository.UserRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -22,23 +22,22 @@ import java.util.UUID;
 @Service
 public class FavoriteMovieService {
 
-    private final UserRepository userRepository;
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
+    private final MovieService movieService;
+    private final UserRepository userRepository;
 
-    public FavoriteMovieService(
-            UserRepository userRepository,
-            MovieRepository movieRepository,
-            MovieMapper movieMapper) {
-        this.userRepository = userRepository;
+    public FavoriteMovieService(MovieRepository movieRepository, MovieMapper movieMapper, MovieService movieService, UserRepository userRepository) {
         this.movieRepository = movieRepository;
         this.movieMapper = movieMapper;
+        this.movieService = movieService;
+        this.userRepository = userRepository;
     }
 
     private MovieEntity findFavoriteMovie(Long movieId, UUID userId) {
         return movieRepository
                 .findByIdAndUsersWhoFavoritedId(movieId, userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie with given id is not in your favorite list."));
     }
 
     public Page<MovieResponse> findAll(Jwt jwt, Pageable pageable) {
@@ -50,25 +49,19 @@ public class FavoriteMovieService {
 
     @Transactional
     public MovieResponse create(Jwt jwt, FavoriteMovieDto dto) {
+        var movieEntity = movieService.findEntity(dto.movieId());
+
         var userId = UserDetailsImpl.fromJwt(jwt).getId();
-        var movie =
-                movieRepository
-                        .findById(dto.movieId())
-                        .orElseThrow(
-                                () ->
-                                        new ResponseStatusException(
-                                                HttpStatus.BAD_REQUEST,
-                                                new MovieNotFoundException().getMessage()));
-        var user = userRepository.findById(userId).orElseThrow();
+        var userEntity = userRepository.findById(userId).orElseThrow();
 
         try {
-            user.getFavoriteMovies().add(movie);
-            userRepository.saveAndFlush(user);
+            userEntity.getFavoriteMovies().add(movieEntity);
+            userRepository.saveAndFlush(userEntity);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Movie is already in your favorite list.");
         }
 
-        return movieMapper.toResponse(movie);
+        return movieMapper.toResponse(movieEntity);
     }
 
     @Transactional
@@ -76,8 +69,9 @@ public class FavoriteMovieService {
         var userId = UserDetailsImpl.fromJwt(jwt).getId();
         var favoriteMovie = findFavoriteMovie(movieId, userId);
 
-        var user = userRepository.findById(userId).orElseThrow();
-        user.getFavoriteMovies().remove(favoriteMovie);
-        userRepository.save(user);
+        var userEntity = userRepository.findById(userId).orElseThrow();
+        userEntity.getFavoriteMovies().remove(favoriteMovie);
+
+        userRepository.save(userEntity);
     }
 }
