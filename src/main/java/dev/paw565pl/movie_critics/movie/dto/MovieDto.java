@@ -29,6 +29,6 @@ public record MovieDto(
         @NotEmpty(message = "Genre ids cannot be empty.") List<Long> genreIds,
         List<Long> directorIds,
         List<Long> writerIds,
-        List<Long> actorId
+        List<Long> actorIds
 ) {
 }
