@@ -1,11 +1,12 @@
 package dev.paw565pl.movie_critics.rating.repository;
 
-import dev.paw565pl.movie_critics.rating.model.Rating;
-import java.util.Optional;
-import java.util.UUID;
+import dev.paw565pl.movie_critics.rating.model.RatingEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RatingRepository extends JpaRepository<Rating, Long> {
+import java.util.Optional;
+import java.util.UUID;
 
-    Optional<Rating> findByMovieIdAndAuthorId(Long movieId, UUID authorId);
+public interface RatingRepository extends JpaRepository<RatingEntity, Long> {
+
+    Optional<RatingEntity> findByMovieIdAndAuthorId(Long movieId, UUID authorId);
 }

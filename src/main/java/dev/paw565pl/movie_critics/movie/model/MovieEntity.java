@@ -1,7 +1,7 @@
 package dev.paw565pl.movie_critics.movie.model;
 
 import dev.paw565pl.movie_critics.comment.model.CommentEntity;
-import dev.paw565pl.movie_critics.rating.model.Rating;
+import dev.paw565pl.movie_critics.rating.model.RatingEntity;
 import dev.paw565pl.movie_critics.user.model.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -109,7 +109,7 @@ public class MovieEntity {
     private List<ActorEntity> actors = new ArrayList<>();
 
     @OneToMany(mappedBy = "movie")
-    private List<Rating> ratings = new ArrayList<>();
+    private List<RatingEntity> ratings = new ArrayList<>();
 
     @Setter(AccessLevel.NONE)
     @Formula("(SELECT COUNT(r.id) FROM ratings r WHERE r.movie_id = id)")

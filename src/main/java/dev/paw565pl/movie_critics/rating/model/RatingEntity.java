@@ -10,10 +10,10 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDateTime;
 
-@NoArgsConstructor
-@RequiredArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @Table(
         name = "ratings",
@@ -23,28 +23,30 @@ import java.time.LocalDateTime;
                         columnList = "user_id, movie_id",
                         unique = true)
         })
-public class Rating {
+public class RatingEntity {
 
     @Id
     @GeneratedValue
+    @Column(name = "id")
     private Long id;
 
     @NonNull
     @Column(name = "value", nullable = false)
     private Byte value;
 
+    @NonNull
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false, updatable = false)
+    @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.SET_NULL)
     private UserEntity author;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
 
     @NonNull
     @ManyToOne
     @JoinColumn(name = "movie_id", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private MovieEntity movie;
-
-    @CreationTimestamp
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
 }

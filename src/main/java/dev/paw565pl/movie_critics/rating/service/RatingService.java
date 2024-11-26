@@ -5,17 +5,18 @@ import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.rating.dto.RatingDto;
 import dev.paw565pl.movie_critics.rating.mapper.RatingMapper;
-import dev.paw565pl.movie_critics.rating.model.Rating;
+import dev.paw565pl.movie_critics.rating.model.RatingEntity;
 import dev.paw565pl.movie_critics.rating.repository.RatingRepository;
 import dev.paw565pl.movie_critics.rating.response.RatingResponse;
 import dev.paw565pl.movie_critics.user.repository.UserRepository;
-import java.util.UUID;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.UUID;
 
 @Service
 public class RatingService {
@@ -36,7 +37,7 @@ public class RatingService {
         this.ratingMapper = ratingMapper;
     }
 
-    private Rating findRating(Long movieId, UUID userId) {
+    private RatingEntity findRating(Long movieId, UUID userId) {
         return ratingRepository
                 .findByMovieIdAndAuthorId(movieId, userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
