@@ -1,8 +1,7 @@
 package dev.paw565pl.movie_critics.rating.service;
 
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
-import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
-import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
+import dev.paw565pl.movie_critics.movie.service.MovieService;
 import dev.paw565pl.movie_critics.rating.dto.RatingDto;
 import dev.paw565pl.movie_critics.rating.mapper.RatingMapper;
 import dev.paw565pl.movie_critics.rating.model.RatingEntity;
@@ -21,45 +20,44 @@ import java.util.UUID;
 @Service
 public class RatingService {
 
-    private final UserRepository userRepository;
-    private final MovieRepository movieRepository;
     private final RatingRepository ratingRepository;
     private final RatingMapper ratingMapper;
+    private final UserRepository userRepository;
+    private final MovieService movieService;
 
-    public RatingService(
-            UserRepository userRepository,
-            MovieRepository movieRepository,
-            RatingRepository ratingRepository,
-            RatingMapper ratingMapper) {
-        this.userRepository = userRepository;
-        this.movieRepository = movieRepository;
+    public RatingService(RatingRepository ratingRepository, RatingMapper ratingMapper, UserRepository userRepository, MovieService movieService) {
         this.ratingRepository = ratingRepository;
         this.ratingMapper = ratingMapper;
+        this.userRepository = userRepository;
+        this.movieService = movieService;
     }
 
-    private RatingEntity findRating(Long movieId, UUID userId) {
+
+    private RatingEntity findEntity(Long movieId, UUID userId) {
         return ratingRepository
                 .findByMovieIdAndAuthorId(movieId, userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "You have not rated this movie."));
     }
 
     public RatingResponse findByMovieIdAndUserId(Long movieId, Jwt jwt) {
         var user = UserDetailsImpl.fromJwt(jwt);
-        var rating = findRating(movieId, user.getId());
+        var ratingEntity = findEntity(movieId, user.getId());
 
-        return ratingMapper.toResponse(rating);
+        return ratingMapper.toResponse(ratingEntity);
     }
 
     @Transactional
     public RatingResponse create(Long movieId, Jwt jwt, RatingDto dto) {
-        var movie = movieRepository.findById(movieId).orElseThrow(MovieNotFoundException::new);
+        var movieEntity = movieService.findEntity(movieId);
         var user = userRepository.findById(UserDetailsImpl.fromJwt(jwt).getId()).orElseThrow();
 
-        var rating = ratingMapper.toEntity(dto, movie, user);
+        var rating = ratingMapper.toEntity(dto);
+        rating.setAuthor(user);
+        rating.setMovie(movieEntity);
 
         try {
-            var savedRating = ratingRepository.saveAndFlush(rating);
-            return ratingMapper.toResponse(savedRating);
+            var savedRatingEntity = ratingRepository.saveAndFlush(rating);
+            return ratingMapper.toResponse(savedRatingEntity);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("You have already rated this movie.");
         }
@@ -68,19 +66,19 @@ public class RatingService {
     @Transactional
     public RatingResponse update(Long movieId, Jwt jwt, RatingDto dto) {
         var user = UserDetailsImpl.fromJwt(jwt);
-        var rating = findRating(movieId, user.getId());
+        var ratingEntity = findEntity(movieId, user.getId());
 
-        rating.setValue(dto.value());
+        ratingEntity.setValue(dto.value());
 
-        var savedRating = ratingRepository.save(rating);
-        return ratingMapper.toResponse(savedRating);
+        var savedRatingEntity = ratingRepository.save(ratingEntity);
+        return ratingMapper.toResponse(savedRatingEntity);
     }
 
     @Transactional
     public void delete(Long movieId, Jwt jwt) {
         var user = UserDetailsImpl.fromJwt(jwt);
-        var rating = findRating(movieId, user.getId());
+        var ratingEntity = findEntity(movieId, user.getId());
 
-        ratingRepository.deleteById(rating.getId());
+        ratingRepository.deleteById(ratingEntity.getId());
     }
 }
