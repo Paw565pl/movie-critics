@@ -3,52 +3,57 @@ package dev.paw565pl.movie_critics.user.model;
 import dev.paw565pl.movie_critics.comment.model.CommentEntity;
 import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.rating.model.Rating;
-import dev.paw565pl.movie_critics.user.provider.OAuthProvider;
 import jakarta.persistence.*;
-import java.util.List;
-import java.util.UUID;
 import lombok.*;
 import org.hibernate.annotations.Formula;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-@NoArgsConstructor
-@RequiredArgsConstructor
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 @Getter
 @Setter
+@NoArgsConstructor
+@RequiredArgsConstructor
 @Entity
 @Table(
         name = "users",
         indexes = {
-            @Index(
-                    name = "unique_user_per_provider",
-                    columnList = "username, email, provider",
-                    unique = true)
+                @Index(
+                        name = "unique_user_per_provider",
+                        columnList = "username, email, provider",
+                        unique = true)
         })
-public class User {
+public class UserEntity {
 
     @Id
-    @NonNull @Column(name = "id", nullable = false, unique = true, updatable = false)
+    @NonNull
+    @Column(name = "id", nullable = false, unique = true, updatable = false)
     private UUID id;
 
-    @NonNull @Column(name = "username", nullable = false)
+    @NonNull
+    @Column(name = "username", nullable = false)
     private String username;
 
-    @NonNull @Column(name = "email", nullable = false)
+    @NonNull
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @NonNull @Enumerated(EnumType.STRING)
+    @NonNull
+    @Enumerated(EnumType.STRING)
     @Column(name = "provider", nullable = false)
     private OAuthProvider provider;
 
     @OneToMany(mappedBy = "author")
-    private List<Rating> ratings;
+    private List<Rating> ratings = new ArrayList<>();
 
     @Formula("(SELECT COUNT(r.id) FROM ratings r WHERE r.user_id = id)")
     private Long ratingsCount;
 
     @OneToMany(mappedBy = "author")
-    private List<CommentEntity> comments;
+    private List<CommentEntity> comments = new ArrayList<>();
 
     @Formula("(SELECT COUNT(c.id) FROM comments c WHERE c.user_id = id)")
     private Long commentsCount;
@@ -59,12 +64,12 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "movie_id"),
             indexes =
-                    @Index(
-                            name = "one_movie_per_user",
-                            columnList = "user_id, movie_id",
-                            unique = true))
+            @Index(
+                    name = "one_movie_per_user",
+                    columnList = "user_id, movie_id",
+                    unique = true))
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<MovieEntity> moviesToWatch;
+    private List<MovieEntity> moviesToWatch = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -72,12 +77,12 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "movie_id"),
             indexes =
-                    @Index(
-                            name = "one_movie_per_user",
-                            columnList = "user_id, movie_id",
-                            unique = true))
+            @Index(
+                    name = "one_movie_per_user",
+                    columnList = "user_id, movie_id",
+                    unique = true))
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<MovieEntity> favoriteMovies;
+    private List<MovieEntity> favoriteMovies = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
@@ -85,10 +90,10 @@ public class User {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "movie_id"),
             indexes =
-                    @Index(
-                            name = "one_movie_per_user",
-                            columnList = "user_id, movie_id",
-                            unique = true))
+            @Index(
+                    name = "one_movie_per_user",
+                    columnList = "user_id, movie_id",
+                    unique = true))
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<MovieEntity> ignoredMovies;
+    private List<MovieEntity> ignoredMovies = new ArrayList<>();
 }

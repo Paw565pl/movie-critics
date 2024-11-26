@@ -1,7 +1,7 @@
 package dev.paw565pl.movie_critics.comment.model;
 
 import dev.paw565pl.movie_critics.movie.model.MovieEntity;
-import dev.paw565pl.movie_critics.user.model.User;
+import dev.paw565pl.movie_critics.user.model.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -37,7 +37,7 @@ public class CommentEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    private User author;
+    private UserEntity author;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

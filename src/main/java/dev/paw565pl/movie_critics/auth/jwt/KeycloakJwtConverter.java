@@ -1,10 +1,7 @@
 package dev.paw565pl.movie_critics.auth.jwt;
 
-import static dev.paw565pl.movie_critics.auth.utils.JwtUtils.getAuthorities;
-
-import dev.paw565pl.movie_critics.user.provider.OAuthProvider;
+import dev.paw565pl.movie_critics.user.model.OAuthProvider;
 import dev.paw565pl.movie_critics.user.service.UserService;
-import java.util.stream.Stream;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -13,6 +10,10 @@ import org.springframework.security.oauth2.jwt.JwtClaimNames;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.stereotype.Component;
+
+import java.util.stream.Stream;
+
+import static dev.paw565pl.movie_critics.auth.utils.JwtUtils.getAuthorities;
 
 @Component
 public class KeycloakJwtConverter implements Converter<Jwt, AbstractAuthenticationToken> {

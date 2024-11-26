@@ -1,13 +1,12 @@
 package dev.paw565pl.movie_critics.movie.specification;
 
 import dev.paw565pl.movie_critics.movie.model.MovieEntity;
-import dev.paw565pl.movie_critics.user.model.User;
+import dev.paw565pl.movie_critics.user.model.UserEntity;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
-
-import org.springframework.data.jpa.domain.Specification;
 
 public class MovieSpecification {
 
@@ -133,7 +132,7 @@ public class MovieSpecification {
                 return null;
             }
 
-            var userRoot = subquery.from(User.class);
+            var userRoot = subquery.from(UserEntity.class);
             var ignoredMovies = userRoot.join("ignoredMovies");
             subquery.select(ignoredMovies.get("id"))
                     .where(builder.equal(userRoot.get("id"), userId));

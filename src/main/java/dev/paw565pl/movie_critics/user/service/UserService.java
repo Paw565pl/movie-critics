@@ -1,8 +1,8 @@
 package dev.paw565pl.movie_critics.user.service;
 
 import dev.paw565pl.movie_critics.auth.utils.JwtUtils;
-import dev.paw565pl.movie_critics.user.model.User;
-import dev.paw565pl.movie_critics.user.provider.OAuthProvider;
+import dev.paw565pl.movie_critics.user.model.OAuthProvider;
+import dev.paw565pl.movie_critics.user.model.UserEntity;
 import dev.paw565pl.movie_critics.user.repository.UserRepository;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
@@ -18,9 +18,9 @@ public class UserService {
     }
 
     @Transactional
-    public User createOrUpdate(Jwt jwt, OAuthProvider provider) {
+    public UserEntity createOrUpdate(Jwt jwt, OAuthProvider provider) {
         var id = JwtUtils.getUserId(jwt);
-        var user = userRepository.findById(id).orElse(new User());
+        var user = userRepository.findById(id).orElse(new UserEntity());
 
         user.setId(id);
         user.setUsername(JwtUtils.getUsername(jwt));

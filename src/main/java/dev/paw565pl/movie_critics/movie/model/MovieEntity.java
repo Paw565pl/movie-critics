@@ -2,7 +2,7 @@ package dev.paw565pl.movie_critics.movie.model;
 
 import dev.paw565pl.movie_critics.comment.model.CommentEntity;
 import dev.paw565pl.movie_critics.rating.model.Rating;
-import dev.paw565pl.movie_critics.user.model.User;
+import dev.paw565pl.movie_critics.user.model.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Formula;
@@ -124,13 +124,13 @@ public class MovieEntity {
 
     @ManyToMany(mappedBy = "moviesToWatch")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<User> usersWhoWantToWatch = new ArrayList<>();
+    private List<UserEntity> usersWhoWantToWatch = new ArrayList<>();
 
     @ManyToMany(mappedBy = "favoriteMovies")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<User> usersWhoFavorited = new ArrayList<>();
+    private List<UserEntity> usersWhoFavorited = new ArrayList<>();
 
     @ManyToMany(mappedBy = "ignoredMovies")
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<User> usersWhoIgnored = new ArrayList<>();
+    private List<UserEntity> usersWhoIgnored = new ArrayList<>();
 }

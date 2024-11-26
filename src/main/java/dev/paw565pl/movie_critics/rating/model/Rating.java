@@ -1,15 +1,14 @@
 package dev.paw565pl.movie_critics.rating.model;
 
 import dev.paw565pl.movie_critics.movie.model.MovieEntity;
-import dev.paw565pl.movie_critics.user.model.User;
+import dev.paw565pl.movie_critics.user.model.UserEntity;
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
-
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @RequiredArgsConstructor
@@ -37,7 +36,7 @@ public class Rating {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false, updatable = false)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    private User author;
+    private UserEntity author;
 
     @NonNull
     @ManyToOne
