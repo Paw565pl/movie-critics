@@ -23,14 +23,14 @@ import java.util.UUID;
 public class MovieToWatchService {
 
     private final MovieRepository movieRepository;
-    private final MovieService movieService;
     private final MovieMapper movieMapper;
+    private final MovieService movieService;
     private final UserRepository userRepository;
 
-    public MovieToWatchService(MovieRepository movieRepository, MovieService movieService, MovieMapper movieMapper, UserRepository userRepository) {
+    public MovieToWatchService(MovieRepository movieRepository, MovieMapper movieMapper, MovieService movieService, UserRepository userRepository) {
         this.movieRepository = movieRepository;
-        this.movieService = movieService;
         this.movieMapper = movieMapper;
+        this.movieService = movieService;
         this.userRepository = userRepository;
     }
 
