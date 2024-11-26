@@ -29,7 +29,7 @@ public class MovieService {
         this.movieMapper = movieMapper;
     }
 
-    private MovieEntity findMovie(Long id) {
+    public MovieEntity findEntity(Long id) {
         return movieRepository.findById(id).orElseThrow(MovieNotFoundException::new);
     }
 
@@ -56,17 +56,17 @@ public class MovieService {
     }
 
     public MovieResponse findById(Long id) {
-        var movie = findMovie(id);
+        var movie = findEntity(id);
         return movieMapper.toResponse(movie);
     }
 
     @Transactional
     public MovieResponse create(MovieDto dto) {
-        var movie = movieMapper.toEntity(dto);
+        var movieEntity = movieMapper.toEntity(dto);
 
         try {
-            var savedMovie = movieRepository.saveAndFlush(movie);
-            return movieMapper.toResponse(savedMovie);
+            var savedMovieEntity = movieRepository.saveAndFlush(movieEntity);
+            return movieMapper.toResponse(savedMovieEntity);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Movie with given title already exists.");
         }
@@ -74,14 +74,14 @@ public class MovieService {
 
     @Transactional
     public MovieResponse update(Long id, MovieDto dto) {
-        findMovie(id);
+        var movieEntity = findEntity(id);
 
-        var updatedMovie = movieMapper.toEntity(dto);
-        updatedMovie.setId(id);
+        var updatedMovieEntity = movieMapper.toEntity(dto);
+        updatedMovieEntity.setId(movieEntity.getId());
 
         try {
-            var savedMovie = movieRepository.saveAndFlush(updatedMovie);
-            return movieMapper.toResponse(savedMovie);
+            var savedMovieEntity = movieRepository.saveAndFlush(updatedMovieEntity);
+            return movieMapper.toResponse(savedMovieEntity);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Movie with given title already exists.");
         }
@@ -89,7 +89,7 @@ public class MovieService {
 
     @Transactional
     public void delete(Long id) {
-        findMovie(id);
-        movieRepository.deleteById(id);
+        var movieEntity = findEntity(id);
+        movieRepository.deleteById(movieEntity.getId());
     }
 }
