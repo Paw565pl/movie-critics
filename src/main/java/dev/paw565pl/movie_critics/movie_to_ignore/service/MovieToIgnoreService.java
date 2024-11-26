@@ -49,18 +49,19 @@ public class MovieToIgnoreService {
 
     @Transactional
     public MovieResponse create(Jwt jwt, MovieToIgnoreDto dto) {
+        var movieEntity = movieService.findEntity(dto.movieId());
+
         var userId = UserDetailsImpl.fromJwt(jwt).getId();
         var userEntity = userRepository.findById(userId).orElseThrow();
-        var movie = movieService.findEntity(dto.movieId());
 
         try {
-            userEntity.getIgnoredMovies().add(movie);
+            userEntity.getIgnoredMovies().add(movieEntity);
             userRepository.saveAndFlush(userEntity);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Movie is already in your ignored list.");
         }
 
-        return movieMapper.toResponse(movie);
+        return movieMapper.toResponse(movieEntity);
     }
 
     @Transactional

@@ -49,10 +49,10 @@ public class MovieToWatchService {
 
     @Transactional
     public MovieResponse create(Jwt jwt, MovieToWatchDto dto) {
+        var movieEntity = movieService.findEntity(dto.movieId());
+
         var userId = UserDetailsImpl.fromJwt(jwt).getId();
         var userEntity = userRepository.findById(userId).orElseThrow();
-        var movieEntity =
-                movieService.findEntity(dto.movieId());
 
         try {
             userEntity.getMoviesToWatch().add(movieEntity);
