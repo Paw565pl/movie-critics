@@ -23,7 +23,6 @@ public interface MovieRepository
 
     Page<MovieEntity> findAllByUsersWhoIgnoredId(UUID userId, Pageable pageable);
 
-    Optional<Movie> findByIdAndUsersWhoIgnoredId(Long id, UUID userId);
     Optional<MovieEntity> findByIdAndUsersWhoIgnoredId(Long id, UUID userId);
 
 }
