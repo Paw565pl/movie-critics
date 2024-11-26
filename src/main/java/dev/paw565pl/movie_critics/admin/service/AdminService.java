@@ -49,7 +49,7 @@ public class AdminService {
         this.movieMapper = movieMapper;
     }
 
-    public ByteArrayResource createMoviesExportBytes() {
+    public ByteArrayResource exportMoviesToJson() {
         var movies = movieRepository.findAll().stream().map(movieMapper::toResponse).toList();
 
         try {
@@ -63,7 +63,7 @@ public class AdminService {
     }
 
     @Transactional(rollbackFor = {IOException.class})
-    public void importMovies(MultipartFile file) {
+    public void importMoviesFromJson(MultipartFile file) {
         if (file.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "File can not be empty.");
         }

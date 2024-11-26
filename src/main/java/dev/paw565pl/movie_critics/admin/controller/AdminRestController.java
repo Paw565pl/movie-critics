@@ -2,15 +2,16 @@ package dev.paw565pl.movie_critics.admin.controller;
 
 import dev.paw565pl.movie_critics.admin.service.AdminService;
 import dev.paw565pl.movie_critics.auth.annotation.IsAdmin;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Map;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/admin")
@@ -25,7 +26,7 @@ public class AdminRestController {
     @IsAdmin
     @GetMapping("/export-movies")
     public ResponseEntity<ByteArrayResource> exportMovies() {
-        var file = adminService.createMoviesExportBytes();
+        var file = adminService.exportMoviesToJson();
         var formattedDateTime =
                 LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
         var fileName = "movies_" + formattedDateTime + ".json";
@@ -42,7 +43,7 @@ public class AdminRestController {
     @IsAdmin
     @PostMapping("/import-movies")
     public Map<String, String> importMovies(@RequestParam("file") MultipartFile file) {
-        adminService.importMovies(file);
+        adminService.importMoviesFromJson(file);
         return Map.of("message", "Movies imported successfully.");
     }
 }
