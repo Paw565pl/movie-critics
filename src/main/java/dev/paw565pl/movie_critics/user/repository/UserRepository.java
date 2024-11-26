@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<UserEntity, UUID> {
     @Query(
             """
                         SELECT u FROM UserEntity u
-                        LEFT JOIN Rating r ON r.author = u
+                        LEFT JOIN RatingEntity r ON r.author = u
                         LEFT JOIN CommentEntity c ON c.author = u
                         GROUP BY u.id
                         HAVING COUNT(r.id) + COUNT(c.id) > 0
