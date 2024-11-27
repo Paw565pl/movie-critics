@@ -45,7 +45,7 @@ repositories {
     mavenCentral()
 }
 
-val springdocVersion = "2.6.0"
+val springdocVersion = "2.7.0"
 val modelMapperVersion = "3.2.1"
 val modelMapperRecordVersion = "1.0.0"
 
@@ -59,6 +59,10 @@ dependencies {
     implementation("org.modelmapper:modelmapper-module-record:${modelMapperRecordVersion}")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
+    implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("org.postgresql:postgresql")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
