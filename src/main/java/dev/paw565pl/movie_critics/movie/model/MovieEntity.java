@@ -39,7 +39,7 @@ public class MovieEntity {
     @Column(name = "year")
     private Year year;
 
-    @Column(name = "ageRating")
+    @Column(name = "age_rating")
     private String ageRating;
 
     @Column(name = "released")
