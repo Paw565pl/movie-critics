@@ -39,6 +39,7 @@ public class RatingService {
     }
 
     public RatingResponse findByMovieIdAndUserId(Long movieId, Jwt jwt) {
+        movieService.findEntity(movieId);
         var user = UserDetailsImpl.fromJwt(jwt);
         var ratingEntity = findEntity(movieId, user.getId());
 
@@ -66,6 +67,7 @@ public class RatingService {
 
     @Transactional
     public RatingResponse update(Long movieId, Jwt jwt, RatingDto dto) {
+        movieService.findEntity(movieId);
         var user = UserDetailsImpl.fromJwt(jwt);
         var ratingEntity = findEntity(movieId, user.getId());
 
@@ -77,6 +79,7 @@ public class RatingService {
 
     @Transactional
     public void delete(Long movieId, Jwt jwt) {
+        movieService.findEntity(movieId);
         var user = UserDetailsImpl.fromJwt(jwt);
         var ratingEntity = findEntity(movieId, user.getId());
 

@@ -35,7 +35,7 @@ public class CommentService {
         this.userService = userService;
     }
 
-    public CommentEntity findEntity(Long id, Long movieId) {
+    private CommentEntity findEntity(Long id, Long movieId) {
         return commentRepository
                 .findByIdAndMovieId(id, movieId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment with given id does not exist."));
@@ -47,6 +47,7 @@ public class CommentService {
     }
 
     public CommentResponse findByIdAndMovieId(Long id, Long movieId) {
+        movieService.findEntity(movieId);
         var commentEntity = findEntity(id, movieId);
         return commentMapper.toResponse(commentEntity);
     }
@@ -73,6 +74,7 @@ public class CommentService {
 
     @Transactional
     public CommentResponse update(Long id, Long movieId, Jwt jwt, CommentDto dto) {
+        movieService.findEntity(movieId);
         var commentEntity = findEntity(id, movieId);
         var user = UserDetailsImpl.fromJwt(jwt);
 
@@ -90,6 +92,7 @@ public class CommentService {
 
     @Transactional
     public void delete(Long id, Long movieId, Jwt jwt) {
+        movieService.findEntity(movieId);
         var commentEntity = findEntity(id, movieId);
         var user = UserDetailsImpl.fromJwt(jwt);
 
