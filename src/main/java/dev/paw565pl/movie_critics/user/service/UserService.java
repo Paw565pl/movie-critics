@@ -8,6 +8,8 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 public class UserService {
 
@@ -15,6 +17,10 @@ public class UserService {
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public UserEntity findById(UUID id) {
+        return userRepository.findById(id).orElseThrow();
     }
 
     @Transactional

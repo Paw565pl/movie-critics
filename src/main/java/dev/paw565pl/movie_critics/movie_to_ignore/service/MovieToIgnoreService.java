@@ -8,6 +8,7 @@ import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie_to_ignore.dto.MovieToIgnoreDto;
 import dev.paw565pl.movie_critics.user.repository.UserRepository;
+import dev.paw565pl.movie_critics.user.service.UserService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,11 +26,13 @@ public class MovieToIgnoreService {
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public MovieToIgnoreService(MovieRepository movieRepository, MovieMapper movieMapper, UserRepository userRepository) {
+    public MovieToIgnoreService(MovieRepository movieRepository, MovieMapper movieMapper, UserRepository userRepository, UserService userService) {
         this.movieRepository = movieRepository;
         this.movieMapper = movieMapper;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     private MovieEntity findMovieEntity(Long id) {
@@ -54,7 +57,7 @@ public class MovieToIgnoreService {
         var movieEntity = findMovieEntity(dto.movieId());
 
         var userId = UserDetailsImpl.fromJwt(jwt).getId();
-        var userEntity = userRepository.findById(userId).orElseThrow();
+        var userEntity = userService.findById(userId);
 
         try {
             userEntity.getIgnoredMovies().add(movieEntity);
@@ -71,7 +74,7 @@ public class MovieToIgnoreService {
         var userId = UserDetailsImpl.fromJwt(jwt).getId();
         var movieToIgnore = findMovieToIgnoreEntity(movieId, userId);
 
-        var userEntity = userRepository.findById(userId).orElseThrow();
+        var userEntity = userService.findById(userId);
         userEntity.getIgnoredMovies().remove(movieToIgnore);
 
         userRepository.save(userEntity);

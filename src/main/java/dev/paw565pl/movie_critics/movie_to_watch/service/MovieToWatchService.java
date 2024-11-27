@@ -8,6 +8,7 @@ import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie_to_watch.dto.MovieToWatchDto;
 import dev.paw565pl.movie_critics.user.repository.UserRepository;
+import dev.paw565pl.movie_critics.user.service.UserService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,11 +26,13 @@ public class MovieToWatchService {
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
     private final UserRepository userRepository;
+    private final UserService userService;
 
-    public MovieToWatchService(MovieRepository movieRepository, MovieMapper movieMapper, UserRepository userRepository) {
+    public MovieToWatchService(MovieRepository movieRepository, MovieMapper movieMapper, UserRepository userRepository, UserService userService) {
         this.movieRepository = movieRepository;
         this.movieMapper = movieMapper;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     private MovieEntity findMovieEntity(Long id) {
@@ -54,7 +57,7 @@ public class MovieToWatchService {
         var movieEntity = findMovieEntity(dto.movieId());
 
         var userId = UserDetailsImpl.fromJwt(jwt).getId();
-        var userEntity = userRepository.findById(userId).orElseThrow();
+        var userEntity = userService.findById(userId);
 
         try {
             userEntity.getMoviesToWatch().add(movieEntity);
@@ -71,7 +74,7 @@ public class MovieToWatchService {
         var userId = UserDetailsImpl.fromJwt(jwt).getId();
         var movieToWatch = findMovieToWatchEntity(movieId, userId);
 
-        var userEntity = userRepository.findById(userId).orElseThrow();
+        var userEntity = userService.findById(userId);
         userEntity.getMoviesToWatch().remove(movieToWatch);
 
         userRepository.save(userEntity);

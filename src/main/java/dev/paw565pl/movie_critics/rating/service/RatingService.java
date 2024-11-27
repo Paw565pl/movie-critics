@@ -7,7 +7,7 @@ import dev.paw565pl.movie_critics.rating.mapper.RatingMapper;
 import dev.paw565pl.movie_critics.rating.model.RatingEntity;
 import dev.paw565pl.movie_critics.rating.repository.RatingRepository;
 import dev.paw565pl.movie_critics.rating.response.RatingResponse;
-import dev.paw565pl.movie_critics.user.repository.UserRepository;
+import dev.paw565pl.movie_critics.user.service.UserService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -22,21 +22,20 @@ public class RatingService {
 
     private final RatingRepository ratingRepository;
     private final RatingMapper ratingMapper;
-    private final UserRepository userRepository;
+    private final UserService userService;
     private final MovieService movieService;
 
-    public RatingService(RatingRepository ratingRepository, RatingMapper ratingMapper, UserRepository userRepository, MovieService movieService) {
+    public RatingService(RatingRepository ratingRepository, RatingMapper ratingMapper, UserService userService, MovieService movieService) {
         this.ratingRepository = ratingRepository;
         this.ratingMapper = ratingMapper;
-        this.userRepository = userRepository;
+        this.userService = userService;
         this.movieService = movieService;
     }
-
 
     private RatingEntity findEntity(Long movieId, UUID userId) {
         return ratingRepository
                 .findByMovieIdAndAuthorId(movieId, userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "You have not rated this movie."));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "You have not rated this movie yet."));
     }
 
     public RatingResponse findByMovieIdAndUserId(Long movieId, Jwt jwt) {
@@ -49,14 +48,16 @@ public class RatingService {
     @Transactional
     public RatingResponse create(Long movieId, Jwt jwt, RatingDto dto) {
         var movieEntity = movieService.findEntity(movieId);
-        var user = userRepository.findById(UserDetailsImpl.fromJwt(jwt).getId()).orElseThrow();
 
-        var rating = ratingMapper.toEntity(dto);
-        rating.setAuthor(user);
-        rating.setMovie(movieEntity);
+        var userId = UserDetailsImpl.fromJwt(jwt).getId();
+        var userEntity = userService.findById(userId);
+
+        var ratingEntity = ratingMapper.toEntity(dto);
+        ratingEntity.setAuthor(userEntity);
+        ratingEntity.setMovie(movieEntity);
 
         try {
-            var savedRatingEntity = ratingRepository.saveAndFlush(rating);
+            var savedRatingEntity = ratingRepository.saveAndFlush(ratingEntity);
             return ratingMapper.toResponse(savedRatingEntity);
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("You have already rated this movie.");

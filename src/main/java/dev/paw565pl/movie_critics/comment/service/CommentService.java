@@ -8,7 +8,7 @@ import dev.paw565pl.movie_critics.comment.model.CommentEntity;
 import dev.paw565pl.movie_critics.comment.repository.CommentRepository;
 import dev.paw565pl.movie_critics.comment.response.CommentResponse;
 import dev.paw565pl.movie_critics.movie.service.MovieService;
-import dev.paw565pl.movie_critics.user.repository.UserRepository;
+import dev.paw565pl.movie_critics.user.service.UserService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,13 +26,13 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
     private final MovieService movieService;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public CommentService(CommentRepository commentRepository, CommentMapper commentMapper, MovieService movieService, UserRepository userRepository) {
+    public CommentService(CommentRepository commentRepository, CommentMapper commentMapper, MovieService movieService, UserService userService) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.movieService = movieService;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public CommentEntity findEntity(Long id, Long movieId) {
@@ -54,7 +54,9 @@ public class CommentService {
     @Transactional
     public CommentResponse create(Long movieId, Jwt jwt, CommentDto dto) {
         var movieEntity = movieService.findEntity(movieId);
-        var userEntity = userRepository.findById(UserDetailsImpl.fromJwt(jwt).getId()).orElseThrow();
+
+        var userId = UserDetailsImpl.fromJwt(jwt).getId();
+        var userEntity = userService.findById(userId);
 
         var commentEntity = commentMapper.toEntity(dto);
         commentEntity.setAuthor(userEntity);
