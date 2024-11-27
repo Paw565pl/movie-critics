@@ -82,7 +82,7 @@ public class MovieEntity {
             joinColumns = {@JoinColumn(name = "movie_id")},
             inverseJoinColumns = {@JoinColumn(name = "genre_id")})
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private List<GenreEntity> genres = new ArrayList<>();
+    private List<GenreEntity> genres;
 
     @ManyToMany
     @JoinTable(
