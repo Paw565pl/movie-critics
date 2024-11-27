@@ -65,7 +65,7 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "movie_id"),
             indexes =
             @Index(
-                    name = "one_movie_per_user",
+                    name = "one_movie_to_watch_per_user",
                     columnList = "user_id, movie_id",
                     unique = true))
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -78,7 +78,7 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "movie_id"),
             indexes =
             @Index(
-                    name = "one_movie_per_user",
+                    name = "one_favorite_movie_per_user",
                     columnList = "user_id, movie_id",
                     unique = true))
     @OnDelete(action = OnDeleteAction.CASCADE)
@@ -91,7 +91,7 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "movie_id"),
             indexes =
             @Index(
-                    name = "one_movie_per_user",
+                    name = "one_ignored_movie_per_user",
                     columnList = "user_id, movie_id",
                     unique = true))
     @OnDelete(action = OnDeleteAction.CASCADE)

@@ -16,7 +16,7 @@ import java.util.List;
 @Table(
         name = "writers",
         indexes = {
-                @Index(name = "index_name", columnList = "name", unique = true),
+                @Index(name = "index_writer_name", columnList = "name", unique = true),
         })
 public class WriterEntity {
 

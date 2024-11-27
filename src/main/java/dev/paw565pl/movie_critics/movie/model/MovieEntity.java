@@ -22,8 +22,8 @@ import java.util.List;
 @Table(
         name = "movies",
         indexes = {
-                @Index(name = "index_title", columnList = "title", unique = true),
-                @Index(name = "index_released", columnList = "released")
+                @Index(name = "index_movie_title", columnList = "title", unique = true),
+                @Index(name = "index_movie_released", columnList = "released")
         })
 public class MovieEntity {
 

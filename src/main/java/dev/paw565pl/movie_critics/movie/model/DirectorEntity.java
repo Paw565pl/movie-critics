@@ -16,7 +16,7 @@ import java.util.List;
 @Table(
         name = "directors",
         indexes = {
-                @Index(name = "index_name", columnList = "name", unique = true),
+                @Index(name = "index_director_name", columnList = "name", unique = true),
         })
 public class DirectorEntity {
 
