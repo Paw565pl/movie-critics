@@ -5,10 +5,12 @@ import dev.paw565pl.movie_critics.auth.utils.KeycloakOidcUserUtils;
 import dev.paw565pl.movie_critics.user.model.OAuthProvider;
 import dev.paw565pl.movie_critics.user.model.UserEntity;
 import dev.paw565pl.movie_critics.user.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -22,7 +24,7 @@ public class UserService {
     }
 
     public UserEntity findById(UUID id) {
-        return userRepository.findById(id).orElseThrow();
+        return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
     }
 
     @Transactional
