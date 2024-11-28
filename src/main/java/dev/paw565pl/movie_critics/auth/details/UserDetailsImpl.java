@@ -1,18 +1,23 @@
 package dev.paw565pl.movie_critics.auth.details;
 
 import dev.paw565pl.movie_critics.auth.utils.JwtUtils;
-import java.util.Collection;
-import java.util.UUID;
+import dev.paw565pl.movie_critics.auth.utils.OidcUserUtils;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.jwt.Jwt;
+
+import java.util.Collection;
+import java.util.UUID;
 
 public class UserDetailsImpl implements UserDetails {
 
-    @Getter private final UUID id;
+    @Getter
+    private final UUID id;
     private final String username;
-    @Getter private final String email;
+    @Getter
+    private final String email;
     private final Collection<? extends GrantedAuthority> authorities;
 
     private UserDetailsImpl(
@@ -31,6 +36,15 @@ public class UserDetailsImpl implements UserDetails {
         var username = JwtUtils.getUsername(jwt);
         var email = JwtUtils.getEmail(jwt);
         var authorities = JwtUtils.getAuthorities(jwt);
+
+        return new UserDetailsImpl(id, username, email, authorities);
+    }
+
+    public static UserDetailsImpl fromOidcUser(OidcUser oidcUser) {
+        var id = OidcUserUtils.getUserId(oidcUser);
+        var username = OidcUserUtils.getUsername(oidcUser);
+        var email = OidcUserUtils.getEmail(oidcUser);
+        var authorities = OidcUserUtils.getAuthorities(oidcUser);
 
         return new UserDetailsImpl(id, username, email, authorities);
     }
