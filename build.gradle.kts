@@ -1,3 +1,5 @@
+import com.diffplug.spotless.LineEnding
+
 plugins {
     java
     idea
@@ -24,14 +26,15 @@ idea {
 
 spotless {
     java {
-        googleJavaFormat("1.23.0").aosp().reflowLongStrings()
         importOrder()
         removeUnusedImports()
+        cleanthat()
+        lineEndings = LineEnding.UNIX
+        palantirJavaFormat()
         trimTrailingWhitespace()
         endWithNewline()
         indentWithSpaces()
         formatAnnotations()
-        toggleOffOn()
     }
 }
 
