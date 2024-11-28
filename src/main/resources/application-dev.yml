@@ -17,8 +17,20 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:9000/realms/movie_critics
-          jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+          issuer-uri: http://localhost:9000/realms/movie-critics
+
+      client:
+        provider:
+          keycloak:
+            issuer-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}
+
+        registration:
+          keycloak:
+            client-id: spring-boot-api
+            client-secret: MKHz0Kw82cGhDIwmz3vZ8fO6AmY87eQn
+            authorization-grant-type: authorization_code
+            scope:
+              - openid
 
 logging:
   level:
