@@ -16,7 +16,7 @@ import java.util.List;
 @Table(
         name = "genres",
         indexes = {
-                @Index(name = "index_name", columnList = "name", unique = true),
+                @Index(name = "index_genre_name", columnList = "name", unique = true),
         })
 public class GenreEntity {
 
