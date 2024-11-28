@@ -1,0 +1,118 @@
+<!doctype html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{core/layout}"
+>
+  <body>
+    <div layout:fragment="content">
+      <h1 class="mb-3">
+        Check out greatest hits in the history of the cinema!
+      </h1>
+
+      <div class="d-flex mb-3 align-items-center justify-content-between">
+        <!-- filters -->
+        <div class="d-flex gap-3 align-items-center">
+          <!-- genre fiter dropdown -->
+          <div class="dropdown">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              th:text="${selectedGenreFilter != null ? selectedGenreFilter.name : 'Select genre'}"
+            ></button>
+            <ul
+              class="dropdown-menu"
+              style="max-height: 350px; overflow-y: auto"
+            >
+              <li>
+                <a class="dropdown-item" th:href="@{/movies}">All genres</a>
+              </li>
+              <li th:each="genre : ${genres}">
+                <a
+                  class="dropdown-item"
+                  th:href="@{/movies(genreIds=${genre.id})}"
+                  th:text="${genre.name}"
+                ></a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- age rating filter dropdown -->
+          <div class="dropdown">
+            <button
+              class="btn btn-secondary dropdown-toggle"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+              th:text="${selectedAgeRating != null ? selectedAgeRating : 'Select age rating'}"
+            ></button>
+            <ul
+              class="dropdown-menu"
+              style="max-height: 350px; overflow-y: auto"
+            >
+              <li>
+                <a class="dropdown-item" th:href="@{/movies}"
+                  >All age ratings</a
+                >
+              </li>
+              <li th:each="ageRating : ${ageRatings}">
+                <a
+                  class="dropdown-item"
+                  th:href="@{/movies(ageRating=${ageRating})}"
+                  th:text="${ageRating}"
+                ></a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- sort dropdown -->
+        <div class="dropdown">
+          <button
+            class="btn btn-secondary dropdown-toggle"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            th:text="${selectedSortOption != null ? selectedSortOption.label : 'Select sorting'}"
+          ></button>
+          <ul class="dropdown-menu" style="max-height: 350px; overflow-y: auto">
+            <li>
+              <a class="dropdown-item" th:href="@{/movies}">Default</a>
+            </li>
+            <li th:each="sortOption : ${sortOptions}">
+              <a
+                class="dropdown-item"
+                th:href="@{/movies(sort=${sortOption.value})}"
+                th:text="${sortOption.label}"
+              ></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row row-cols-auto justify-content-evenly gap-3">
+        <section
+          class="card col"
+          style="width: 15rem"
+          th:each="movie : ${movies}"
+        >
+          <img
+            th:src="${movie.poster}"
+            th:alt="${movie.title + ' poster'}"
+            class="card-img-top w-100"
+          />
+          <div class="card-body">
+            <h5 class="card-title fw-bold" th:text="${movie.title}"></h5>
+            <p class="card-text text-truncate" th:text="${movie.plot}"></p>
+            <a class="btn btn-primary" th:href="@{/movies/{id}(id=${movie.id})}"
+              >Check details</a
+            >
+          </div>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>
