@@ -23,6 +23,76 @@
         </header>
       </section>
 
+      <section sec:authorize="isAuthenticated()" class="mb-2">
+        <div class="d-flex align-items-center gap-2 fs-5 mb-1">
+          <h5 class="m-0">Rate this movie:</h5>
+          <form
+            th:action="@{/movies/{id}/rate(id=${movie.id})}"
+            method="post"
+            id="ratingForm"
+          >
+            <input type="hidden" name="value" id="ratingValue" />
+            <div class="star-rating">
+              <i
+                role="button"
+                class="bi"
+                th:classappend="${userMovieRatingValue != null && userMovieRatingValue >= 1} ? 'bi-star-fill' : 'bi-star'"
+                onclick="submitRatingForm(1)"
+              ></i>
+              <i
+                role="button"
+                class="bi"
+                th:classappend="${userMovieRatingValue != null && userMovieRatingValue >= 2} ? 'bi-star-fill' : 'bi-star'"
+                onclick="submitRatingForm(2)"
+              ></i>
+              <i
+                role="button"
+                class="bi"
+                th:classappend="${userMovieRatingValue != null && userMovieRatingValue >= 3} ? 'bi-star-fill' : 'bi-star'"
+                onclick="submitRatingForm(3)"
+              ></i>
+              <i
+                role="button"
+                class="bi"
+                th:classappend="${userMovieRatingValue != null && userMovieRatingValue >= 4} ? 'bi-star-fill' : 'bi-star'"
+                onclick="submitRatingForm(4)"
+              ></i>
+              <i
+                role="button"
+                class="bi"
+                th:classappend="${userMovieRatingValue != null && userMovieRatingValue >= 5} ? 'bi-star-fill' : 'bi-star'"
+                onclick="submitRatingForm(5)"
+              ></i>
+            </div>
+          </form>
+        </div>
+
+        <div class="d-flex align-items-center fs-2 gap-3">
+          <i
+            role="button"
+            class="bi bi-card-list"
+            title="add to watch list"
+          ></i>
+          <i
+            role="button"
+            class="bi bi-bookmark-heart"
+            title="add to favorites"
+          ></i>
+          <i
+            role="button"
+            class="bi bi-x-octagon"
+            title="add to ignore list"
+          ></i>
+        </div>
+
+        <script>
+          const submitRatingForm = (ratingValue) => {
+            document.getElementById("ratingValue").value = ratingValue;
+            document.getElementById("ratingForm").submit();
+          };
+        </script>
+      </section>
+
       <section class="mb-2">
         <header class="mb-1">
           <h3>Plot</h3>

@@ -1,19 +1,27 @@
 package dev.paw565pl.movie_critics.movie.controller;
 
+import dev.paw565pl.movie_critics.auth.annotation.IsAuthenticated;
+import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.comment.service.CommentService;
 import dev.paw565pl.movie_critics.movie.dto.MovieFilterDto;
 import dev.paw565pl.movie_critics.movie.repository.GenreRepository;
 import dev.paw565pl.movie_critics.movie.service.MovieService;
+import dev.paw565pl.movie_critics.rating.dto.RatingDto;
+import dev.paw565pl.movie_critics.rating.service.RatingService;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 public class MovieViewController {
@@ -21,12 +29,17 @@ public class MovieViewController {
     private final MovieService movieService;
     private final CommentService commentService;
     private final GenreRepository genreRepository;
+    private final RatingService ratingService;
 
     public MovieViewController(
-            MovieService movieService, CommentService commentService, GenreRepository genreRepository) {
+            MovieService movieService,
+            CommentService commentService,
+            GenreRepository genreRepository,
+            RatingService ratingService) {
         this.movieService = movieService;
         this.commentService = commentService;
         this.genreRepository = genreRepository;
+        this.ratingService = ratingService;
     }
 
     @GetMapping
@@ -84,13 +97,50 @@ public class MovieViewController {
     }
 
     @GetMapping("/movies/{id}")
-    public String getMovieDetailView(@PathVariable Long id, Model model) {
+    public String getMovieDetailView(@PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser, Model model) {
         var movie = movieService.findById(id);
         var movieComments = commentService.findAllByMovieId(id, Pageable.ofSize(20));
 
         model.addAttribute("movie", movie);
         model.addAttribute("movieComments", movieComments);
 
+        if (oidcUser != null) {
+            var user = UserDetailsImpl.fromOidcUser(oidcUser);
+
+            try {
+                var userMovieRatingValue =
+                        ratingService.findByMovieIdAndUserId(id, user).value();
+                model.addAttribute("userMovieRatingValue", userMovieRatingValue);
+            } catch (ResponseStatusException ignored) {
+            }
+        }
+
         return "movie/movie-detail";
+    }
+
+    @IsAuthenticated
+    @PostMapping("/movies/{id}/rate")
+    public String rateMovie(
+            @PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser, @RequestParam Byte value, Model model) {
+        var user = UserDetailsImpl.fromOidcUser(oidcUser);
+
+        try {
+            var userMovieRatingValue =
+                    ratingService.findByMovieIdAndUserId(id, user).value();
+
+            if (userMovieRatingValue.equals(value)) {
+                ratingService.delete(id, user);
+            } else {
+                ratingService.update(id, user, new RatingDto(value));
+            }
+
+            model.addAttribute("userMovieRatingValue", userMovieRatingValue);
+        } catch (ResponseStatusException ignored) {
+            var userMovieRatingValue =
+                    ratingService.create(id, user, new RatingDto(value)).value();
+            model.addAttribute("userMovieRatingValue", userMovieRatingValue);
+        }
+
+        return "redirect:/movies/{id}";
     }
 }
