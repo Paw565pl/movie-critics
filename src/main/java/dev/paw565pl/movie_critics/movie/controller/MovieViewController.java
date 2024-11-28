@@ -1,7 +1,10 @@
 package dev.paw565pl.movie_critics.movie.controller;
 
+import static dev.paw565pl.movie_critics.auth.utils.AuthUtils.hasRole;
+
 import dev.paw565pl.movie_critics.auth.annotation.IsAuthenticated;
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
+import dev.paw565pl.movie_critics.auth.role.Role;
 import dev.paw565pl.movie_critics.comment.dto.CommentDto;
 import dev.paw565pl.movie_critics.comment.service.CommentService;
 import dev.paw565pl.movie_critics.movie.dto.MovieFilterDto;
@@ -108,6 +111,10 @@ public class MovieViewController {
 
         if (oidcUser != null) {
             var user = UserDetailsImpl.fromOidcUser(oidcUser);
+            var isAdmin = hasRole(user.getAuthorities(), Role.ADMIN);
+
+            model.addAttribute("user", user);
+            model.addAttribute("isAdmin", isAdmin);
 
             try {
                 var userMovieRatingValue =
@@ -180,5 +187,18 @@ public class MovieViewController {
         }
 
         return "redirect:/movies/{id}";
+    }
+
+    @IsAuthenticated
+    @PostMapping("/movies/{movieId}/comments/{commentId}/delete")
+    public String deleteComment(
+            @PathVariable Long movieId, @PathVariable Long commentId, @AuthenticationPrincipal OidcUser oidcUser) {
+        var user = UserDetailsImpl.fromOidcUser(oidcUser);
+        try {
+            commentService.delete(commentId, movieId, user);
+        } catch (ResponseStatusException ignored) {
+        }
+
+        return "redirect:/movies/{movieId}";
     }
 }

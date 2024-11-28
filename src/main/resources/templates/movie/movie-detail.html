@@ -261,10 +261,29 @@
 
         <div class="card w-100 mb-1" th:each="comment : ${movieComments}">
           <div class="card-body">
-            <h5
-              class="card-title"
-              th:text="'Author: ' + ${comment.author}"
-            ></h5>
+            <div class="d-flex align-items-center justify-content-between">
+              <h5
+                class="card-title"
+                th:text="'Author: ' + ${comment.author}"
+              ></h5>
+
+              <!-- delete comment button -->
+              <form
+                sec:authorize="isAuthenticated()"
+                th:if="${user != null && (user.username == comment.author || isAdmin)}"
+                th:action="@{/movies/{id}/comments/{commentId}/delete(id=${movie.id}, commentId=${comment.id})}"
+                method="post"
+              >
+                <button
+                  class="btn btn-outline-danger btn-sm"
+                  type="submit"
+                  title="delete comment"
+                >
+                  <i class="bi bi-x-lg"></i>
+                </button>
+              </form>
+            </div>
+
             <h6
               class="card-subtitle mb-2 text-muted"
               th:text="${#temporals.format(comment.createdAt, 'dd-MM-yyyy HH:mm')}"
@@ -276,3 +295,4 @@
     </article>
   </body>
 </html>
+`
