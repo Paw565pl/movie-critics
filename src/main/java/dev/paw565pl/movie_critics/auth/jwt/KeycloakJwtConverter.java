@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.stream.Stream;
 
-import static dev.paw565pl.movie_critics.auth.utils.JwtUtils.getAuthorities;
+import static dev.paw565pl.movie_critics.auth.utils.KeycloakJwtUtils.getAuthorities;
 
 @Component
 public class KeycloakJwtConverter implements Converter<Jwt, AbstractAuthenticationToken> {

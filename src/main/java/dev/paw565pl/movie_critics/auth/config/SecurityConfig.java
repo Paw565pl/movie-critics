@@ -1,7 +1,7 @@
 package dev.paw565pl.movie_critics.auth.config;
 
 import dev.paw565pl.movie_critics.auth.jwt.KeycloakJwtConverter;
-import dev.paw565pl.movie_critics.auth.service.CustomOidcUserService;
+import dev.paw565pl.movie_critics.auth.service.KeycloakOidcUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -25,11 +25,11 @@ import static org.springframework.security.oauth2.client.web.OAuth2Authorization
 public class SecurityConfig {
 
     private final KeycloakJwtConverter keycloakJwtConverter;
-    private final CustomOidcUserService customOidcUserService;
+    private final KeycloakOidcUserService keycloakOidcUserService;
 
-    public SecurityConfig(KeycloakJwtConverter keycloakJwtConverter, CustomOidcUserService customOidcUserService) {
+    public SecurityConfig(KeycloakJwtConverter keycloakJwtConverter, KeycloakOidcUserService keycloakOidcUserService) {
         this.keycloakJwtConverter = keycloakJwtConverter;
-        this.customOidcUserService = customOidcUserService;
+        this.keycloakOidcUserService = keycloakOidcUserService;
     }
 
     @Bean
@@ -55,7 +55,7 @@ public class SecurityConfig {
         http.oauth2Login((config) ->
                 config.loginPage("/login").authorizationEndpoint((authorizationEndpointConfig) ->
                                 authorizationEndpointConfig.authorizationRequestResolver(pkceResolver))
-                        .userInfoEndpoint(((userInfo) -> userInfo.oidcUserService(customOidcUserService))));
+                        .userInfoEndpoint(((userInfo) -> userInfo.oidcUserService(keycloakOidcUserService))));
 
         http.logout((logout) -> {
             logout.logoutUrl("/logout");

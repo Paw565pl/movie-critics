@@ -9,7 +9,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-public abstract class OidcUserUtils {
+public abstract class KeycloakOidcUserUtils {
 
     public static UUID getUserId(OidcUser oidcUser) {
         return UUID.fromString(oidcUser.getClaimAsString(JwtClaimNames.SUB));

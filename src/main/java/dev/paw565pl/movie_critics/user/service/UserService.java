@@ -1,7 +1,7 @@
 package dev.paw565pl.movie_critics.user.service;
 
-import dev.paw565pl.movie_critics.auth.utils.JwtUtils;
-import dev.paw565pl.movie_critics.auth.utils.OidcUserUtils;
+import dev.paw565pl.movie_critics.auth.utils.KeycloakJwtUtils;
+import dev.paw565pl.movie_critics.auth.utils.KeycloakOidcUserUtils;
 import dev.paw565pl.movie_critics.user.model.OAuthProvider;
 import dev.paw565pl.movie_critics.user.model.UserEntity;
 import dev.paw565pl.movie_critics.user.repository.UserRepository;
@@ -27,12 +27,12 @@ public class UserService {
 
     @Transactional
     public UserEntity createOrUpdate(Jwt jwt, OAuthProvider provider) {
-        var id = JwtUtils.getUserId(jwt);
+        var id = KeycloakJwtUtils.getUserId(jwt);
         var user = userRepository.findById(id).orElse(new UserEntity());
 
         user.setId(id);
-        user.setUsername(JwtUtils.getUsername(jwt));
-        user.setEmail(JwtUtils.getEmail(jwt));
+        user.setUsername(KeycloakJwtUtils.getUsername(jwt));
+        user.setEmail(KeycloakJwtUtils.getEmail(jwt));
         user.setProvider(provider);
 
         return userRepository.save(user);
@@ -40,12 +40,12 @@ public class UserService {
 
     @Transactional
     public UserEntity createOrUpdate(OidcUser oidcUser, OAuthProvider provider) {
-        var id = OidcUserUtils.getUserId(oidcUser);
+        var id = KeycloakOidcUserUtils.getUserId(oidcUser);
         var user = userRepository.findById(id).orElse(new UserEntity());
 
         user.setId(id);
-        user.setUsername(OidcUserUtils.getUsername(oidcUser));
-        user.setEmail(OidcUserUtils.getEmail(oidcUser));
+        user.setUsername(KeycloakOidcUserUtils.getUsername(oidcUser));
+        user.setEmail(KeycloakOidcUserUtils.getEmail(oidcUser));
         user.setProvider(provider);
 
         return userRepository.save(user);

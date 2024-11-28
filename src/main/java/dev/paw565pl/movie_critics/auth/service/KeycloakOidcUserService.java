@@ -11,15 +11,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.stream.Stream;
 
-import static dev.paw565pl.movie_critics.auth.utils.OidcUserUtils.getAuthorities;
+import static dev.paw565pl.movie_critics.auth.utils.KeycloakOidcUserUtils.getAuthorities;
 
 
 @Service
-public class CustomOidcUserService extends OidcUserService {
+public class KeycloakOidcUserService extends OidcUserService {
 
     private final UserService userService;
 
-    public CustomOidcUserService(UserService userService) {
+    public KeycloakOidcUserService(UserService userService) {
         this.userService = userService;
     }
 

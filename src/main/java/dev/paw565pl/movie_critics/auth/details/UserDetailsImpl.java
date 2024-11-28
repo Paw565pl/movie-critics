@@ -1,7 +1,7 @@
 package dev.paw565pl.movie_critics.auth.details;
 
-import dev.paw565pl.movie_critics.auth.utils.JwtUtils;
-import dev.paw565pl.movie_critics.auth.utils.OidcUserUtils;
+import dev.paw565pl.movie_critics.auth.utils.KeycloakJwtUtils;
+import dev.paw565pl.movie_critics.auth.utils.KeycloakOidcUserUtils;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,19 +32,19 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetailsImpl fromJwt(Jwt jwt) {
-        var id = JwtUtils.getUserId(jwt);
-        var username = JwtUtils.getUsername(jwt);
-        var email = JwtUtils.getEmail(jwt);
-        var authorities = JwtUtils.getAuthorities(jwt);
+        var id = KeycloakJwtUtils.getUserId(jwt);
+        var username = KeycloakJwtUtils.getUsername(jwt);
+        var email = KeycloakJwtUtils.getEmail(jwt);
+        var authorities = KeycloakJwtUtils.getAuthorities(jwt);
 
         return new UserDetailsImpl(id, username, email, authorities);
     }
 
     public static UserDetailsImpl fromOidcUser(OidcUser oidcUser) {
-        var id = OidcUserUtils.getUserId(oidcUser);
-        var username = OidcUserUtils.getUsername(oidcUser);
-        var email = OidcUserUtils.getEmail(oidcUser);
-        var authorities = OidcUserUtils.getAuthorities(oidcUser);
+        var id = KeycloakOidcUserUtils.getUserId(oidcUser);
+        var username = KeycloakOidcUserUtils.getUsername(oidcUser);
+        var email = KeycloakOidcUserUtils.getEmail(oidcUser);
+        var authorities = KeycloakOidcUserUtils.getAuthorities(oidcUser);
 
         return new UserDetailsImpl(id, username, email, authorities);
     }
