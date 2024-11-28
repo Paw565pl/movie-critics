@@ -1,14 +1,13 @@
 package dev.paw565pl.movie_critics.core.exception_handler;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
-import lombok.Setter;
+import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-
-import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -21,8 +20,7 @@ public class ErrorResponse {
     private String message;
     private Map<String, List<String>> errors;
 
-    public ErrorResponse(
-            Integer status, String error, String message, Map<String, List<String>> errors) {
+    public ErrorResponse(Integer status, String error, String message, Map<String, List<String>> errors) {
         this.timestamp = LocalDateTime.now();
         this.status = status;
         this.error = error;

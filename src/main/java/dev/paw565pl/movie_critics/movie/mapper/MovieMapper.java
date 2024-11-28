@@ -7,9 +7,7 @@ import dev.paw565pl.movie_critics.movie.repository.DirectorRepository;
 import dev.paw565pl.movie_critics.movie.repository.GenreRepository;
 import dev.paw565pl.movie_critics.movie.repository.WriterRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
-
 import java.util.ArrayList;
-
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 

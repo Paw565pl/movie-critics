@@ -1,5 +1,7 @@
 package dev.paw565pl.movie_critics.comment.service;
 
+import static dev.paw565pl.movie_critics.auth.utils.AuthUtils.hasRole;
+
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.auth.role.Role;
 import dev.paw565pl.movie_critics.comment.dto.CommentDto;
@@ -18,8 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import static dev.paw565pl.movie_critics.auth.utils.AuthUtils.hasRole;
-
 @Service
 public class CommentService {
 
@@ -28,7 +28,11 @@ public class CommentService {
     private final MovieService movieService;
     private final UserService userService;
 
-    public CommentService(CommentRepository commentRepository, CommentMapper commentMapper, MovieService movieService, UserService userService) {
+    public CommentService(
+            CommentRepository commentRepository,
+            CommentMapper commentMapper,
+            MovieService movieService,
+            UserService userService) {
         this.commentRepository = commentRepository;
         this.commentMapper = commentMapper;
         this.movieService = movieService;
@@ -38,7 +42,8 @@ public class CommentService {
     private CommentEntity findEntity(Long id, Long movieId) {
         return commentRepository
                 .findByIdAndMovieId(id, movieId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment with given id does not exist."));
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Comment with given id does not exist."));
     }
 
     public Page<CommentResponse> findAllByMovieId(Long movieId, Pageable pageable) {
@@ -67,8 +72,7 @@ public class CommentService {
             var savedCommentEntity = commentRepository.saveAndFlush(commentEntity);
             return commentMapper.toResponse(savedCommentEntity);
         } catch (DataIntegrityViolationException e) {
-            throw new DataIntegrityViolationException(
-                    "You have already created a comment for this movie.");
+            throw new DataIntegrityViolationException("You have already created a comment for this movie.");
         }
     }
 
@@ -80,8 +84,7 @@ public class CommentService {
 
         var isAuthor = commentEntity.getAuthor().getId().equals(user.getId());
         if (!isAuthor) {
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN, "You are not allowed to update this comment.");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to update this comment.");
         }
 
         commentEntity.setText(dto.text());
@@ -99,8 +102,7 @@ public class CommentService {
         var isAuthor = commentEntity.getAuthor().getId().equals(user.getId());
         var isAdmin = hasRole(user.getAuthorities(), Role.ADMIN);
         if (!(isAuthor || isAdmin)) {
-            throw new ResponseStatusException(
-                    HttpStatus.FORBIDDEN, "You are not allowed to delete this comment.");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to delete this comment.");
         }
 
         commentRepository.deleteById(commentEntity.getId());

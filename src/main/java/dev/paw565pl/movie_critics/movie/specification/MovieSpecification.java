@@ -2,16 +2,14 @@ package dev.paw565pl.movie_critics.movie.specification;
 
 import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.user.model.UserEntity;
-import org.springframework.data.jpa.domain.Specification;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.jpa.domain.Specification;
 
 public class MovieSpecification {
 
-    private MovieSpecification() {
-    }
+    private MovieSpecification() {}
 
     public static Specification<MovieEntity> titleContainsIgnoreCase(String title) {
         return (root, query, builder) -> {
@@ -19,9 +17,7 @@ public class MovieSpecification {
                 return null;
             }
 
-            return builder.like(
-                    builder.lower(root.get("title")),
-                    builder.lower(builder.literal("%" + title + "%")));
+            return builder.like(builder.lower(root.get("title")), builder.lower(builder.literal("%" + title + "%")));
         };
     }
 
@@ -31,9 +27,7 @@ public class MovieSpecification {
                 return null;
             }
 
-            return builder.equal(
-                    builder.lower(root.get("ageRating")),
-                    builder.lower(builder.literal(ageRating)));
+            return builder.equal(builder.lower(root.get("ageRating")), builder.lower(builder.literal(ageRating)));
         };
     }
 
@@ -104,8 +98,7 @@ public class MovieSpecification {
             }
 
             return builder.like(
-                    builder.lower(root.get("language")),
-                    builder.lower(builder.literal("%" + language + "%")));
+                    builder.lower(root.get("language")), builder.lower(builder.literal("%" + language + "%")));
         };
     }
 
@@ -116,8 +109,7 @@ public class MovieSpecification {
             }
 
             return builder.like(
-                    builder.lower(root.get("country")),
-                    builder.lower(builder.literal("%" + country + "%")));
+                    builder.lower(root.get("country")), builder.lower(builder.literal("%" + country + "%")));
         };
     }
 
@@ -134,8 +126,7 @@ public class MovieSpecification {
 
             var userRoot = subquery.from(UserEntity.class);
             var ignoredMovies = userRoot.join("ignoredMovies");
-            subquery.select(ignoredMovies.get("id"))
-                    .where(builder.equal(userRoot.get("id"), userId));
+            subquery.select(ignoredMovies.get("id")).where(builder.equal(userRoot.get("id"), userId));
 
             return builder.not(root.get("id").in(subquery));
         };

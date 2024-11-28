@@ -31,8 +31,7 @@ public class MovieToIgnoreRestController {
     @IsAuthenticated
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MovieResponse create(
-            @AuthenticationPrincipal Jwt jwt, @Valid @RequestBody MovieToIgnoreDto dto) {
+    public MovieResponse create(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody MovieToIgnoreDto dto) {
         return movieToIgnoreService.create(jwt, dto);
     }
 

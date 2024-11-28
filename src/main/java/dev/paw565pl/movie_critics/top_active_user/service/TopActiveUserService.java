@@ -13,8 +13,7 @@ public class TopActiveUserService {
     private final UserRepository userRepository;
     private final TopActiveUserMapper topActiveUserMapper;
 
-    public TopActiveUserService(
-            UserRepository userRepository, TopActiveUserMapper topActiveUserMapper) {
+    public TopActiveUserService(UserRepository userRepository, TopActiveUserMapper topActiveUserMapper) {
         this.userRepository = userRepository;
         this.topActiveUserMapper = topActiveUserMapper;
     }

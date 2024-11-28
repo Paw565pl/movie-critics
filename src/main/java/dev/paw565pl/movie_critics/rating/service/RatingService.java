@@ -8,14 +8,13 @@ import dev.paw565pl.movie_critics.rating.model.RatingEntity;
 import dev.paw565pl.movie_critics.rating.repository.RatingRepository;
 import dev.paw565pl.movie_critics.rating.response.RatingResponse;
 import dev.paw565pl.movie_critics.user.service.UserService;
+import java.util.UUID;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.UUID;
 
 @Service
 public class RatingService {
@@ -25,7 +24,11 @@ public class RatingService {
     private final UserService userService;
     private final MovieService movieService;
 
-    public RatingService(RatingRepository ratingRepository, RatingMapper ratingMapper, UserService userService, MovieService movieService) {
+    public RatingService(
+            RatingRepository ratingRepository,
+            RatingMapper ratingMapper,
+            UserService userService,
+            MovieService movieService) {
         this.ratingRepository = ratingRepository;
         this.ratingMapper = ratingMapper;
         this.userService = userService;
@@ -35,7 +38,8 @@ public class RatingService {
     private RatingEntity findEntity(Long movieId, UUID userId) {
         return ratingRepository
                 .findByMovieIdAndAuthorId(movieId, userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "You have not rated this movie yet."));
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "You have not rated this movie yet."));
     }
 
     public RatingResponse findByMovieIdAndUserId(Long movieId, Jwt jwt) {

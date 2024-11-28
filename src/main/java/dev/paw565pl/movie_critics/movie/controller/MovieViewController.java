@@ -4,6 +4,8 @@ import dev.paw565pl.movie_critics.comment.service.CommentService;
 import dev.paw565pl.movie_critics.movie.dto.MovieFilterDto;
 import dev.paw565pl.movie_critics.movie.repository.GenreRepository;
 import dev.paw565pl.movie_critics.movie.service.MovieService;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -13,9 +15,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-import java.util.Optional;
-
 @Controller
 public class MovieViewController {
 
@@ -24,9 +23,7 @@ public class MovieViewController {
     private final GenreRepository genreRepository;
 
     public MovieViewController(
-            MovieService movieService,
-            CommentService commentService,
-            GenreRepository genreRepository) {
+            MovieService movieService, CommentService commentService, GenreRepository genreRepository) {
         this.movieService = movieService;
         this.commentService = commentService;
         this.genreRepository = genreRepository;
@@ -41,8 +38,7 @@ public class MovieViewController {
     public String getMovieListView(
             MovieFilterDto filters,
             @RequestParam(required = false) String sort,
-            @PageableDefault(size = 50, sort = "ratingsCount", direction = Direction.DESC)
-            Pageable pageable,
+            @PageableDefault(size = 50, sort = "ratingsCount", direction = Direction.DESC) Pageable pageable,
             Model model) {
         var movies = movieService.findAll(Optional.empty(), filters, pageable);
 
@@ -52,30 +48,26 @@ public class MovieViewController {
         var genres = genreRepository.findAll();
         var selectedGenreFilterId =
                 filters.genreIds() != null ? filters.genreIds().getFirst() : null;
-        var selectedGenreFilter =
-                selectedGenreFilterId != null
-                        ? genreRepository.findById(selectedGenreFilterId).orElse(null)
-                        : null;
+        var selectedGenreFilter = selectedGenreFilterId != null
+                ? genreRepository.findById(selectedGenreFilterId).orElse(null)
+                : null;
 
-        record SortOption(String label, String value) {
-        }
-        var sortOptions =
-                List.of(
-                        new SortOption("Title (A-Z)", "title,asc"),
-                        new SortOption("Title (Z-A)", "title,desc"),
-                        new SortOption("Year (Newest)", "year,desc"),
-                        new SortOption("Year (Oldest)", "year,asc"),
-                        new SortOption("Metascore (Highest)", "metaScore,desc"),
-                        new SortOption("Metascore (Lowest)", "metaScore,asc"),
-                        new SortOption("Ratings (Most)", "ratingsCount,desc"),
-                        new SortOption("Ratings (Least)", "ratingsCount,asc"),
-                        new SortOption("Average RatingEntity (Highest)", "averageRating,desc"),
-                        new SortOption("Average RatingEntity (Lowest)", "averageRating,asc"));
-        var selectedSortOption =
-                sortOptions.stream()
-                        .filter((option) -> option.value().equals(sort))
-                        .findFirst()
-                        .orElse(null);
+        record SortOption(String label, String value) {}
+        var sortOptions = List.of(
+                new SortOption("Title (A-Z)", "title,asc"),
+                new SortOption("Title (Z-A)", "title,desc"),
+                new SortOption("Year (Newest)", "year,desc"),
+                new SortOption("Year (Oldest)", "year,asc"),
+                new SortOption("Metascore (Highest)", "metaScore,desc"),
+                new SortOption("Metascore (Lowest)", "metaScore,asc"),
+                new SortOption("Ratings (Most)", "ratingsCount,desc"),
+                new SortOption("Ratings (Least)", "ratingsCount,asc"),
+                new SortOption("Average RatingEntity (Highest)", "averageRating,desc"),
+                new SortOption("Average RatingEntity (Lowest)", "averageRating,asc"));
+        var selectedSortOption = sortOptions.stream()
+                .filter((option) -> option.value().equals(sort))
+                .findFirst()
+                .orElse(null);
 
         model.addAttribute("movies", movies);
 

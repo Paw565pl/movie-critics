@@ -1,12 +1,11 @@
 package dev.paw565pl.movie_critics.movie.model;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
@@ -16,7 +15,7 @@ import java.util.List;
 @Table(
         name = "actors",
         indexes = {
-                @Index(name = "index_actor_name", columnList = "name", unique = true),
+            @Index(name = "index_actor_name", columnList = "name", unique = true),
         })
 public class ActorEntity {
 
@@ -25,8 +24,7 @@ public class ActorEntity {
     @Column(name = "id")
     private Long id;
 
-    @NonNull
-    @Column(name = "name", nullable = false)
+    @NonNull @Column(name = "name", nullable = false)
     private String name;
 
     @ManyToMany(mappedBy = "actors")

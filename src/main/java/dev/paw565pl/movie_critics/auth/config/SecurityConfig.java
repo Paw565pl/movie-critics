@@ -1,5 +1,9 @@
 package dev.paw565pl.movie_critics.auth.config;
 
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+import static org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestCustomizers.withPkce;
+import static org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI;
+
 import dev.paw565pl.movie_critics.auth.jwt.KeycloakJwtConverter;
 import dev.paw565pl.movie_critics.auth.service.KeycloakOidcUserService;
 import org.springframework.context.annotation.Bean;
@@ -14,10 +18,6 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.web.SecurityFilterChain;
-
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
-import static org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestCustomizers.withPkce;
-import static org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter.DEFAULT_AUTHORIZATION_REQUEST_BASE_URI;
 
 @Configuration
 @EnableWebSecurity
@@ -35,11 +35,11 @@ public class SecurityConfig {
     @Bean
     @Order(1)
     public SecurityFilterChain oAuthResourceServerSecurityFilterChain(HttpSecurity http) throws Exception {
-        http.securityMatcher("/api/**").authorizeHttpRequests((auth) -> auth.anyRequest().permitAll());
+        http.securityMatcher("/api/**")
+                .authorizeHttpRequests((auth) -> auth.anyRequest().permitAll());
 
         http.oauth2ResourceServer(
-                (oauth2) ->
-                        oauth2.jwt((jwt) -> jwt.jwtAuthenticationConverter(keycloakJwtConverter)));
+                (oauth2) -> oauth2.jwt((jwt) -> jwt.jwtAuthenticationConverter(keycloakJwtConverter)));
 
         http.csrf(AbstractHttpConfigurer::disable);
         http.sessionManagement((session) -> session.sessionCreationPolicy(STATELESS));
@@ -49,19 +49,23 @@ public class SecurityConfig {
 
     @Bean
     @Order(2)
-    public SecurityFilterChain oAuthLoginSecurityFilterChain(HttpSecurity http, OAuth2AuthorizationRequestResolver pkceResolver, ClientRegistrationRepository clientRegistrationRepository) throws Exception {
-        http.securityMatcher("/**").authorizeHttpRequests((auth) -> auth.anyRequest().permitAll());
+    public SecurityFilterChain oAuthLoginSecurityFilterChain(
+            HttpSecurity http,
+            OAuth2AuthorizationRequestResolver pkceResolver,
+            ClientRegistrationRepository clientRegistrationRepository)
+            throws Exception {
+        http.securityMatcher("/**")
+                .authorizeHttpRequests((auth) -> auth.anyRequest().permitAll());
 
-        http.oauth2Login((config) ->
-                config.loginPage("/login").authorizationEndpoint((authorizationEndpointConfig) ->
-                                authorizationEndpointConfig.authorizationRequestResolver(pkceResolver))
-                        .userInfoEndpoint(((userInfo) -> userInfo.oidcUserService(keycloakOidcUserService))));
+        http.oauth2Login((config) -> config.loginPage("/login")
+                .authorizationEndpoint((authorizationEndpointConfig) ->
+                        authorizationEndpointConfig.authorizationRequestResolver(pkceResolver))
+                .userInfoEndpoint(((userInfo) -> userInfo.oidcUserService(keycloakOidcUserService))));
 
         http.logout((logout) -> {
             logout.logoutUrl("/logout");
 
-            var logoutSuccessHandler =
-                    new OidcClientInitiatedLogoutSuccessHandler(clientRegistrationRepository);
+            var logoutSuccessHandler = new OidcClientInitiatedLogoutSuccessHandler(clientRegistrationRepository);
             logoutSuccessHandler.setPostLogoutRedirectUri("{baseUrl}/");
             logout.logoutSuccessHandler(logoutSuccessHandler);
         });

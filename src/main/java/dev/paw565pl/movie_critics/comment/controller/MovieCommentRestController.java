@@ -31,9 +31,7 @@ public class MovieCommentRestController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CommentResponse create(
-            @PathVariable Long movieId,
-            @AuthenticationPrincipal Jwt jwt,
-            @Valid @RequestBody CommentDto dto) {
+            @PathVariable Long movieId, @AuthenticationPrincipal Jwt jwt, @Valid @RequestBody CommentDto dto) {
         return commentService.create(movieId, jwt, dto);
     }
 
@@ -55,10 +53,7 @@ public class MovieCommentRestController {
     @IsAuthenticated
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(
-            @PathVariable Long movieId,
-            @PathVariable Long commentId,
-            @AuthenticationPrincipal Jwt jwt) {
+    public void delete(@PathVariable Long movieId, @PathVariable Long commentId, @AuthenticationPrincipal Jwt jwt) {
         commentService.delete(commentId, movieId, jwt);
     }
 }

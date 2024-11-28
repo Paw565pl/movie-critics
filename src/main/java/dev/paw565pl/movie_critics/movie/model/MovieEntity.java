@@ -4,15 +4,14 @@ import dev.paw565pl.movie_critics.comment.model.CommentEntity;
 import dev.paw565pl.movie_critics.rating.model.RatingEntity;
 import dev.paw565pl.movie_critics.user.model.UserEntity;
 import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.*;
+import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -22,8 +21,8 @@ import java.util.List;
 @Table(
         name = "movies",
         indexes = {
-                @Index(name = "index_movie_title", columnList = "title", unique = true),
-                @Index(name = "index_movie_released", columnList = "released")
+            @Index(name = "index_movie_title", columnList = "title", unique = true),
+            @Index(name = "index_movie_released", columnList = "released")
         })
 public class MovieEntity {
 
@@ -32,8 +31,7 @@ public class MovieEntity {
     @Column(name = "id")
     private Long id;
 
-    @NonNull
-    @Column(name = "title", length = 200, nullable = false)
+    @NonNull @Column(name = "title", length = 200, nullable = false)
     private String title;
 
     @Column(name = "year")
@@ -75,8 +73,7 @@ public class MovieEntity {
     @Column(name = "website")
     private String website;
 
-    @NonNull
-    @ManyToMany
+    @NonNull @ManyToMany
     @JoinTable(
             name = "movie_genres",
             joinColumns = {@JoinColumn(name = "movie_id")},

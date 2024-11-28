@@ -6,6 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.paw565pl.movie_critics.movie.mapper.MovieMapper;
 import dev.paw565pl.movie_critics.movie.model.*;
 import dev.paw565pl.movie_critics.movie.repository.*;
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,11 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -50,15 +49,15 @@ public class AdminService {
     }
 
     public ByteArrayResource exportMoviesToJson() {
-        var movies = movieRepository.findAll().stream().map(movieMapper::toResponse).toList();
+        var movies =
+                movieRepository.findAll().stream().map(movieMapper::toResponse).toList();
 
         try {
             var moviesBytes = objectMapper.writeValueAsBytes(movies);
             return new ByteArrayResource(moviesBytes);
         } catch (JsonProcessingException e) {
             log.error("Error while exporting movies.", e);
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Error while exporting movies.");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while exporting movies.");
         }
     }
 
@@ -68,12 +67,10 @@ public class AdminService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "File can not be empty.");
         }
 
-        var isJsonFile =
-                file.getOriginalFilename().toLowerCase().endsWith(".json")
-                        && file.getContentType().equalsIgnoreCase("application/json");
+        var isJsonFile = file.getOriginalFilename().toLowerCase().endsWith(".json")
+                && file.getContentType().equalsIgnoreCase("application/json");
         if (!isJsonFile) {
-            throw new ResponseStatusException(
-                    HttpStatus.UNSUPPORTED_MEDIA_TYPE, "File must be a JSON file.");
+            throw new ResponseStatusException(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "File must be a JSON file.");
         }
 
         try (var inputStream = file.getInputStream()) {
@@ -85,74 +82,60 @@ public class AdminService {
             var actors = new HashSet<ActorEntity>();
             var movies = new HashSet<MovieEntity>();
 
-            jsonList.forEach(
-                    (m) -> {
-                        var currentGenres = new HashSet<GenreEntity>();
-                        var currentDirectors = new HashSet<DirectorEntity>();
-                        var currentWriters = new HashSet<WriterEntity>();
-                        var currentActors = new HashSet<ActorEntity>();
+            jsonList.forEach((m) -> {
+                var currentGenres = new HashSet<GenreEntity>();
+                var currentDirectors = new HashSet<DirectorEntity>();
+                var currentWriters = new HashSet<WriterEntity>();
+                var currentActors = new HashSet<ActorEntity>();
 
-                        var genresJson = (List<Map<String, String>>) m.get("genres");
-                        genresJson.forEach(
-                                (g) -> {
-                                    var genreName = g.get("name");
-                                    var genre =
-                                            genreRepository
-                                                    .findByNameIgnoreCase(genreName)
-                                                    .orElse(new GenreEntity(genreName));
+                var genresJson = (List<Map<String, String>>) m.get("genres");
+                genresJson.forEach((g) -> {
+                    var genreName = g.get("name");
+                    var genre = genreRepository.findByNameIgnoreCase(genreName).orElse(new GenreEntity(genreName));
 
-                                    currentGenres.add(genre);
-                                    genres.add(genre);
-                                });
+                    currentGenres.add(genre);
+                    genres.add(genre);
+                });
 
-                        var directorsJson = (List<Map<String, String>>) m.get("directors");
-                        directorsJson.forEach(
-                                (d) -> {
-                                    var directorName = d.get("name");
-                                    var director =
-                                            directorRepository
-                                                    .findByNameIgnoreCase(directorName)
-                                                    .orElse(new DirectorEntity(directorName));
+                var directorsJson = (List<Map<String, String>>) m.get("directors");
+                directorsJson.forEach((d) -> {
+                    var directorName = d.get("name");
+                    var director = directorRepository
+                            .findByNameIgnoreCase(directorName)
+                            .orElse(new DirectorEntity(directorName));
 
-                                    currentDirectors.add(director);
-                                    directors.add(director);
-                                });
+                    currentDirectors.add(director);
+                    directors.add(director);
+                });
 
-                        var writersJson = (List<Map<String, String>>) m.get("writers");
-                        writersJson.forEach(
-                                (w) -> {
-                                    var writerName = w.get("name");
-                                    var writer =
-                                            writerRepository
-                                                    .findByNameIgnoreCase(writerName)
-                                                    .orElse(new WriterEntity(writerName));
+                var writersJson = (List<Map<String, String>>) m.get("writers");
+                writersJson.forEach((w) -> {
+                    var writerName = w.get("name");
+                    var writer =
+                            writerRepository.findByNameIgnoreCase(writerName).orElse(new WriterEntity(writerName));
 
-                                    currentWriters.add(writer);
-                                    writers.add(writer);
-                                });
+                    currentWriters.add(writer);
+                    writers.add(writer);
+                });
 
-                        var actorsJson = (List<Map<String, String>>) m.get("actors");
-                        actorsJson.forEach(
-                                (a) -> {
-                                    var actorName = a.get("name");
-                                    var actor =
-                                            actorRepository
-                                                    .findByNameIgnoreCase(actorName)
-                                                    .orElse(new ActorEntity(actorName));
+                var actorsJson = (List<Map<String, String>>) m.get("actors");
+                actorsJson.forEach((a) -> {
+                    var actorName = a.get("name");
+                    var actor = actorRepository.findByNameIgnoreCase(actorName).orElse(new ActorEntity(actorName));
 
-                                    currentActors.add(actor);
-                                    actors.add(actor);
-                                });
+                    currentActors.add(actor);
+                    actors.add(actor);
+                });
 
-                        var movie = objectMapper.convertValue(m, MovieEntity.class);
+                var movie = objectMapper.convertValue(m, MovieEntity.class);
 
-                        movie.setGenres(currentGenres.stream().toList());
-                        movie.setDirectors(currentDirectors.stream().toList());
-                        movie.setWriters(currentWriters.stream().toList());
-                        movie.setActors(currentActors.stream().toList());
+                movie.setGenres(currentGenres.stream().toList());
+                movie.setDirectors(currentDirectors.stream().toList());
+                movie.setWriters(currentWriters.stream().toList());
+                movie.setActors(currentActors.stream().toList());
 
-                        movies.add(movie);
-                    });
+                movies.add(movie);
+            });
 
             genreRepository.saveAllAndFlush(genres);
             directorRepository.saveAllAndFlush(directors);
@@ -168,8 +151,7 @@ public class AdminService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid JSON file.");
         } catch (IOException e) {
             log.error("Error while importing movies.", e);
-            throw new ResponseStatusException(
-                    HttpStatus.INTERNAL_SERVER_ERROR, "Error while importing movies.");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error while importing movies.");
         }
     }
 }

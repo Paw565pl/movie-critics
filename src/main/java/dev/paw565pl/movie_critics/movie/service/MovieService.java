@@ -9,6 +9,8 @@ import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie.specification.MovieSpecification;
+import java.util.Optional;
+import java.util.Set;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,9 +18,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class MovieService {
@@ -35,19 +34,17 @@ public class MovieService {
         return movieRepository.findById(id).orElseThrow(MovieNotFoundException::new);
     }
 
-    public Page<MovieResponse> findAll(
-            Optional<Jwt> jwt, MovieFilterDto filters, Pageable pageable) {
-        var specification =
-                Specification.where(MovieSpecification.titleContainsIgnoreCase(filters.title()))
-                        .and(MovieSpecification.ageRatingEqualsIgnoreCase(filters.ageRating()))
-                        .and(MovieSpecification.releasedAfterOrEquals(filters.startReleasedDate()))
-                        .and(MovieSpecification.releasedBeforeOrEquals(filters.endReleasedDate()))
-                        .and(MovieSpecification.genreIdsContains(filters.genreIds()))
-                        .and(MovieSpecification.directorIdsContains(filters.directorIds()))
-                        .and(MovieSpecification.writerIdsContains(filters.writerIds()))
-                        .and(MovieSpecification.actorIdsContains(filters.actorIds()))
-                        .and(MovieSpecification.languageContainsIgnoreCase(filters.language()))
-                        .and(MovieSpecification.countryContainsIgnoreCase(filters.country()));
+    public Page<MovieResponse> findAll(Optional<Jwt> jwt, MovieFilterDto filters, Pageable pageable) {
+        var specification = Specification.where(MovieSpecification.titleContainsIgnoreCase(filters.title()))
+                .and(MovieSpecification.ageRatingEqualsIgnoreCase(filters.ageRating()))
+                .and(MovieSpecification.releasedAfterOrEquals(filters.startReleasedDate()))
+                .and(MovieSpecification.releasedBeforeOrEquals(filters.endReleasedDate()))
+                .and(MovieSpecification.genreIdsContains(filters.genreIds()))
+                .and(MovieSpecification.directorIdsContains(filters.directorIds()))
+                .and(MovieSpecification.writerIdsContains(filters.writerIds()))
+                .and(MovieSpecification.actorIdsContains(filters.actorIds()))
+                .and(MovieSpecification.languageContainsIgnoreCase(filters.language()))
+                .and(MovieSpecification.countryContainsIgnoreCase(filters.country()));
 
         if (jwt.isPresent()) {
             var userId = UserDetailsImpl.fromJwt(jwt.get()).getId();

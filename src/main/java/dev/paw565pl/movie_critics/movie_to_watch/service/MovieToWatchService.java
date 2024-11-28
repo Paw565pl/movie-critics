@@ -9,6 +9,7 @@ import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie_to_watch.dto.MovieToWatchDto;
 import dev.paw565pl.movie_critics.user.repository.UserRepository;
 import dev.paw565pl.movie_critics.user.service.UserService;
+import java.util.UUID;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.UUID;
-
 @Service
 public class MovieToWatchService {
 
@@ -28,7 +27,11 @@ public class MovieToWatchService {
     private final UserRepository userRepository;
     private final UserService userService;
 
-    public MovieToWatchService(MovieRepository movieRepository, MovieMapper movieMapper, UserRepository userRepository, UserService userService) {
+    public MovieToWatchService(
+            MovieRepository movieRepository,
+            MovieMapper movieMapper,
+            UserRepository userRepository,
+            UserService userService) {
         this.movieRepository = movieRepository;
         this.movieMapper = movieMapper;
         this.userRepository = userRepository;
@@ -36,20 +39,22 @@ public class MovieToWatchService {
     }
 
     private MovieEntity findMovieEntity(Long id) {
-        return movieRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, new MovieNotFoundException().getMessage()));
+        return movieRepository
+                .findById(id)
+                .orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.BAD_REQUEST, new MovieNotFoundException().getMessage()));
     }
 
     private MovieEntity findMovieToWatchEntity(Long movieId, UUID userId) {
         return movieRepository
                 .findByIdAndUsersWhoWantToWatchId(movieId, userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie with given id is not in your to watch list."));
+                .orElseThrow(() -> new ResponseStatusException(
+                        HttpStatus.NOT_FOUND, "Movie with given id is not in your to watch list."));
     }
 
     public Page<MovieResponse> findAll(Jwt jwt, Pageable pageable) {
         var userId = UserDetailsImpl.fromJwt(jwt).getId();
-        return movieRepository
-                .findAllByUsersWhoWantToWatchId(userId, pageable)
-                .map(movieMapper::toResponse);
+        return movieRepository.findAllByUsersWhoWantToWatchId(userId, pageable).map(movieMapper::toResponse);
     }
 
     @Transactional

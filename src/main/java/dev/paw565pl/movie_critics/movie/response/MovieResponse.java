@@ -1,10 +1,9 @@
 package dev.paw565pl.movie_critics.movie.response;
 
-import lombok.Data;
-
 import java.time.LocalDate;
 import java.time.Year;
 import java.util.List;
+import lombok.Data;
 
 @Data
 public class MovieResponse {

@@ -30,18 +30,14 @@ public class MovieRatingRestController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public RatingResponse createRating(
-            @PathVariable Long movieId,
-            @AuthenticationPrincipal Jwt jwt,
-            @Valid @RequestBody RatingDto dto) {
+            @PathVariable Long movieId, @AuthenticationPrincipal Jwt jwt, @Valid @RequestBody RatingDto dto) {
         return ratingService.create(movieId, jwt, dto);
     }
 
     @IsAuthenticated
     @PutMapping
     public RatingResponse updateRating(
-            @PathVariable Long movieId,
-            @AuthenticationPrincipal Jwt jwt,
-            @Valid @RequestBody RatingDto dto) {
+            @PathVariable Long movieId, @AuthenticationPrincipal Jwt jwt, @Valid @RequestBody RatingDto dto) {
         return ratingService.update(movieId, jwt, dto);
     }
 

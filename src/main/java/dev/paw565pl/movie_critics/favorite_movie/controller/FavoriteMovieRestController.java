@@ -31,8 +31,7 @@ public class FavoriteMovieRestController {
     @IsAuthenticated
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MovieResponse create(
-            @AuthenticationPrincipal Jwt jwt, @Valid @RequestBody FavoriteMovieDto dto) {
+    public MovieResponse create(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody FavoriteMovieDto dto) {
         return favoriteMovieService.create(jwt, dto);
     }
 
