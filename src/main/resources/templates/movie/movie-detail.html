@@ -1,0 +1,182 @@
+<!doctype html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{core/layout}"
+>
+  <body>
+    <article layout:fragment="content">
+      <img
+        th:src="${movie.poster}"
+        th:alt="${movie.title + ' poster'}"
+        class="mb-2"
+      />
+
+      <section class="mb-3">
+        <header class="d-flex align-items-center gap-2">
+          <h1 th:text="${movie.title}" class="fw-bold"></h1>
+          <span
+            th:text="'(' + ${movie.released.year} + ')'"
+            class="text-muted"
+          ></span>
+        </header>
+      </section>
+
+      <section class="mb-2">
+        <header class="mb-1">
+          <h3>Plot</h3>
+        </header>
+
+        <p th:text="${movie.plot}"></p>
+      </section>
+
+      <section class="mb-2">
+        <header class="mb-1">
+          <h3>Staff</h3>
+        </header>
+
+        <dl class="row row-cols-auto gap-2">
+          <div class="col">
+            <dt>Directors</dt>
+            <dd>
+              <ul>
+                <li th:each="director : ${movie.directors}">
+                  <span th:text="${director.name}"></span>
+                </li>
+              </ul>
+            </dd>
+          </div>
+
+          <div class="col">
+            <dt>Writers</dt>
+            <dd>
+              <ul>
+                <li th:each="writer : ${movie.writers}">
+                  <span th:text="${writer.name}"></span>
+                </li>
+              </ul>
+            </dd>
+          </div>
+
+          <div class="col">
+            <dt>Actors</dt>
+            <dd>
+              <ul>
+                <li th:each="actor : ${movie.actors}">
+                  <span th:text="${actor.name}"></span>
+                </li>
+              </ul>
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="mb-2">
+        <header class="mb-1">
+          <h3>Details</h3>
+        </header>
+
+        <dl class="row row-cols-auto gap-2">
+          <div th:if="${movie.metaScore}">
+            <dt>Metacritic score</dt>
+            <dd>
+              <span
+                th:if="${movie.metaScore >= 67}"
+                th:text="${movie.metaScore}"
+                class="badge text-bg-success"
+              ></span>
+              <span
+                th:if="${34 <= movie.metaScore and movie.metaScore < 67}"
+                th:text="${movie.metaScore}"
+                class="badge text-bg-warning"
+              ></span>
+              <span
+                th:if="${movie.metaScore < 34}"
+                th:text="${movie.metaScore}"
+                class="badge text-bg-danger"
+              ></span>
+            </dd>
+          </div>
+
+          <div th:if="${movie.ageRating}">
+            <dt>Age Rating</dt>
+            <dd th:text="${movie.ageRating}"></dd>
+          </div>
+
+          <div th:if="${movie.runtime}">
+            <dt>Runtime</dt>
+            <dd th:text="${movie.runtime}"></dd>
+          </div>
+
+          <div th:if="${movie.language}">
+            <dt>Language</dt>
+            <dd th:text="${movie.language}"></dd>
+          </div>
+
+          <div th:if="${movie.country}">
+            <dt>Country</dt>
+            <dd th:text="${movie.country}"></dd>
+          </div>
+
+          <div th:if="${movie.awards}">
+            <dt>Awards</dt>
+            <dd th:text="${movie.awards}"></dd>
+          </div>
+
+          <div th:if="${movie.dvd}">
+            <dt>Dvd</dt>
+            <dd th:text="${movie.dvd}"></dd>
+          </div>
+
+          <div th:if="${movie.boxOffice}">
+            <dt>Box Office</dt>
+            <dd th:text="${movie.boxOffice}"></dd>
+          </div>
+
+          <div th:if="${movie.website}">
+            <dt>Website</dt>
+            <dd>
+              <a th:href="${movie.website}" target="_blank">Link</a>
+            </dd>
+          </div>
+
+          <div th:if="${movie.ratingsCount}">
+            <dt>User's ratings count</dt>
+            <dd th:text="${movie.ratingsCount}"></dd>
+          </div>
+
+          <div th:if="${movie.averageRating}">
+            <dt>User's average rating</dt>
+            <dd th:text="${movie.averageRating}"></dd>
+          </div>
+        </dl>
+      </section>
+
+      <!-- comments section -->
+      <section class="mb-2">
+        <header class="mb-1">
+          <h3>Comments</h3>
+        </header>
+
+        <p th:if="${movieComments.isEmpty()}">
+          This movie does not have any comments yet.
+        </p>
+
+        <div class="card w-100 mb-1" th:each="comment : ${movieComments}">
+          <div class="card-body">
+            <h5
+              class="card-title"
+              th:text="'Author: ' + ${comment.author}"
+            ></h5>
+            <h6
+              class="card-subtitle mb-2 text-muted"
+              th:text="${#temporals.format(comment.createdAt, 'dd-MM-yyyy HH:mm')}"
+            ></h6>
+            <p class="card-text" th:text="${comment.text}"></p>
+          </div>
+        </div>
+      </section>
+    </article>
+  </body>
+</html>
