@@ -229,6 +229,32 @@
           <h3>Comments</h3>
         </header>
 
+        <form
+          sec:authorize="isAuthenticated()"
+          th:action="@{/movies/{id}/comments(id=${movie.id})}"
+          th:object="${newComment}"
+          method="post"
+          class="mb-3"
+        >
+          <div class="mb-3">
+            <label for="comment" class="form-label">Your new comment</label>
+            <textarea
+              id="comment"
+              name="text"
+              th:field="*{text}"
+              class="form-control"
+              rows="4"
+              placeholder="Tell everyone what you think about this movie..."
+            ></textarea>
+            <p
+              th:if="${#fields.hasErrors('text')}"
+              th:errors="*{text}"
+              class="form-text text-danger"
+            ></p>
+          </div>
+          <button type="submit" class="btn btn-primary">Add comment</button>
+        </form>
+
         <p th:if="${movieComments.isEmpty()}">
           This movie does not have any comments yet.
         </p>

@@ -2,14 +2,17 @@ package dev.paw565pl.movie_critics.movie.controller;
 
 import dev.paw565pl.movie_critics.auth.annotation.IsAuthenticated;
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
+import dev.paw565pl.movie_critics.comment.dto.CommentDto;
 import dev.paw565pl.movie_critics.comment.service.CommentService;
 import dev.paw565pl.movie_critics.movie.dto.MovieFilterDto;
 import dev.paw565pl.movie_critics.movie.repository.GenreRepository;
 import dev.paw565pl.movie_critics.movie.service.MovieService;
 import dev.paw565pl.movie_critics.rating.dto.RatingDto;
 import dev.paw565pl.movie_critics.rating.service.RatingService;
+import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -17,10 +20,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 @Controller
@@ -103,6 +104,7 @@ public class MovieViewController {
 
         model.addAttribute("movie", movie);
         model.addAttribute("movieComments", movieComments);
+        model.addAttribute("newComment", new CommentDto(""));
 
         if (oidcUser != null) {
             var user = UserDetailsImpl.fromOidcUser(oidcUser);
@@ -139,6 +141,42 @@ public class MovieViewController {
             var userMovieRatingValue =
                     ratingService.create(id, user, new RatingDto(value)).value();
             model.addAttribute("userMovieRatingValue", userMovieRatingValue);
+        }
+
+        return "redirect:/movies/{id}";
+    }
+
+    @IsAuthenticated
+    @PostMapping("/movies/{id}/comments")
+    public String addComment(
+            @PathVariable Long id,
+            @AuthenticationPrincipal OidcUser oidcUser,
+            @Valid @ModelAttribute("newComment") CommentDto commentDto,
+            BindingResult bindingResult,
+            Model model) {
+        if (bindingResult.hasErrors()) {
+            var movie = movieService.findById(id);
+            var movieComments = commentService.findAllByMovieId(id, Pageable.ofSize(20));
+
+            model.addAttribute("movie", movie);
+            model.addAttribute("movieComments", movieComments);
+
+            return "movie/movie-detail";
+        }
+
+        var user = UserDetailsImpl.fromOidcUser(oidcUser);
+        try {
+            commentService.create(id, user, commentDto);
+        } catch (DataIntegrityViolationException e) {
+            var movie = movieService.findById(id);
+            var movieComments = commentService.findAllByMovieId(id, Pageable.ofSize(20));
+
+            model.addAttribute("movie", movie);
+            model.addAttribute("movieComments", movieComments);
+
+            bindingResult.rejectValue("text", "", e.getMessage());
+
+            return "movie/movie-detail";
         }
 
         return "redirect:/movies/{id}";
