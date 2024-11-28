@@ -25,4 +25,6 @@ public interface MovieRepository
 
     Optional<MovieEntity> findByIdAndUsersWhoIgnoredId(Long id, UUID userId);
 
+    @Query("SELECT DISTINCT m.ageRating FROM MovieEntity m WHERE m.ageRating IS NOT NULL")
+    Set<String> findDistinctAgeRatings();
 }

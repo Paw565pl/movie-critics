@@ -9,7 +9,6 @@ import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie.specification.MovieSpecification;
-import java.util.Optional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +16,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class MovieService {
@@ -56,8 +58,12 @@ public class MovieService {
     }
 
     public MovieResponse findById(Long id) {
-        var movie = findEntity(id);
-        return movieMapper.toResponse(movie);
+        var movieEntity = findEntity(id);
+        return movieMapper.toResponse(movieEntity);
+    }
+
+    public Set<String> findDistinctAgeRatings() {
+        return movieRepository.findDistinctAgeRatings();
     }
 
     @Transactional
