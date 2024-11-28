@@ -14,7 +14,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -52,16 +51,16 @@ public class MovieToIgnoreService {
                         HttpStatus.NOT_FOUND, "Movie with given id is not in your ignored list."));
     }
 
-    public Page<MovieResponse> findAll(Jwt jwt, Pageable pageable) {
-        var userId = UserDetailsImpl.fromJwt(jwt).getId();
+    public Page<MovieResponse> findAll(UserDetailsImpl user, Pageable pageable) {
+        var userId = user.getId();
         return movieRepository.findAllByUsersWhoIgnoredId(userId, pageable).map(movieMapper::toResponse);
     }
 
     @Transactional
-    public MovieResponse create(Jwt jwt, MovieToIgnoreDto dto) {
+    public MovieResponse create(UserDetailsImpl user, MovieToIgnoreDto dto) {
         var movieEntity = findMovieEntity(dto.movieId());
 
-        var userId = UserDetailsImpl.fromJwt(jwt).getId();
+        var userId = user.getId();
         var userEntity = userService.findById(userId);
 
         try {
@@ -75,8 +74,8 @@ public class MovieToIgnoreService {
     }
 
     @Transactional
-    public void delete(Long movieId, Jwt jwt) {
-        var userId = UserDetailsImpl.fromJwt(jwt).getId();
+    public void delete(Long movieId, UserDetailsImpl user) {
+        var userId = user.getId();
         var movieToIgnore = findMovieToIgnoreEntity(movieId, userId);
 
         var userEntity = userService.findById(userId);

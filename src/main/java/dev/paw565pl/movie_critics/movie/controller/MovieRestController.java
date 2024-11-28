@@ -1,6 +1,7 @@
 package dev.paw565pl.movie_critics.movie.controller;
 
 import dev.paw565pl.movie_critics.auth.annotation.IsAdmin;
+import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.movie.dto.MovieDto;
 import dev.paw565pl.movie_critics.movie.dto.MovieFilterDto;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
@@ -26,7 +27,7 @@ public class MovieRestController {
 
     @GetMapping
     public Page<MovieResponse> findAll(@AuthenticationPrincipal Jwt jwt, MovieFilterDto filters, Pageable pageable) {
-        return movieService.findAll(Optional.ofNullable(jwt), filters, pageable);
+        return movieService.findAll(Optional.of(UserDetailsImpl.fromJwt(jwt)), filters, pageable);
     }
 
     @IsAdmin

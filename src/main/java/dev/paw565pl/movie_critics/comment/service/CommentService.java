@@ -15,7 +15,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -58,10 +57,10 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponse create(Long movieId, Jwt jwt, CommentDto dto) {
+    public CommentResponse create(Long movieId, UserDetailsImpl user, CommentDto dto) {
         var movieEntity = movieService.findEntity(movieId);
 
-        var userId = UserDetailsImpl.fromJwt(jwt).getId();
+        var userId = user.getId();
         var userEntity = userService.findById(userId);
 
         var commentEntity = commentMapper.toEntity(dto);
@@ -77,10 +76,9 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponse update(Long id, Long movieId, Jwt jwt, CommentDto dto) {
+    public CommentResponse update(Long id, Long movieId, UserDetailsImpl user, CommentDto dto) {
         movieService.findEntity(movieId);
         var commentEntity = findEntity(id, movieId);
-        var user = UserDetailsImpl.fromJwt(jwt);
 
         var isAuthor = commentEntity.getAuthor().getId().equals(user.getId());
         if (!isAuthor) {
@@ -94,10 +92,9 @@ public class CommentService {
     }
 
     @Transactional
-    public void delete(Long id, Long movieId, Jwt jwt) {
+    public void delete(Long id, Long movieId, UserDetailsImpl user) {
         movieService.findEntity(movieId);
         var commentEntity = findEntity(id, movieId);
-        var user = UserDetailsImpl.fromJwt(jwt);
 
         var isAuthor = commentEntity.getAuthor().getId().equals(user.getId());
         var isAdmin = hasRole(user.getAuthorities(), Role.ADMIN);

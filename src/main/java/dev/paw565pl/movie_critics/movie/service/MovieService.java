@@ -15,7 +15,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +33,7 @@ public class MovieService {
         return movieRepository.findById(id).orElseThrow(MovieNotFoundException::new);
     }
 
-    public Page<MovieResponse> findAll(Optional<Jwt> jwt, MovieFilterDto filters, Pageable pageable) {
+    public Page<MovieResponse> findAll(Optional<UserDetailsImpl> user, MovieFilterDto filters, Pageable pageable) {
         var specification = Specification.where(MovieSpecification.titleContainsIgnoreCase(filters.title()))
                 .and(MovieSpecification.ageRatingEqualsIgnoreCase(filters.ageRating()))
                 .and(MovieSpecification.releasedAfterOrEquals(filters.startReleasedDate()))
@@ -46,8 +45,8 @@ public class MovieService {
                 .and(MovieSpecification.languageContainsIgnoreCase(filters.language()))
                 .and(MovieSpecification.countryContainsIgnoreCase(filters.country()));
 
-        if (jwt.isPresent()) {
-            var userId = UserDetailsImpl.fromJwt(jwt.get()).getId();
+        if (user.isPresent()) {
+            var userId = user.get().getId();
             specification = specification.and(MovieSpecification.notIgnoredByUser(userId));
         }
 

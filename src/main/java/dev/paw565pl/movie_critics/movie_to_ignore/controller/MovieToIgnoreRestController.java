@@ -1,6 +1,7 @@
 package dev.paw565pl.movie_critics.movie_to_ignore.controller;
 
 import dev.paw565pl.movie_critics.auth.annotation.IsAuthenticated;
+import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie_to_ignore.dto.MovieToIgnoreDto;
 import dev.paw565pl.movie_critics.movie_to_ignore.service.MovieToIgnoreService;
@@ -25,20 +26,20 @@ public class MovieToIgnoreRestController {
     @IsAuthenticated
     @GetMapping
     public Page<MovieResponse> findAll(@AuthenticationPrincipal Jwt jwt, Pageable pageable) {
-        return movieToIgnoreService.findAll(jwt, pageable);
+        return movieToIgnoreService.findAll(UserDetailsImpl.fromJwt(jwt), pageable);
     }
 
     @IsAuthenticated
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MovieResponse create(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody MovieToIgnoreDto dto) {
-        return movieToIgnoreService.create(jwt, dto);
+        return movieToIgnoreService.create(UserDetailsImpl.fromJwt(jwt), dto);
     }
 
     @IsAuthenticated
     @DeleteMapping("/{movieId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long movieId, @AuthenticationPrincipal Jwt jwt) {
-        movieToIgnoreService.delete(movieId, jwt);
+        movieToIgnoreService.delete(movieId, UserDetailsImpl.fromJwt(jwt));
     }
 }

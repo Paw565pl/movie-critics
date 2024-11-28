@@ -11,7 +11,6 @@ import dev.paw565pl.movie_critics.user.service.UserService;
 import java.util.UUID;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
@@ -42,19 +41,18 @@ public class RatingService {
                         () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "You have not rated this movie yet."));
     }
 
-    public RatingResponse findByMovieIdAndUserId(Long movieId, Jwt jwt) {
+    public RatingResponse findByMovieIdAndUserId(Long movieId, UserDetailsImpl user) {
         movieService.findEntity(movieId);
-        var user = UserDetailsImpl.fromJwt(jwt);
         var ratingEntity = findEntity(movieId, user.getId());
 
         return ratingMapper.toResponse(ratingEntity);
     }
 
     @Transactional
-    public RatingResponse create(Long movieId, Jwt jwt, RatingDto dto) {
+    public RatingResponse create(Long movieId, UserDetailsImpl user, RatingDto dto) {
         var movieEntity = movieService.findEntity(movieId);
 
-        var userId = UserDetailsImpl.fromJwt(jwt).getId();
+        var userId = user.getId();
         var userEntity = userService.findById(userId);
 
         var ratingEntity = ratingMapper.toEntity(dto);
@@ -70,9 +68,8 @@ public class RatingService {
     }
 
     @Transactional
-    public RatingResponse update(Long movieId, Jwt jwt, RatingDto dto) {
+    public RatingResponse update(Long movieId, UserDetailsImpl user, RatingDto dto) {
         movieService.findEntity(movieId);
-        var user = UserDetailsImpl.fromJwt(jwt);
         var ratingEntity = findEntity(movieId, user.getId());
 
         ratingEntity.setValue(dto.value());
@@ -82,9 +79,8 @@ public class RatingService {
     }
 
     @Transactional
-    public void delete(Long movieId, Jwt jwt) {
+    public void delete(Long movieId, UserDetailsImpl user) {
         movieService.findEntity(movieId);
-        var user = UserDetailsImpl.fromJwt(jwt);
         var ratingEntity = findEntity(movieId, user.getId());
 
         ratingRepository.deleteById(ratingEntity.getId());

@@ -1,6 +1,7 @@
 package dev.paw565pl.movie_critics.movie_to_watch.controller;
 
 import dev.paw565pl.movie_critics.auth.annotation.IsAuthenticated;
+import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie_to_watch.dto.MovieToWatchDto;
 import dev.paw565pl.movie_critics.movie_to_watch.service.MovieToWatchService;
@@ -25,20 +26,20 @@ public class MovieToWatchRestController {
     @IsAuthenticated
     @GetMapping
     public Page<MovieResponse> findAll(@AuthenticationPrincipal Jwt jwt, Pageable pageable) {
-        return movieToWatchService.findAll(jwt, pageable);
+        return movieToWatchService.findAll(UserDetailsImpl.fromJwt(jwt), pageable);
     }
 
     @IsAuthenticated
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MovieResponse create(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody MovieToWatchDto movieToWatchDto) {
-        return movieToWatchService.create(jwt, movieToWatchDto);
+        return movieToWatchService.create(UserDetailsImpl.fromJwt(jwt), movieToWatchDto);
     }
 
     @IsAuthenticated
     @DeleteMapping("/{movieId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long movieId, @AuthenticationPrincipal Jwt jwt) {
-        movieToWatchService.delete(movieId, jwt);
+        movieToWatchService.delete(movieId, UserDetailsImpl.fromJwt(jwt));
     }
 }

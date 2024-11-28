@@ -1,6 +1,7 @@
 package dev.paw565pl.movie_critics.rating.controller;
 
 import dev.paw565pl.movie_critics.auth.annotation.IsAuthenticated;
+import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.rating.dto.RatingDto;
 import dev.paw565pl.movie_critics.rating.response.RatingResponse;
 import dev.paw565pl.movie_critics.rating.service.RatingService;
@@ -23,7 +24,7 @@ public class MovieRatingRestController {
     @IsAuthenticated
     @GetMapping
     public RatingResponse findRating(@PathVariable Long movieId, @AuthenticationPrincipal Jwt jwt) {
-        return ratingService.findByMovieIdAndUserId(movieId, jwt);
+        return ratingService.findByMovieIdAndUserId(movieId, UserDetailsImpl.fromJwt(jwt));
     }
 
     @IsAuthenticated
@@ -31,20 +32,20 @@ public class MovieRatingRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public RatingResponse createRating(
             @PathVariable Long movieId, @AuthenticationPrincipal Jwt jwt, @Valid @RequestBody RatingDto dto) {
-        return ratingService.create(movieId, jwt, dto);
+        return ratingService.create(movieId, UserDetailsImpl.fromJwt(jwt), dto);
     }
 
     @IsAuthenticated
     @PutMapping
     public RatingResponse updateRating(
             @PathVariable Long movieId, @AuthenticationPrincipal Jwt jwt, @Valid @RequestBody RatingDto dto) {
-        return ratingService.update(movieId, jwt, dto);
+        return ratingService.update(movieId, UserDetailsImpl.fromJwt(jwt), dto);
     }
 
     @IsAuthenticated
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteRating(@PathVariable Long movieId, @AuthenticationPrincipal Jwt jwt) {
-        ratingService.delete(movieId, jwt);
+        ratingService.delete(movieId, UserDetailsImpl.fromJwt(jwt));
     }
 }

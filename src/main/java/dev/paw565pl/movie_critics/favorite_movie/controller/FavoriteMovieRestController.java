@@ -1,6 +1,7 @@
 package dev.paw565pl.movie_critics.favorite_movie.controller;
 
 import dev.paw565pl.movie_critics.auth.annotation.IsAuthenticated;
+import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.favorite_movie.dto.FavoriteMovieDto;
 import dev.paw565pl.movie_critics.favorite_movie.service.FavoriteMovieService;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
@@ -25,20 +26,20 @@ public class FavoriteMovieRestController {
     @IsAuthenticated
     @GetMapping
     public Page<MovieResponse> findAll(@AuthenticationPrincipal Jwt jwt, Pageable pageable) {
-        return favoriteMovieService.findAll(jwt, pageable);
+        return favoriteMovieService.findAll(UserDetailsImpl.fromJwt(jwt), pageable);
     }
 
     @IsAuthenticated
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MovieResponse create(@AuthenticationPrincipal Jwt jwt, @Valid @RequestBody FavoriteMovieDto dto) {
-        return favoriteMovieService.create(jwt, dto);
+        return favoriteMovieService.create(UserDetailsImpl.fromJwt(jwt), dto);
     }
 
     @IsAuthenticated
     @DeleteMapping("/{movieId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long movieId, @AuthenticationPrincipal Jwt jwt) {
-        favoriteMovieService.delete(movieId, jwt);
+        favoriteMovieService.delete(movieId, UserDetailsImpl.fromJwt(jwt));
     }
 }

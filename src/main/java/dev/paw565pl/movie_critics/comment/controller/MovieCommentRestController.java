@@ -1,6 +1,7 @@
 package dev.paw565pl.movie_critics.comment.controller;
 
 import dev.paw565pl.movie_critics.auth.annotation.IsAuthenticated;
+import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.comment.dto.CommentDto;
 import dev.paw565pl.movie_critics.comment.response.CommentResponse;
 import dev.paw565pl.movie_critics.comment.service.CommentService;
@@ -32,7 +33,7 @@ public class MovieCommentRestController {
     @ResponseStatus(HttpStatus.CREATED)
     public CommentResponse create(
             @PathVariable Long movieId, @AuthenticationPrincipal Jwt jwt, @Valid @RequestBody CommentDto dto) {
-        return commentService.create(movieId, jwt, dto);
+        return commentService.create(movieId, UserDetailsImpl.fromJwt(jwt), dto);
     }
 
     @GetMapping("/{commentId}")
@@ -47,13 +48,13 @@ public class MovieCommentRestController {
             @PathVariable Long commentId,
             @AuthenticationPrincipal Jwt jwt,
             @Valid @RequestBody CommentDto dto) {
-        return commentService.update(commentId, movieId, jwt, dto);
+        return commentService.update(commentId, movieId, UserDetailsImpl.fromJwt(jwt), dto);
     }
 
     @IsAuthenticated
     @DeleteMapping("/{commentId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long movieId, @PathVariable Long commentId, @AuthenticationPrincipal Jwt jwt) {
-        commentService.delete(commentId, movieId, jwt);
+        commentService.delete(commentId, movieId, UserDetailsImpl.fromJwt(jwt));
     }
 }
