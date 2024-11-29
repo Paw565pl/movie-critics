@@ -1,7 +1,5 @@
 package dev.paw565pl.movie_critics.movie.controller;
 
-import static dev.paw565pl.movie_critics.auth.utils.AuthUtils.hasRole;
-
 import dev.paw565pl.movie_critics.auth.annotation.IsAuthenticated;
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.auth.role.Role;
@@ -12,13 +10,13 @@ import dev.paw565pl.movie_critics.favorite_movie.service.FavoriteMovieService;
 import dev.paw565pl.movie_critics.movie.dto.MovieFilterDto;
 import dev.paw565pl.movie_critics.movie.repository.GenreRepository;
 import dev.paw565pl.movie_critics.movie.service.MovieService;
+import dev.paw565pl.movie_critics.movie_to_ignore.dto.MovieToIgnoreDto;
+import dev.paw565pl.movie_critics.movie_to_ignore.service.MovieToIgnoreService;
 import dev.paw565pl.movie_critics.movie_to_watch.dto.MovieToWatchDto;
 import dev.paw565pl.movie_critics.movie_to_watch.service.MovieToWatchService;
 import dev.paw565pl.movie_critics.rating.dto.RatingDto;
 import dev.paw565pl.movie_critics.rating.service.RatingService;
 import jakarta.validation.Valid;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -31,6 +29,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+import java.util.Optional;
+
+import static dev.paw565pl.movie_critics.auth.utils.AuthUtils.hasRole;
+
 @Controller
 public class MovieViewController {
 
@@ -40,6 +43,7 @@ public class MovieViewController {
     private final RatingService ratingService;
     private final MovieToWatchService movieToWatchService;
     private final FavoriteMovieService favoriteMovieService;
+    private final MovieToIgnoreService movieToIgnoreService;
 
     public MovieViewController(
             MovieService movieService,
@@ -47,13 +51,14 @@ public class MovieViewController {
             GenreRepository genreRepository,
             RatingService ratingService,
             MovieToWatchService movieToWatchService,
-            FavoriteMovieService favoriteMovieService) {
+            FavoriteMovieService favoriteMovieService, MovieToIgnoreService movieToIgnoreService) {
         this.movieService = movieService;
         this.commentService = commentService;
         this.genreRepository = genreRepository;
         this.ratingService = ratingService;
         this.movieToWatchService = movieToWatchService;
         this.favoriteMovieService = favoriteMovieService;
+        this.movieToIgnoreService = movieToIgnoreService;
     }
 
     @GetMapping
@@ -79,7 +84,8 @@ public class MovieViewController {
                 ? genreRepository.findById(selectedGenreFilterId).orElse(null)
                 : null;
 
-        record SortOption(String label, String value) {}
+        record SortOption(String label, String value) {
+        }
         var sortOptions = List.of(
                 new SortOption("Title (A-Z)", "title,asc"),
                 new SortOption("Title (Z-A)", "title,desc"),
@@ -142,6 +148,12 @@ public class MovieViewController {
             try {
                 var isFavoriteMovie = favoriteMovieService.findByMovieIdAndUserId(id, user) != null;
                 model.addAttribute("isFavoriteMovie", isFavoriteMovie);
+            } catch (ResponseStatusException ignored) {
+            }
+
+            try {
+                var isMovieInToIgnoreList = movieToIgnoreService.findByMovieIdAndUserId(id, user) != null;
+                model.addAttribute("isMovieInToIgnoreList", isMovieInToIgnoreList);
             } catch (ResponseStatusException ignored) {
             }
         }
@@ -250,5 +262,19 @@ public class MovieViewController {
         }
 
         return "redirect:/movies/{id}";
+    }
+
+    @IsAuthenticated
+    @PostMapping("/movies/{id}/ignore")
+    public String addMovieToIgnoreList(@PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser) {
+        var user = UserDetailsImpl.fromOidcUser(oidcUser);
+
+        try {
+            movieToIgnoreService.create(user, new MovieToIgnoreDto(id));
+        } catch (DataIntegrityViolationException e) {
+            movieToIgnoreService.delete(id, user);
+        }
+
+        return "redirect:/movies";
     }
 }

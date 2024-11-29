@@ -94,7 +94,18 @@
             </button>
           </form>
 
-          <i class="bi bi-x-octagon fs-2" title="add to ignore list"></i>
+          <form
+            th:action="@{/movies/{id}/ignore(id=${movie.id})}"
+            method="post"
+          >
+            <button class="btn border-0 p-0">
+              <i
+                class="bi bi-x-octagon fs-2"
+                th:classappend="${isMovieInToIgnoreList != null} ? 'text-secondary' : ''"
+                title="add to ignore list"
+              ></i>
+            </button>
+          </form>
         </div>
 
         <script>
