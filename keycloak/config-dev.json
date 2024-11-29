@@ -80,15 +80,9 @@
         "description": "${role_default-roles}",
         "composite": true,
         "composites": {
-          "realm": [
-            "offline_access",
-            "uma_authorization"
-          ],
+          "realm": ["offline_access", "uma_authorization"],
           "client": {
-            "account": [
-              "view-profile",
-              "manage-account"
-            ]
+            "account": ["view-profile", "manage-account"]
           }
         },
         "clientRole": false,
@@ -165,10 +159,7 @@
           "composite": true,
           "composites": {
             "client": {
-              "realm-management": [
-                "query-groups",
-                "query-users"
-              ]
+              "realm-management": ["query-groups", "query-users"]
             }
           },
           "clientRole": true,
@@ -191,9 +182,7 @@
           "composite": true,
           "composites": {
             "client": {
-              "realm-management": [
-                "query-clients"
-              ]
+              "realm-management": ["query-clients"]
             }
           },
           "clientRole": true,
@@ -340,9 +329,7 @@
           "composite": true,
           "composites": {
             "client": {
-              "account": [
-                "view-consent"
-              ]
+              "account": ["view-consent"]
             }
           },
           "clientRole": true,
@@ -401,9 +388,7 @@
           "composite": true,
           "composites": {
             "client": {
-              "account": [
-                "manage-account-links"
-              ]
+              "account": ["manage-account-links"]
             }
           },
           "clientRole": true,
@@ -423,9 +408,7 @@
     "clientRole": false,
     "containerId": "cc088114-2ba1-4474-a985-117cfd80a285"
   },
-  "requiredCredentials": [
-    "password"
-  ],
+  "requiredCredentials": ["password"],
   "passwordPolicy": "length(8) and notUsername(undefined) and notEmail(undefined) and notContainsUsername(undefined) and upperCase(1) and lowerCase(1) and digits(1)",
   "otpPolicyType": "totp",
   "otpPolicyAlgorithm": "HmacSHA1",
@@ -441,10 +424,7 @@
   ],
   "localizationTexts": {},
   "webAuthnPolicyRpEntityName": "keycloak",
-  "webAuthnPolicySignatureAlgorithms": [
-    "ES256",
-    "RS256"
-  ],
+  "webAuthnPolicySignatureAlgorithms": ["ES256", "RS256"],
   "webAuthnPolicyRpId": "",
   "webAuthnPolicyAttestationConveyancePreference": "not specified",
   "webAuthnPolicyAuthenticatorAttachment": "not specified",
@@ -455,10 +435,7 @@
   "webAuthnPolicyAcceptableAaguids": [],
   "webAuthnPolicyExtraOrigins": [],
   "webAuthnPolicyPasswordlessRpEntityName": "keycloak",
-  "webAuthnPolicyPasswordlessSignatureAlgorithms": [
-    "ES256",
-    "RS256"
-  ],
+  "webAuthnPolicyPasswordlessSignatureAlgorithms": ["ES256", "RS256"],
   "webAuthnPolicyPasswordlessRpId": "",
   "webAuthnPolicyPasswordlessAttestationConveyancePreference": "not specified",
   "webAuthnPolicyPasswordlessAuthenticatorAttachment": "not specified",
@@ -489,10 +466,7 @@
       ],
       "disableableCredentialTypes": [],
       "requiredActions": [],
-      "realmRoles": [
-        "admin",
-        "default-roles-movie-critics"
-      ],
+      "realmRoles": ["admin", "default-roles-movie-critics"],
       "notBefore": 0,
       "groups": []
     },
@@ -516,9 +490,7 @@
       ],
       "disableableCredentialTypes": [],
       "requiredActions": [],
-      "realmRoles": [
-        "default-roles-movie-critics"
-      ],
+      "realmRoles": ["default-roles-movie-critics"],
       "notBefore": 0,
       "groups": []
     }
@@ -526,19 +498,14 @@
   "scopeMappings": [
     {
       "clientScope": "offline_access",
-      "roles": [
-        "offline_access"
-      ]
+      "roles": ["offline_access"]
     }
   ],
   "clientScopeMappings": {
     "account": [
       {
         "client": "account-console",
-        "roles": [
-          "manage-account",
-          "view-groups"
-        ]
+        "roles": ["manage-account", "view-groups"]
       }
     ]
   },
@@ -553,9 +520,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "redirectUris": [
-        "/realms/movie-critics/account/*"
-      ],
+      "redirectUris": ["/realms/movie-critics/account/*"],
       "webOrigins": [],
       "notBefore": 0,
       "bearerOnly": false,
@@ -600,9 +565,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "redirectUris": [
-        "/realms/movie-critics/account/*"
-      ],
+      "redirectUris": ["/realms/movie-critics/account/*"],
       "webOrigins": [],
       "notBefore": 0,
       "bearerOnly": false,
@@ -785,12 +748,8 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "redirectUris": [
-        "/admin/movie-critics/console/*"
-      ],
-      "webOrigins": [
-        "+"
-      ],
+      "redirectUris": ["/admin/movie-critics/console/*"],
+      "webOrigins": ["+"],
       "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,
@@ -851,18 +810,14 @@
       "description": "",
       "rootUrl": "http://localhost:8080",
       "adminUrl": "http://localhost:8080",
-      "baseUrl": "",
+      "baseUrl": "http://localhost:8080",
       "surrogateAuthRequired": false,
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "MKHz0Kw82cGhDIwmz3vZ8fO6AmY87eQn",
-      "redirectUris": [
-        "http://localhost:8080/*"
-      ],
-      "webOrigins": [
-        "http://localhost:8080"
-      ],
+      "redirectUris": ["http://localhost:8080/*"],
+      "webOrigins": ["http://localhost:8080"],
       "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,
@@ -1567,9 +1522,7 @@
   },
   "smtpServer": {},
   "eventsEnabled": false,
-  "eventsListeners": [
-    "jboss-logging"
-  ],
+  "eventsListeners": ["jboss-logging"],
   "enabledEventTypes": [],
   "adminEventsEnabled": false,
   "adminEventsDetailsEnabled": false,
@@ -1584,12 +1537,8 @@
         "subType": "anonymous",
         "subComponents": {},
         "config": {
-          "host-sending-registration-request-must-match": [
-            "true"
-          ],
-          "client-uris-must-match": [
-            "true"
-          ]
+          "host-sending-registration-request-must-match": ["true"],
+          "client-uris-must-match": ["true"]
         }
       },
       {
@@ -1599,9 +1548,7 @@
         "subType": "anonymous",
         "subComponents": {},
         "config": {
-          "max-clients": [
-            "200"
-          ]
+          "max-clients": ["200"]
         }
       },
       {
@@ -1630,9 +1577,7 @@
         "subType": "anonymous",
         "subComponents": {},
         "config": {
-          "allow-default-scopes": [
-            "true"
-          ]
+          "allow-default-scopes": ["true"]
         }
       },
       {
@@ -1669,9 +1614,7 @@
         "subType": "authenticated",
         "subComponents": {},
         "config": {
-          "allow-default-scopes": [
-            "true"
-          ]
+          "allow-default-scopes": ["true"]
         }
       },
       {
@@ -1705,15 +1648,11 @@
           "privateKey": [
             "MIIEowIBAAKCAQEAncfc8d0Ch73bYZLutmAiRNxZi7Y8PHuiAXIK6AFe3LnnZM+OioA7yb9cGhBXeKTYbFCUU/MXNtYPYkkB2bunGweNNhyqnHCqMdjsFqUyudtwP/QqImMxEDGD7ivOHKI5ZQ/L+rQ/4ERgUfl4HvQdbMEvOOpAJU6xLl1jJ7Fwp7ENrBz59Us63/t5PmWCgfWaNIMuz1Bgs0R/7bbSXHUd6oEDf61sQp2bgw56MRJjspbZSCK34CqWrzICLGxusufIr51hI33v4LflOQbecqeGNEJZhUsngTyFnK5MFgFo07GtRi8fyArXWj1XPocWBZ/cjeqKJZC25174/JIzca7rEwIDAQABAoIBAA4I6GwE2/2PGdcE5uighh8LkSH1KxTsoNO+fThEYIsDZ/d24jFxVRNasXdwDksHZTXDuGEvTz7r4G2k6N4HuMZivMdPc+DhwYHlnDqRDBrhAvJTzPVG6LP0DTQ//6zBKv6eXrQ4ssxHYmBoVhMKy+mpbxxOjTfEV2ZnnP/u4xwUM9CpaGRsnfrdpsq71dSpefDUb00ICcz7/xuewGmHSBa79SxgMDsFjQAWd+bWZynLLTcy4cbwM84CYzeJCLI0OzBtHashN6iLTfshtnfdmQZ2QzA6NZk6h5TDKRWLUpg6w8L0VU3IYjGLculmdMcHGoUWVv1fhMbNU1DHRAVqzWECgYEA3r2FFrmCAl+9yGtQ/yZ2FlfkOpn4NIAugSJWNM58hlWYCB8M4ZvdWLFiLob+d8LB0RHZgf5NbPgHCRdQ5VTIySv8+3thW6ozjL8Svtz4eD5GPbdAca+6e7F8h4NKGYBBlaCIPH5lR+hIcme3bFvA7Db0cAp9f8JAjVkYOEeqXW8CgYEAtVcx7RhdXkEgbIxH9JAepl1XmNaf/ybaBcRo+afpRjMsZwocGyUcBbl0t/x/3JxvBRYjA+qPTCb2yN5TxXCqKUqPcTQ6Y1+qdRJLmYaKF7mFORCowUK6z2Ln8lpiE2l5wPk5engWDQ8zjDOIQEaGhCmsvrUVuIBDChe3mdszQp0CgYEAmrnB+rAwjJ+fQNqzcBpyi0DQrJiKH0Yvh8qnYZVSUSqiKnoPQ6U3FEZcMn/Zwq2KX0Xr9u4FML32fS0yJ6xGseAZo0PotHk9x/Zu+iCbhUOVHYfvf0mX3BbFr4jW73H1nQ/fs04F4vaLZNWBSAdQs4XVNQNEfHwexVFvjqDRyocCgYBMlQdbpsd/j6d+z/tvWBHplk/xFuq42ZKHjvv6OyQz5lahKU7XU+OyszCMptDkvRfRoRimhb+AnI/qIqJkJoFmMLvFRhZGc1dMW66bporZHBscD2IFRAYaoR1tZyg2JHwrt9TDWMWPPFU7p2OqKV6Tn/n5DAahRWGKeJusGTtbrQKBgAqGSwvTqFjVYwPy1jVQ2n690ihtRq2cAR1b4Zepf7nu62nJdYDaOfWcbOFz3qBQJ6Ty3BmDn3hztzgNBq6BbBafBL3tWqhKkDfHmk21ZSCOJe7L39N89p8bMeMVC5qIzjsbcsUHWHpI5zxpYQhl88cwIAkqmbxiam/qNzj8yRx7"
           ],
-          "keyUse": [
-            "SIG"
-          ],
+          "keyUse": ["SIG"],
           "certificate": [
             "MIICqTCCAZECBgGTciDnbzANBgkqhkiG9w0BAQsFADAYMRYwFAYDVQQDDA1tb3ZpZS1jcml0aWNzMB4XDTI0MTEyODA5MzQzOVoXDTM0MTEyODA5MzYxOVowGDEWMBQGA1UEAwwNbW92aWUtY3JpdGljczCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAJ3H3PHdAoe922GS7rZgIkTcWYu2PDx7ogFyCugBXty552TPjoqAO8m/XBoQV3ik2GxQlFPzFzbWD2JJAdm7pxsHjTYcqpxwqjHY7BalMrnbcD/0KiJjMRAxg+4rzhyiOWUPy/q0P+BEYFH5eB70HWzBLzjqQCVOsS5dYyexcKexDawc+fVLOt/7eT5lgoH1mjSDLs9QYLNEf+220lx1HeqBA3+tbEKdm4MOejESY7KW2Ugit+Aqlq8yAixsbrLnyK+dYSN97+C35TkG3nKnhjRCWYVLJ4E8hZyuTBYBaNOxrUYvH8gK11o9Vz6HFgWf3I3qiiWQtude+PySM3Gu6xMCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEAe56QBYPXBeyytCOvalkB+o0CCfdFdC3WNdLGSFjUkfTVvR//wb6OSK2xuGqIcIyTtZFqOCJoTd+HeO1jpmeBKO4vCGMj+IScc+rLiDemIPDASUJAqyYGd98K03sQ+1a6VELOtV0O5vr6ja8Om/O5/OVKMb0VbnrsEW+5FbnXaRyzmk4A8NlooL4nqEx/+36qSihfdTLWfgFBjyY5tHS8PaQ9G8iEwt8oy45F2x9zZc+m4N5V1vdmPmCRgGOaFuM1UnKtNmiFwGYXCRyU9chIjM64fKp9tttG+AHzXcK4huBS/Xfq51m1pAUzU70oYrBPKyvx02zQXYJk78jjh4Wnyg=="
           ],
-          "priority": [
-            "100"
-          ]
+          "priority": ["100"]
         }
       },
       {
@@ -1722,15 +1661,9 @@
         "providerId": "aes-generated",
         "subComponents": {},
         "config": {
-          "kid": [
-            "0351b04f-6a39-4c8a-ba0b-e15090be8b9b"
-          ],
-          "secret": [
-            "Tcv61g-nEfujtuUEvKz4fg"
-          ],
-          "priority": [
-            "100"
-          ]
+          "kid": ["0351b04f-6a39-4c8a-ba0b-e15090be8b9b"],
+          "secret": ["Tcv61g-nEfujtuUEvKz4fg"],
+          "priority": ["100"]
         }
       },
       {
@@ -1739,18 +1672,12 @@
         "providerId": "hmac-generated",
         "subComponents": {},
         "config": {
-          "kid": [
-            "6b5ac23d-55fe-408e-a3f4-f4da04cd215a"
-          ],
+          "kid": ["6b5ac23d-55fe-408e-a3f4-f4da04cd215a"],
           "secret": [
             "XGKWgBs99bRYnkzA0Owk6tqJ1n7lSsV89bYbF5cnMAfTd10KWbV9y-2yZy1vKxVh1R0eLRR3vMGnvX6zJ8hcyK5KEAOt3bAL7A_NkrTEwyx137pweW0h8s0LBR0pUB7CXPqBBpj1JJ1piE7lUt5VERuZPq-YtRld1xT4465rmnc"
           ],
-          "priority": [
-            "100"
-          ],
-          "algorithm": [
-            "HS512"
-          ]
+          "priority": ["100"],
+          "algorithm": ["HS512"]
         }
       },
       {
@@ -1762,18 +1689,12 @@
           "privateKey": [
             "MIIEowIBAAKCAQEA8R1tovSSC34sh1dI4r17PU2dIHZJUHBo0niKkWwb1egJJCPmwn8Ir+EPiDxKWRaPhMQU/uDdYuJ5XpvyNrSlyP3TmGUFo9+wP4lWd1n54yGNZ4ft+E3QGlOeqTd+mrx8/apJp2eNpJVEZgKAXAYuNHaKD8k9WWpg3BNX7oJBkRvXZ4BOWbkfKqA+K8rCqd2ao7731inXCopazHTjJ7TB1usLoYGrek428RSqVv+pLaMF7/RK8haoI9vbdMU6jdi/E1AQewsafvqGNAcqH510rZdAgMNjduYur4nc5w15dFwAikp9Chvq5NHKupHr2ZFQKaZ3LbSjMIwmcNDeK1hiVQIDAQABAoIBAA/uaBlZjBHO1S3fHk1/BBbVm0FzF16FguOPO+ambENquLnm1l85Cg+m8QIJK8dtpm95DkMWBAK94JOX/b3QG1knrlS2LhR5Gfnkvu4VZ52ykJeL43Uh3RN0PXpEVKzwMdkH6KRzQuhiRXnxBd6uuNxWDcLDwvY2wW4hKBD2EdN+0NsXtNUGLH/7kNeQ1cHTkRZ5sWnYb4qaUtJS1Wg1YB7dODZU3EgMorGwq6CcebUXMNaWzEeZ5wlPQk4n9pAjflSBXZCTI2C8YPV4L12WoPL+zAWbGmcS2wSRGmJSUCZNwVkeujvoOvpjdocWCpmgtnaViAeSm2/0bxN/RdndFSkCgYEA/SDtp7xpKGipquv1UwggkR5ujmIADVMQnIr7hvIJUV7sABqGhUp9PfQ/nfkLYsm3oF4zTlqqWgBwC2SqO05CgWoV3Uv3EGZYcvUmmKqPCheb3kkb+0HAYV/XtP4VSc1nTBDHT3IW4oEalzCjbzhUR53qDr0m/wKHpIdu4NJOKVkCgYEA89mc5cyQF4AWAd4z+lC9tRTh+/aPH+UnKI7K4uyvdGpg+JsuQDggnv1BCjjZ2D9raInPH7bRuwIa23aOvTTaexXzTB7xCzZPeXTfuIEDcpMKgJh0MdoeZFXaF/tflkLUJqfT4leYyu2kymwd46ZCguPLRQk4UTellxDHnAAVpV0CgYAApxoVyaWXxhVR7IPYb/fth9+PHG+VmTY8wRr+8RbXD+CZ63eXVmbWRw/271J5Mb34euW0+QThcIjZbqwFtSD0xnpB9NUxRKJLwZgU4rO1ufPb8eJRlozRc3bR76nMY+w1RQHOkaO/d8fCxgxV2BZXjO+ylAhKtg31fafqioBLGQKBgGsKOzUkdpvaPc7UGzzl9GBoqkpQEMOPc4D6LVUvUFVp3OdENyk5ehhQUxyJmBa0wBFDbQge2DGe2us7P60OZllhaUsgye6CCKDoDMyQ1VKV+SY5xcecV3rztKiST4NGEpplUT0p9ogdiRjSHMyxTsDl/XRwd6gvJSEK3JQ99UKBAoGBAJPid8HhoBs5YU7tS97JLEcdE/pExe/kxIZ0NqwTToYg3GWPxR3XCPIDARxm/7ACksFK0VRa8p+rO/D7/bwTvLDQ4GiSs/4gRWxag843SCKKFchPyBI1uTlL9c9pqAEblNhcSN9enCvF83qWsufv71wx8/VR+1VnTfRnfOO+x5l5"
           ],
-          "keyUse": [
-            "ENC"
-          ],
+          "keyUse": ["ENC"],
           "certificate": [
             "MIICqTCCAZECBgGTciDoWzANBgkqhkiG9w0BAQsFADAYMRYwFAYDVQQDDA1tb3ZpZS1jcml0aWNzMB4XDTI0MTEyODA5MzQzOVoXDTM0MTEyODA5MzYxOVowGDEWMBQGA1UEAwwNbW92aWUtY3JpdGljczCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAPEdbaL0kgt+LIdXSOK9ez1NnSB2SVBwaNJ4ipFsG9XoCSQj5sJ/CK/hD4g8SlkWj4TEFP7g3WLieV6b8ja0pcj905hlBaPfsD+JVndZ+eMhjWeH7fhN0BpTnqk3fpq8fP2qSadnjaSVRGYCgFwGLjR2ig/JPVlqYNwTV+6CQZEb12eATlm5HyqgPivKwqndmqO+99Yp1wqKWsx04ye0wdbrC6GBq3pONvEUqlb/qS2jBe/0SvIWqCPb23TFOo3YvxNQEHsLGn76hjQHKh+ddK2XQIDDY3bmLq+J3OcNeXRcAIpKfQob6uTRyrqR69mRUCmmdy20ozCMJnDQ3itYYlUCAwEAATANBgkqhkiG9w0BAQsFAAOCAQEA3PL+TfYeS2S4eR97sQkY1syTqb3nmhkFTnwB/NwDRytQCkukFKI7FPmjd1SH7vXs/lgFGraF4Q+Zbj7Osl4aBFAR/D05Ic6avVtCK7hislmSadbN7eZ/mcaWk8PKAuO6WNco1NSEDK4tbEo7zL1NGV4/xamNsWrIhaNpPcyGTa2vGDlAkgk6/R8DsN6pvNRDEhMKGPUQLQnjj19LNh9wRu3LSn7Ogj8LLxFbZUFzHWpbGY4MNXLiJtGMH0XCXyHjz32xEGtcAL9R1RJhHgQVfGT7dBVy3lU05D+QU+v4AgOcFk3Mn8P3wzx4XZuyzOpHqlP3eP5JmtrzY0v++hBy+Q=="
           ],
-          "priority": [
-            "100"
-          ],
-          "algorithm": [
-            "RSA-OAEP"
-          ]
+          "priority": ["100"],
+          "algorithm": ["RSA-OAEP"]
         }
       }
     ]
