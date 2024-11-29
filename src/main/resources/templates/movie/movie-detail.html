@@ -67,20 +67,27 @@
           </form>
         </div>
 
-        <div class="d-flex align-items-center fs-2 gap-3">
+        <div class="d-flex align-items-center gap-3">
+          <form
+            th:action="@{/movies/{id}/to-watch(id=${movie.id})}"
+            method="post"
+          >
+            <button class="btn border-0 p-0">
+              <i
+                class="bi bi-card-list fs-2"
+                th:classappend="${isMovieInToWatchList != null} ? 'text-success' : ''"
+                title="add to watch list"
+              ></i>
+            </button>
+          </form>
           <i
             role="button"
-            class="bi bi-card-list"
-            title="add to watch list"
-          ></i>
-          <i
-            role="button"
-            class="bi bi-bookmark-heart"
+            class="bi bi-bookmark-heart fs-2"
             title="add to favorites"
           ></i>
           <i
             role="button"
-            class="bi bi-x-octagon"
+            class="bi bi-x-octagon fs-2"
             title="add to ignore list"
           ></i>
         </div>

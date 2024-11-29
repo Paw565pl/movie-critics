@@ -56,6 +56,11 @@ public class MovieToWatchService {
         return movieRepository.findAllByUsersWhoWantToWatchId(userId, pageable).map(movieMapper::toResponse);
     }
 
+    public MovieResponse findByMovieIdAndUserId(Long movieId, UserDetailsImpl user) {
+        var movieEntity = findMovieToWatchEntity(movieId, user.getId());
+        return movieMapper.toResponse(movieEntity);
+    }
+
     @Transactional
     public MovieResponse create(UserDetailsImpl user, MovieToWatchDto dto) {
         var movieEntity = findMovieEntity(dto.movieId());

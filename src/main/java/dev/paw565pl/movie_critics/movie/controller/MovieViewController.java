@@ -10,6 +10,8 @@ import dev.paw565pl.movie_critics.comment.service.CommentService;
 import dev.paw565pl.movie_critics.movie.dto.MovieFilterDto;
 import dev.paw565pl.movie_critics.movie.repository.GenreRepository;
 import dev.paw565pl.movie_critics.movie.service.MovieService;
+import dev.paw565pl.movie_critics.movie_to_watch.dto.MovieToWatchDto;
+import dev.paw565pl.movie_critics.movie_to_watch.service.MovieToWatchService;
 import dev.paw565pl.movie_critics.rating.dto.RatingDto;
 import dev.paw565pl.movie_critics.rating.service.RatingService;
 import jakarta.validation.Valid;
@@ -34,16 +36,19 @@ public class MovieViewController {
     private final CommentService commentService;
     private final GenreRepository genreRepository;
     private final RatingService ratingService;
+    private final MovieToWatchService movieToWatchService;
 
     public MovieViewController(
             MovieService movieService,
             CommentService commentService,
             GenreRepository genreRepository,
-            RatingService ratingService) {
+            RatingService ratingService,
+            MovieToWatchService movieToWatchService) {
         this.movieService = movieService;
         this.commentService = commentService;
         this.genreRepository = genreRepository;
         this.ratingService = ratingService;
+        this.movieToWatchService = movieToWatchService;
     }
 
     @GetMapping
@@ -120,6 +125,12 @@ public class MovieViewController {
                 var userMovieRatingValue =
                         ratingService.findByMovieIdAndUserId(id, user).value();
                 model.addAttribute("userMovieRatingValue", userMovieRatingValue);
+            } catch (ResponseStatusException ignored) {
+            }
+
+            try {
+                var isMovieInToWatchList = movieToWatchService.findByMovieIdAndUserId(id, user) != null;
+                model.addAttribute("isMovieInToWatchList", isMovieInToWatchList);
             } catch (ResponseStatusException ignored) {
             }
         }
@@ -200,5 +211,19 @@ public class MovieViewController {
         }
 
         return "redirect:/movies/{movieId}";
+    }
+
+    @IsAuthenticated
+    @PostMapping("/movies/{id}/to-watch")
+    public String addMovieToWatch(@PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser) {
+        var user = UserDetailsImpl.fromOidcUser(oidcUser);
+
+        try {
+            movieToWatchService.create(user, new MovieToWatchDto(id));
+        } catch (DataIntegrityViolationException e) {
+            movieToWatchService.delete(id, user);
+        }
+
+        return "redirect:/movies/{id}";
     }
 }
