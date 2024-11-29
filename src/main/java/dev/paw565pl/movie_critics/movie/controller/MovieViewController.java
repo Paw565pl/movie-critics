@@ -239,7 +239,10 @@ public class MovieViewController {
 
     @IsAuthenticated
     @PostMapping("/movies/{id}/to-watch")
-    public String toggleMovieToWatch(@PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser) {
+    public String toggleMovieToWatch(
+            @PathVariable Long id,
+            @AuthenticationPrincipal OidcUser oidcUser,
+            @RequestParam(defaultValue = "/movies/{id}") String redirectUrl) {
         var user = UserDetailsImpl.fromOidcUser(oidcUser);
 
         try {
@@ -248,12 +251,15 @@ public class MovieViewController {
             movieToWatchService.delete(id, user);
         }
 
-        return "redirect:/movies/{id}";
+        return "redirect:" + redirectUrl;
     }
 
     @IsAuthenticated
     @PostMapping("/movies/{id}/favorite")
-    public String toggleFavoriteMovie(@PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser) {
+    public String toggleFavoriteMovie(
+            @PathVariable Long id,
+            @AuthenticationPrincipal OidcUser oidcUser,
+            @RequestParam(defaultValue = "/movies/{id}") String redirectUrl) {
         var user = UserDetailsImpl.fromOidcUser(oidcUser);
 
         try {
@@ -262,12 +268,15 @@ public class MovieViewController {
             favoriteMovieService.delete(id, user);
         }
 
-        return "redirect:/movies/{id}";
+        return "redirect:" + redirectUrl;
     }
 
     @IsAuthenticated
     @PostMapping("/movies/{id}/ignore")
-    public String toggleMovieToIgnoreList(@PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser) {
+    public String toggleMovieToIgnoreList(
+            @PathVariable Long id,
+            @AuthenticationPrincipal OidcUser oidcUser,
+            @RequestParam(defaultValue = "/movies") String redirectUrl) {
         var user = UserDetailsImpl.fromOidcUser(oidcUser);
 
         try {
@@ -276,6 +285,6 @@ public class MovieViewController {
             movieToIgnoreService.delete(id, user);
         }
 
-        return "redirect:/movies";
+        return "redirect:" + redirectUrl;
     }
 }

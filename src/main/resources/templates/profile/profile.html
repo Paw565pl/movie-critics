@@ -98,7 +98,7 @@
                   >
 
                   <form
-                    th:action="@{/movies/{id}/to-watch(id=${movie.id})}"
+                    th:action="@{/movies/{id}/to-watch(id=${movie.id}, redirectUrl='/profile')}"
                     method="post"
                   >
                     <button
@@ -151,7 +151,7 @@
                   >
 
                   <form
-                    th:action="@{/movies/{id}/favorite(id=${movie.id})}"
+                    th:action="@{/movies/{id}/favorite(id=${movie.id}, redirectUrl='/profile')}"
                     method="post"
                   >
                     <button
@@ -204,7 +204,7 @@
                   >
 
                   <form
-                    th:action="@{/movies/{id}/ignore(id=${movie.id})}"
+                    th:action="@{/movies/{id}/ignore(id=${movie.id}, redirectUrl='/profile')}"
                     method="post"
                   >
                     <button
