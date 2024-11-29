@@ -41,12 +41,9 @@ public class UserViewController {
     @GetMapping
     public String getProfileView(@AuthenticationPrincipal OidcUser oidcUser, Model model) {
         var user = UserDetailsImpl.fromOidcUser(oidcUser);
-        var moviesToWatch =
-                movieToWatchService.findAll(user, Pageable.ofSize(50)).toList();
-        var favoriteMovies =
-                favoriteMovieService.findAll(user, Pageable.ofSize(50)).toList();
-        var moviesToIgnore =
-                movieToIgnoreService.findAll(user, Pageable.ofSize(50)).toList();
+        var moviesToWatch = movieToWatchService.findAll(user, Pageable.ofSize(50));
+        var favoriteMovies = favoriteMovieService.findAll(user, Pageable.ofSize(50));
+        var moviesToIgnore = movieToIgnoreService.findAll(user, Pageable.ofSize(50));
         var keycloakAccountUrl = String.format("%s/account?referrer=%s", keycloakUrl, keycloakClientId);
 
         model.addAttribute("user", user);

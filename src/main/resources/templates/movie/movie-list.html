@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html
   lang="en"
   xmlns:th="http://www.thymeleaf.org"
@@ -93,7 +93,10 @@
         </div>
       </div>
 
-      <div class="row row-cols-auto gap-3">
+      <div
+        class="row row-cols-auto gap-3"
+        th:classappend="${movies.getNumberOfElements()} >= 4 ? 'justify-content-evenly' : ''"
+      >
         <section
           class="card col"
           style="width: 15rem"
@@ -107,7 +110,10 @@
           <div class="card-body">
             <h5 class="card-title fw-bold" th:text="${movie.title}"></h5>
             <p class="card-text text-truncate" th:text="${movie.plot}"></p>
-            <a class="btn btn-primary" th:href="@{/movies/{id}(id=${movie.id})}"
+            <a
+              role="button"
+              class="btn btn-primary"
+              th:href="@{/movies/{id}(id=${movie.id})}"
               >Check details</a
             >
           </div>

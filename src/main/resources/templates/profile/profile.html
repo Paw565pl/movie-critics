@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html
   lang="en"
   xmlns:th="http://www.thymeleaf.org"
@@ -69,10 +69,13 @@
           <h3>Watchlist</h3>
         </div>
         <div class="card-body">
-          <div th:if="${#lists.isEmpty(moviesToWatch)}">
+          <div th:if="${moviesToWatch.getNumberOfElements()} == 0">
             This list is currently empty.
           </div>
-          <div class="row row-cols-auto gap-3">
+          <div
+            class="row row-cols-auto gap-3"
+            th:classappend="${moviesToWatch.getNumberOfElements()} >= 4 ? 'justify-content-evenly' : ''"
+          >
             <section
               class="card col"
               style="width: 15rem"
@@ -88,6 +91,7 @@
                 <p class="card-text text-truncate" th:text="${movie.plot}"></p>
                 <div class="d-flex justify-content-between">
                   <a
+                    role="button"
                     class="btn btn-primary"
                     th:href="@{/movies/{id}(id=${movie.id})}"
                     >Check details</a
@@ -99,7 +103,7 @@
                   >
                     <button
                       type="submit"
-                      class="btn btn-outline-danger btn-sm"
+                      class="btn btn-outline-danger"
                       title="delete from list"
                     >
                       <i class="bi bi-x-lg"></i>
@@ -118,10 +122,13 @@
           <h3>Favorite Movies</h3>
         </div>
         <div class="card-body">
-          <div th:if="${#lists.isEmpty(favoriteMovies)}">
+          <div th:if="${favoriteMovies.getNumberOfElements()} == 0">
             This list is currently empty.
           </div>
-          <div class="row row-cols-auto gap-3">
+          <div
+            class="row row-cols-auto gap-3"
+            th:classappend="${favoriteMovies.getNumberOfElements()} >= 4 ? 'justify-content-evenly' : ''"
+          >
             <section
               class="card col"
               style="width: 15rem"
@@ -137,6 +144,7 @@
                 <p class="card-text text-truncate" th:text="${movie.plot}"></p>
                 <div class="d-flex justify-content-between">
                   <a
+                    role="button"
                     class="btn btn-primary"
                     th:href="@{/movies/{id}(id=${movie.id})}"
                     >Check details</a
@@ -148,7 +156,7 @@
                   >
                     <button
                       type="submit"
-                      class="btn btn-outline-danger btn-sm"
+                      class="btn btn-outline-danger"
                       title="delete from list"
                     >
                       <i class="bi bi-x-lg"></i>
@@ -167,10 +175,13 @@
           <h3>Ignored Movies</h3>
         </div>
         <div class="card-body">
-          <div th:if="${#lists.isEmpty(moviesToIgnore)}">
+          <div th:if="${moviesToIgnore.getNumberOfElements()} == 0">
             This list is currently empty.
           </div>
-          <div class="row row-cols-auto gap-3">
+          <div
+            class="row row-cols-auto gap-3"
+            th:classappend="${moviesToIgnore.getNumberOfElements()} >= 4 ? 'justify-content-evenly' : ''"
+          >
             <section
               class="card col"
               style="width: 15rem"
@@ -186,6 +197,7 @@
                 <p class="card-text text-truncate" th:text="${movie.plot}"></p>
                 <div class="d-flex justify-content-between">
                   <a
+                    role="button"
                     class="btn btn-primary"
                     th:href="@{/movies/{id}(id=${movie.id})}"
                     >Check details</a
@@ -197,7 +209,7 @@
                   >
                     <button
                       type="submit"
-                      class="btn btn-outline-danger btn-sm"
+                      class="btn btn-outline-danger"
                       title="delete from list"
                     >
                       <i class="bi bi-x-lg"></i>
