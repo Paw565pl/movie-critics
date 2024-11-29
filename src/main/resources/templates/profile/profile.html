@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  layout:decorate="~{core/layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+    <style>
+      .content-panel {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <!-- User Information Panel -->
+      <div class="card mb-4">
+        <div class="card-header">
+          <h3>Profile</h3>
+        </div>
+        <div class="card-body">
+          <p>
+            <strong>Username:</strong>
+            <span th:text="${user.username}"></span>
+          </p>
+          <p>
+            <strong>Email:</strong>
+            <span th:text="${user.email}"></span>
+          </p>
+          <p>
+            <a
+              role="button"
+              class="btn btn-secondary"
+              th:href="${keycloakAccountUrl}"
+            >
+              Change credentials
+            </a>
+          </p>
+        </div>
+      </div>
+
+      <!-- Toggle Buttons -->
+      <div class="mb-4">
+        <button class="btn btn-primary toggle-button" data-target="watchlist">
+          Watchlist
+        </button>
+        <button
+          class="btn btn-primary toggle-button"
+          data-target="favorite-movies"
+        >
+          Favorite Movies
+        </button>
+        <button
+          class="btn btn-primary toggle-button"
+          data-target="ignored-movies"
+        >
+          Ignored Movies
+        </button>
+      </div>
+
+      <!-- Watchlist Panel -->
+      <div id="watchlist" class="card mb-4 content-panel">
+        <div class="card-header">
+          <h3>Watchlist</h3>
+        </div>
+        <div class="card-body">
+          <div th:if="${#lists.isEmpty(moviesToWatch)}">
+            This list is currently empty.
+          </div>
+          <div class="row row-cols-auto gap-3">
+            <section
+              class="card col"
+              style="width: 15rem"
+              th:each="movie : ${moviesToWatch}"
+            >
+              <img
+                th:src="${movie.poster}"
+                th:alt="${movie.title + ' poster'}"
+                class="card-img-top w-100"
+              />
+              <div class="card-body">
+                <h5 class="card-title fw-bold" th:text="${movie.title}"></h5>
+                <p class="card-text text-truncate" th:text="${movie.plot}"></p>
+                <div class="d-flex justify-content-between">
+                  <a
+                    class="btn btn-primary"
+                    th:href="@{/movies/{id}(id=${movie.id})}"
+                    >Check details</a
+                  >
+
+                  <form
+                    th:action="@{/movies/{id}/to-watch(id=${movie.id})}"
+                    method="post"
+                  >
+                    <button
+                      type="submit"
+                      class="btn btn-outline-danger btn-sm"
+                      title="delete from list"
+                    >
+                      <i class="bi bi-x-lg"></i>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <!-- Favorite Movies Panel -->
+      <div id="favorite-movies" class="card mb-4 content-panel">
+        <div class="card-header">
+          <h3>Favorite Movies</h3>
+        </div>
+        <div class="card-body">
+          <div th:if="${#lists.isEmpty(favoriteMovies)}">
+            This list is currently empty.
+          </div>
+          <div class="row row-cols-auto gap-3">
+            <section
+              class="card col"
+              style="width: 15rem"
+              th:each="movie : ${favoriteMovies}"
+            >
+              <img
+                th:src="${movie.poster}"
+                th:alt="${movie.title + ' poster'}"
+                class="card-img-top w-100"
+              />
+              <div class="card-body">
+                <h5 class="card-title fw-bold" th:text="${movie.title}"></h5>
+                <p class="card-text text-truncate" th:text="${movie.plot}"></p>
+                <div class="d-flex justify-content-between">
+                  <a
+                    class="btn btn-primary"
+                    th:href="@{/movies/{id}(id=${movie.id})}"
+                    >Check details</a
+                  >
+
+                  <form
+                    th:action="@{/movies/{id}/favorite(id=${movie.id})}"
+                    method="post"
+                  >
+                    <button
+                      type="submit"
+                      class="btn btn-outline-danger btn-sm"
+                      title="delete from list"
+                    >
+                      <i class="bi bi-x-lg"></i>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+
+      <!-- Ignored Movies Panel -->
+      <div id="ignored-movies" class="card mb-4 content-panel">
+        <div class="card-header">
+          <h3>Ignored Movies</h3>
+        </div>
+        <div class="card-body">
+          <div th:if="${#lists.isEmpty(moviesToIgnore)}">
+            This list is currently empty.
+          </div>
+          <div class="row row-cols-auto gap-3">
+            <section
+              class="card col"
+              style="width: 15rem"
+              th:each="movie : ${moviesToIgnore}"
+            >
+              <img
+                th:src="${movie.poster}"
+                th:alt="${movie.title + ' poster'}"
+                class="card-img-top w-100"
+              />
+              <div class="card-body">
+                <h5 class="card-title fw-bold" th:text="${movie.title}"></h5>
+                <p class="card-text text-truncate" th:text="${movie.plot}"></p>
+                <div class="d-flex justify-content-between">
+                  <a
+                    class="btn btn-primary"
+                    th:href="@{/movies/{id}(id=${movie.id})}"
+                    >Check details</a
+                  >
+
+                  <form
+                    th:action="@{/movies/{id}/ignore(id=${movie.id})}"
+                    method="post"
+                  >
+                    <button
+                      type="submit"
+                      class="btn btn-outline-danger btn-sm"
+                      title="delete from list"
+                    >
+                      <i class="bi bi-x-lg"></i>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+      <script>
+        const panels = document.querySelectorAll(".content-panel");
+        const buttons = document.querySelectorAll(".toggle-button");
+
+        buttons.forEach((button) => {
+          button.addEventListener("click", () => {
+            const target = button.getAttribute("data-target");
+            panels.forEach((panel) => {
+              panel.style.display = panel.id === target ? "block" : "none";
+            });
+          });
+        });
+      </script>
+    </div>
+  </body>
+</html>
