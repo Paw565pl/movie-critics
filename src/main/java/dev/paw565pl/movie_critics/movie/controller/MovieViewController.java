@@ -239,7 +239,7 @@ public class MovieViewController {
 
     @IsAuthenticated
     @PostMapping("/movies/{id}/to-watch")
-    public String addMovieToWatch(@PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser) {
+    public String toggleMovieToWatch(@PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser) {
         var user = UserDetailsImpl.fromOidcUser(oidcUser);
 
         try {
@@ -253,7 +253,7 @@ public class MovieViewController {
 
     @IsAuthenticated
     @PostMapping("/movies/{id}/favorite")
-    public String addFavoriteMovie(@PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser) {
+    public String toggleFavoriteMovie(@PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser) {
         var user = UserDetailsImpl.fromOidcUser(oidcUser);
 
         try {
@@ -267,7 +267,7 @@ public class MovieViewController {
 
     @IsAuthenticated
     @PostMapping("/movies/{id}/ignore")
-    public String addMovieToIgnoreList(@PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser) {
+    public String toggleMovieToIgnoreList(@PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser) {
         var user = UserDetailsImpl.fromOidcUser(oidcUser);
 
         try {
