@@ -27,7 +27,7 @@ public class MovieRestController {
 
     @GetMapping
     public Page<MovieResponse> findAll(@AuthenticationPrincipal Jwt jwt, MovieFilterDto filters, Pageable pageable) {
-        return movieService.findAll(Optional.of(UserDetailsImpl.fromJwt(jwt)), filters, pageable);
+        return movieService.findAll(Optional.ofNullable(jwt).map(UserDetailsImpl::fromJwt), filters, pageable);
     }
 
     @IsAdmin
