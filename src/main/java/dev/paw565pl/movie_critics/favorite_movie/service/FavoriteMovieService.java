@@ -56,6 +56,11 @@ public class FavoriteMovieService {
         return movieRepository.findAllByUsersWhoFavoritedId(userId, pageable).map(movieMapper::toResponse);
     }
 
+    public MovieResponse findByMovieIdAndUserId(Long movieId, UserDetailsImpl user) {
+        var movieEntity = findFavoriteMovieEntity(movieId, user.getId());
+        return movieMapper.toResponse(movieEntity);
+    }
+
     @Transactional
     public MovieResponse create(UserDetailsImpl user, FavoriteMovieDto dto) {
         var movieEntity = findMovieEntity(dto.movieId());

@@ -7,6 +7,8 @@ import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.auth.role.Role;
 import dev.paw565pl.movie_critics.comment.dto.CommentDto;
 import dev.paw565pl.movie_critics.comment.service.CommentService;
+import dev.paw565pl.movie_critics.favorite_movie.dto.FavoriteMovieDto;
+import dev.paw565pl.movie_critics.favorite_movie.service.FavoriteMovieService;
 import dev.paw565pl.movie_critics.movie.dto.MovieFilterDto;
 import dev.paw565pl.movie_critics.movie.repository.GenreRepository;
 import dev.paw565pl.movie_critics.movie.service.MovieService;
@@ -37,18 +39,21 @@ public class MovieViewController {
     private final GenreRepository genreRepository;
     private final RatingService ratingService;
     private final MovieToWatchService movieToWatchService;
+    private final FavoriteMovieService favoriteMovieService;
 
     public MovieViewController(
             MovieService movieService,
             CommentService commentService,
             GenreRepository genreRepository,
             RatingService ratingService,
-            MovieToWatchService movieToWatchService) {
+            MovieToWatchService movieToWatchService,
+            FavoriteMovieService favoriteMovieService) {
         this.movieService = movieService;
         this.commentService = commentService;
         this.genreRepository = genreRepository;
         this.ratingService = ratingService;
         this.movieToWatchService = movieToWatchService;
+        this.favoriteMovieService = favoriteMovieService;
     }
 
     @GetMapping
@@ -131,6 +136,12 @@ public class MovieViewController {
             try {
                 var isMovieInToWatchList = movieToWatchService.findByMovieIdAndUserId(id, user) != null;
                 model.addAttribute("isMovieInToWatchList", isMovieInToWatchList);
+            } catch (ResponseStatusException ignored) {
+            }
+
+            try {
+                var isFavoriteMovie = favoriteMovieService.findByMovieIdAndUserId(id, user) != null;
+                model.addAttribute("isFavoriteMovie", isFavoriteMovie);
             } catch (ResponseStatusException ignored) {
             }
         }
@@ -222,6 +233,20 @@ public class MovieViewController {
             movieToWatchService.create(user, new MovieToWatchDto(id));
         } catch (DataIntegrityViolationException e) {
             movieToWatchService.delete(id, user);
+        }
+
+        return "redirect:/movies/{id}";
+    }
+
+    @IsAuthenticated
+    @PostMapping("/movies/{id}/favorite")
+    public String addFavoriteMovie(@PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser) {
+        var user = UserDetailsImpl.fromOidcUser(oidcUser);
+
+        try {
+            favoriteMovieService.create(user, new FavoriteMovieDto(id));
+        } catch (DataIntegrityViolationException e) {
+            favoriteMovieService.delete(id, user);
         }
 
         return "redirect:/movies/{id}";
