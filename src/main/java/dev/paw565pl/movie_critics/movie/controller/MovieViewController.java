@@ -1,5 +1,7 @@
 package dev.paw565pl.movie_critics.movie.controller;
 
+import static dev.paw565pl.movie_critics.auth.utils.AuthUtils.hasRole;
+
 import dev.paw565pl.movie_critics.auth.annotation.IsAuthenticated;
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.auth.role.Role;
@@ -17,6 +19,8 @@ import dev.paw565pl.movie_critics.movie_to_watch.service.MovieToWatchService;
 import dev.paw565pl.movie_critics.rating.dto.RatingDto;
 import dev.paw565pl.movie_critics.rating.service.RatingService;
 import jakarta.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
@@ -28,11 +32,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-
-import java.util.List;
-import java.util.Optional;
-
-import static dev.paw565pl.movie_critics.auth.utils.AuthUtils.hasRole;
 
 @Controller
 public class MovieViewController {
@@ -51,7 +50,8 @@ public class MovieViewController {
             GenreRepository genreRepository,
             RatingService ratingService,
             MovieToWatchService movieToWatchService,
-            FavoriteMovieService favoriteMovieService, MovieToIgnoreService movieToIgnoreService) {
+            FavoriteMovieService favoriteMovieService,
+            MovieToIgnoreService movieToIgnoreService) {
         this.movieService = movieService;
         this.commentService = commentService;
         this.genreRepository = genreRepository;
@@ -68,11 +68,13 @@ public class MovieViewController {
 
     @GetMapping("/movies")
     public String getMovieListView(
+            @AuthenticationPrincipal OidcUser oidcUser,
             MovieFilterDto filters,
             @RequestParam(required = false) String sort,
             @PageableDefault(size = 50, sort = "ratingsCount", direction = Direction.DESC) Pageable pageable,
             Model model) {
-        var movies = movieService.findAll(Optional.empty(), filters, pageable);
+        var movies = movieService.findAll(
+                Optional.ofNullable(oidcUser).map(UserDetailsImpl::fromOidcUser), filters, pageable);
 
         var ageRatings = movieService.findDistinctAgeRatings();
         var selectedAgeRating = filters.ageRating();
@@ -84,8 +86,7 @@ public class MovieViewController {
                 ? genreRepository.findById(selectedGenreFilterId).orElse(null)
                 : null;
 
-        record SortOption(String label, String value) {
-        }
+        record SortOption(String label, String value) {}
         var sortOptions = List.of(
                 new SortOption("Title (A-Z)", "title,asc"),
                 new SortOption("Title (Z-A)", "title,desc"),
