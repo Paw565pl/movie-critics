@@ -16,10 +16,25 @@
       <section class="mb-3">
         <header class="d-flex align-items-center gap-2">
           <h1 th:text="${movie.title}" class="fw-bold"></h1>
+
           <span
             th:text="'(' + ${movie.released.year} + ')'"
             class="text-muted"
           ></span>
+
+          <form
+            sec:authorize="hasRole('ROLE_ADMIN')"
+            th:action="@{/movies/{id}/delete(id=${movie.id})}"
+            method="post"
+          >
+            <button
+              type="submit"
+              class="btn btn-outline-danger"
+              title="delete this movie"
+            >
+              <i class="bi bi-trash3"></i>
+            </button>
+          </form>
         </header>
       </section>
 

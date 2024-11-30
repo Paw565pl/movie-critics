@@ -2,6 +2,7 @@ package dev.paw565pl.movie_critics.movie.controller;
 
 import static dev.paw565pl.movie_critics.auth.utils.AuthUtils.hasRole;
 
+import dev.paw565pl.movie_critics.auth.annotation.IsAdmin;
 import dev.paw565pl.movie_critics.auth.annotation.IsAuthenticated;
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.auth.role.Role;
@@ -286,5 +287,12 @@ public class MovieViewController {
         }
 
         return "redirect:" + redirectUrl;
+    }
+
+    @IsAdmin
+    @PostMapping("/movies/{id}/delete")
+    public String deleteMovie(@PathVariable Long id) {
+        movieService.delete(id);
+        return "redirect:/movies";
     }
 }
