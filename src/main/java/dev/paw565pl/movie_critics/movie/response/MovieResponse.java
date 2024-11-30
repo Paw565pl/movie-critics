@@ -1,7 +1,6 @@
 package dev.paw565pl.movie_critics.movie.response;
 
 import java.time.LocalDate;
-import java.time.Year;
 import java.util.List;
 import lombok.Data;
 
@@ -10,7 +9,6 @@ public class MovieResponse {
 
     private Long id;
     private String title;
-    private Year year;
     private String ageRating;
     private LocalDate released;
     private String runtime;

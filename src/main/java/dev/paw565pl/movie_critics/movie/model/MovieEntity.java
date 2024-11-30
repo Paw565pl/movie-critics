@@ -5,7 +5,6 @@ import dev.paw565pl.movie_critics.rating.model.RatingEntity;
 import dev.paw565pl.movie_critics.user.model.UserEntity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
@@ -32,13 +31,10 @@ public class MovieEntity {
     @NonNull @Column(name = "title", length = 200, nullable = false)
     private String title;
 
-    @Column(name = "year")
-    private Year year;
-
     @Column(name = "age_rating")
     private String ageRating;
 
-    @Column(name = "released")
+    @NonNull @Column(name = "released", nullable = false)
     private LocalDate released;
 
     @Column(name = "runtime")

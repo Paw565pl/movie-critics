@@ -2,18 +2,17 @@ package dev.paw565pl.movie_critics.movie.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
-import java.time.Year;
 import java.util.List;
 
 public record MovieDto(
         @NotBlank(message = "Title cannot be empty.")
                 @Size(min = 2, max = 200, message = "Title must be between 2 and 200 characters.")
                 String title,
-        Year year,
         String ageRating,
-        LocalDate released,
+        @NotNull(message = "Released date cannot be null.") LocalDate released,
         String runtime,
         @Size(min = 10, max = 1000, message = "Plot must be between 10 and 1000 characters.") String plot,
         String language,
