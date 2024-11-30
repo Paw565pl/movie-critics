@@ -221,6 +221,13 @@
             <dd th:text="${movie.ageRating}"></dd>
           </div>
 
+          <div th:if="${movie.released}">
+            <dt>Released date</dt>
+            <dd
+              th:text="${#temporals.format(movie.released, 'dd-MM-yyyy')}"
+            ></dd>
+          </div>
+
           <div th:if="${movie.runtime}">
             <dt>Runtime</dt>
             <dd th:text="${movie.runtime}"></dd>
