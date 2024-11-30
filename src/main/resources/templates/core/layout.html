@@ -63,6 +63,11 @@
                 >Profile</a
               >
             </li>
+            <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item">
+              <a class="nav-link" aria-current="page" th:href="@{/admin}"
+                >Admin panel</a
+              >
+            </li>
           </ul>
 
           <!-- right side of navbar -->
