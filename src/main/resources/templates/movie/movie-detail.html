@@ -316,7 +316,7 @@
             <div class="d-flex align-items-center justify-content-between">
               <h5
                 class="card-title"
-                th:text="'Author: ' + ${comment.author}"
+                th:text="${comment.author != null} ? 'Author: ' + ${comment.author} : 'Author: <deleted user>'"
               ></h5>
 
               <!-- delete comment button -->
