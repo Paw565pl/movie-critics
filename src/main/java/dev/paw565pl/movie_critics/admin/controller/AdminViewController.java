@@ -3,6 +3,10 @@ package dev.paw565pl.movie_critics.admin.controller;
 import dev.paw565pl.movie_critics.auth.annotation.IsAdmin;
 import dev.paw565pl.movie_critics.movie.dto.MovieDto;
 import dev.paw565pl.movie_critics.movie.dto.MovieFormDto;
+import dev.paw565pl.movie_critics.movie.model.ActorEntity;
+import dev.paw565pl.movie_critics.movie.model.DirectorEntity;
+import dev.paw565pl.movie_critics.movie.model.GenreEntity;
+import dev.paw565pl.movie_critics.movie.model.WriterEntity;
 import dev.paw565pl.movie_critics.movie.repository.ActorRepository;
 import dev.paw565pl.movie_critics.movie.repository.DirectorRepository;
 import dev.paw565pl.movie_critics.movie.repository.GenreRepository;
@@ -13,10 +17,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -65,11 +66,39 @@ public class AdminViewController {
     @GetMapping("/movie/add")
     public String getNewMovieForm(Model model) {
         populateMovieForm(model);
-        model.addAttribute(
-                "movieFormData",
-                new MovieFormDto(
-                        null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-                        null));
+        var movieFormDto = new MovieFormDto(
+                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+        model.addAttribute("movieFormDto", movieFormDto);
+
+        return "admin/movie-form";
+    }
+
+    @IsAdmin
+    @GetMapping("/movie/{id}/edit")
+    public String getMovieEditForm(@PathVariable Long id, Model model) {
+        var movieEntity = movieService.findEntity(id);
+        var movieFormDto = new MovieFormDto(
+                movieEntity.getTitle(),
+                movieEntity.getAgeRating(),
+                movieEntity.getReleased(),
+                movieEntity.getRuntime(),
+                movieEntity.getPlot(),
+                movieEntity.getLanguage(),
+                movieEntity.getCountry(),
+                movieEntity.getAwards(),
+                movieEntity.getPoster(),
+                movieEntity.getMetaScore(),
+                movieEntity.getDvd(),
+                movieEntity.getBoxOffice(),
+                movieEntity.getWebsite(),
+                movieEntity.getGenres().stream().map(GenreEntity::getId).toList(),
+                movieEntity.getDirectors().stream().map(DirectorEntity::getId).toList(),
+                movieEntity.getWriters().stream().map(WriterEntity::getId).toList(),
+                movieEntity.getActors().stream().map(ActorEntity::getId).toList());
+
+        populateMovieForm(model);
+        model.addAttribute("editedMovieId", id);
+        model.addAttribute("movieFormDto", movieFormDto);
 
         return "admin/movie-form";
     }
@@ -77,40 +106,48 @@ public class AdminViewController {
     @IsAdmin
     @PostMapping("/movie/save")
     public String saveMovie(
-            @Valid @ModelAttribute("movieFormData") MovieFormDto movieFormDto,
+            @RequestParam(value = "editedMovieId", required = false) Long editedMovieId,
+            @Valid @ModelAttribute("movieFormDto") MovieFormDto movieFormDto,
             BindingResult bindingResult,
             Model model) {
         if (bindingResult.hasErrors()) {
             populateMovieForm(model);
-            return "admin/admin-panel";
+            model.addAttribute("editedMovieId", editedMovieId);
+            return "admin/movie-form";
         }
+
+        var movieDto = new MovieDto(
+                movieFormDto.title(),
+                movieFormDto.ageRating(),
+                movieFormDto.released(),
+                movieFormDto.runtime(),
+                movieFormDto.plot(),
+                movieFormDto.language(),
+                movieFormDto.country(),
+                movieFormDto.awards(),
+                movieFormDto.poster(),
+                movieFormDto.metaScore(),
+                movieFormDto.dvd(),
+                movieFormDto.boxOffice(),
+                movieFormDto.website(),
+                movieFormDto.genreIds(),
+                movieFormDto.directorIds(),
+                movieFormDto.writerIds(),
+                movieFormDto.actorIds());
 
         try {
-            var movieDto = new MovieDto(
-                    movieFormDto.title(),
-                    movieFormDto.ageRating(),
-                    movieFormDto.released(),
-                    movieFormDto.runtime(),
-                    movieFormDto.plot(),
-                    movieFormDto.language(),
-                    movieFormDto.country(),
-                    movieFormDto.awards(),
-                    movieFormDto.poster(),
-                    movieFormDto.metaScore(),
-                    movieFormDto.dvd(),
-                    movieFormDto.boxOffice(),
-                    movieFormDto.website(),
-                    movieFormDto.genreIds(),
-                    movieFormDto.directorIds(),
-                    movieFormDto.writerIds(),
-                    movieFormDto.actorIds());
-            movieService.create(movieDto);
+            if (editedMovieId == null) {
+                var createdMovie = movieService.create(movieDto);
+                return "redirect:/movies/" + createdMovie.getId();
+            } else {
+                var updatedMovie = movieService.update(editedMovieId, movieDto);
+                return "redirect:/movies/" + updatedMovie.getId();
+            }
         } catch (DataIntegrityViolationException e) {
             bindingResult.rejectValue("title", "", e.getMessage());
+            model.addAttribute("editedMovieId", editedMovieId);
             populateMovieForm(model);
-            return "admin/admin-panel";
+            return "admin/movie-form";
         }
-
-        return "redirect:/admin";
     }
 }

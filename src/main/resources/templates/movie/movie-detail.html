@@ -22,6 +22,15 @@
             class="text-muted"
           ></span>
 
+          <a
+            sec:authorize="hasRole('ROLE_ADMIN')"
+            role="button"
+            class="btn btn-outline-secondary"
+            th:href="@{/admin/movie/{id}/edit(id=${movie.id})}"
+            title="edit this movie"
+            ><i class="bi bi-pencil"></i
+          ></a>
+
           <form
             sec:authorize="hasRole('ROLE_ADMIN')"
             th:action="@{/movies/{id}/delete(id=${movie.id})}"

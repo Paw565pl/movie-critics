@@ -3,13 +3,14 @@ package dev.paw565pl.movie_critics.movie.dto;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
 import java.util.List;
+import org.springframework.format.annotation.DateTimeFormat;
 
 public record MovieFormDto(
         @NotBlank(message = "Title cannot be empty.")
                 @Size(min = 2, max = 200, message = "Title must be between 2 and 200 characters.")
                 String title,
         @Size(max = 255, message = "Age must be at most 255 characters.") String ageRating,
-        @NotNull(message = "Released date cannot be null.") LocalDate released,
+        @NotNull(message = "Released date cannot be empty.") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate released,
         @Size(max = 255, message = "Runtime must be at most 255 characters.") String runtime,
         @Size(min = 10, max = 1000, message = "Plot must be between 10 and 1000 characters.") String plot,
         @Size(max = 255, message = "Language must be at most 255 characters.") String language,
