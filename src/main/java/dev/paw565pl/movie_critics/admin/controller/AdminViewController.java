@@ -57,7 +57,13 @@ public class AdminViewController {
 
     @IsAdmin
     @GetMapping
-    public String getAdminPanelView(Model model) {
+    public String getAdminPanelView() {
+        return "admin/admin-panel";
+    }
+
+    @IsAdmin
+    @GetMapping("/movie/add")
+    public String getNewMovieForm(Model model) {
         populateMovieForm(model);
         model.addAttribute(
                 "movieFormData",
@@ -65,18 +71,18 @@ public class AdminViewController {
                         null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
                         null));
 
-        return "admin/admin";
+        return "admin/movie-form";
     }
 
     @IsAdmin
-    @PostMapping("/movies/save")
+    @PostMapping("/movie/save")
     public String saveMovie(
             @Valid @ModelAttribute("movieFormData") MovieFormDto movieFormDto,
             BindingResult bindingResult,
             Model model) {
         if (bindingResult.hasErrors()) {
             populateMovieForm(model);
-            return "admin/admin";
+            return "admin/admin-panel";
         }
 
         try {
@@ -102,7 +108,7 @@ public class AdminViewController {
         } catch (DataIntegrityViolationException e) {
             bindingResult.rejectValue("title", "", e.getMessage());
             populateMovieForm(model);
-            return "admin/admin";
+            return "admin/admin-panel";
         }
 
         return "redirect:/admin";

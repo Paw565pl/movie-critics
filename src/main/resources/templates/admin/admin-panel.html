@@ -1,0 +1,32 @@
+<!doctype html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  layout:decorate="~{core/layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin panel</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="d-flex flex-wrap gap-3">
+        <a role="button" class="btn btn-primary" th:href="@{/admin/movie/add}"
+          >Add new movie</a
+        >
+        <a
+          role="button"
+          class="btn btn-primary"
+          th:href="@{/admin/movie/import-export}"
+          >Import / export movies</a
+        >
+        <a role="button" class="btn btn-primary" th:href="@{/admin/users}"
+          >Manage users</a
+        >
+      </div>
+    </div>
+  </body>
+</html>
