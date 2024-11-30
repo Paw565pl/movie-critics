@@ -1,0 +1,63 @@
+<!doctype html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{core/layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hall of Fame</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <!-- users hall of fame -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <h2>Top 10 active users</h2>
+          <ol class="list-group list-group-numbered">
+            <p th:if="${users.isEmpty()}">No users found.</p>
+            <li class="list-group-item" th:each="user : ${users}">
+              <span th:text="${user.username}"></span>
+              <p>
+                <span
+                  th:text="'This has user left ' + ${user.ratingsCount} + ' ratings and '"
+                ></span>
+                <span th:text="${user.commentsCount} + ' comments.'"></span>
+              </p>
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- most popular movies -->
+      <div
+        class="row row-cols-auto gap-3"
+        th:classappend="${movies.getNumberOfElements()} >= 4 ? 'justify-content-evenly' : ''"
+      >
+        <section
+          class="card col"
+          style="width: 15rem"
+          th:each="movie : ${movies}"
+        >
+          <img
+            th:src="${movie.poster}"
+            th:alt="${movie.title + ' poster'}"
+            class="card-img-top w-100"
+          />
+          <div class="card-body">
+            <h5 class="card-title fw-bold" th:text="${movie.title}"></h5>
+            <p class="card-text text-truncate" th:text="${movie.plot}"></p>
+            <a
+              role="button"
+              class="btn btn-primary"
+              th:href="@{/movies/{id}(id=${movie.id})}"
+              >Check details</a
+            >
+          </div>
+        </section>
+      </div>
+    </div>
+  </body>
+</html>

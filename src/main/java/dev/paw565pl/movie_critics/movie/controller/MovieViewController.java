@@ -19,10 +19,12 @@ import dev.paw565pl.movie_critics.movie_to_watch.dto.MovieToWatchDto;
 import dev.paw565pl.movie_critics.movie_to_watch.service.MovieToWatchService;
 import dev.paw565pl.movie_critics.rating.dto.RatingDto;
 import dev.paw565pl.movie_critics.rating.service.RatingService;
+import dev.paw565pl.movie_critics.top_active_user.service.TopActiveUserService;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -44,6 +46,7 @@ public class MovieViewController {
     private final MovieToWatchService movieToWatchService;
     private final FavoriteMovieService favoriteMovieService;
     private final MovieToIgnoreService movieToIgnoreService;
+    private final TopActiveUserService topActiveUserService;
 
     public MovieViewController(
             MovieService movieService,
@@ -52,7 +55,8 @@ public class MovieViewController {
             RatingService ratingService,
             MovieToWatchService movieToWatchService,
             FavoriteMovieService favoriteMovieService,
-            MovieToIgnoreService movieToIgnoreService) {
+            MovieToIgnoreService movieToIgnoreService,
+            TopActiveUserService topActiveUserService) {
         this.movieService = movieService;
         this.commentService = commentService;
         this.genreRepository = genreRepository;
@@ -60,6 +64,7 @@ public class MovieViewController {
         this.movieToWatchService = movieToWatchService;
         this.favoriteMovieService = favoriteMovieService;
         this.movieToIgnoreService = movieToIgnoreService;
+        this.topActiveUserService = topActiveUserService;
     }
 
     @GetMapping
@@ -294,5 +299,18 @@ public class MovieViewController {
     public String deleteMovie(@PathVariable Long id) {
         movieService.delete(id);
         return "redirect:/movies";
+    }
+
+    @GetMapping("/hall-of-fame")
+    public String getHallOfFameView(Model model) {
+        var emptyFilters = new MovieFilterDto(null, null, null, null, null, null, null, null, null, null);
+        var movies = movieService.findAll(
+                Optional.empty(), emptyFilters, PageRequest.of(0, 10, Direction.DESC, "ratingsCount"));
+        var users = topActiveUserService.findTop10ActiveUsers();
+
+        model.addAttribute("movies", movies);
+        model.addAttribute("users", users);
+
+        return "movie/hall-of-fame";
     }
 }
