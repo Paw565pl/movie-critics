@@ -1,0 +1,324 @@
+<!doctype html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{core/layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Movie form</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <div class="card">
+        <div class="card-header">
+          <h3 th:text="${editedMovieId} ? 'Edit movie' : 'Add new movie'"></h3>
+        </div>
+        <div class="card-body">
+          <form
+            th:object="${movieFormDto}"
+            th:action="@{/admin/movie/save}"
+            method="post"
+          >
+            <input
+              type="hidden"
+              name="editedMovieId"
+              th:if="${editedMovieId}"
+              th:value="${editedMovieId}"
+            />
+
+            <div class="mb-3">
+              <label for="title" class="form-label">Title</label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                th:field="*{title}"
+              />
+              <p
+                th:if="${#fields.hasErrors('title')}"
+                th:errors="*{title}"
+                class="form-text text-danger"
+              ></p>
+            </div>
+
+            <div class="mb-3">
+              <label for="ageRating" class="form-label">Age Rating</label>
+              <select
+                class="form-select"
+                id="ageRating"
+                th:field="*{ageRating}"
+              >
+                <option selected value="">-</option>
+                <option
+                  th:each="ageRatingOption : ${ageRatingOptions}"
+                  th:value="${ageRatingOption}"
+                  th:text="${ageRatingOption}"
+                ></option>
+              </select>
+              <p
+                th:if="${#fields.hasErrors('ageRating')}"
+                th:errors="*{ageRating}"
+                class="form-text text-danger"
+              ></p>
+            </div>
+
+            <div class="mb-3">
+              <label for="released" class="form-label">Released Date</label>
+              <input
+                type="date"
+                class="form-control"
+                id="released"
+                th:field="*{released}"
+              />
+              <p
+                th:if="${#fields.hasErrors('released')}"
+                th:errors="*{released}"
+                class="form-text text-danger"
+              ></p>
+            </div>
+
+            <div class="mb-3">
+              <label for="runtime" class="form-label">Runtime</label>
+              <input
+                type="text"
+                class="form-control"
+                id="runtime"
+                th:field="*{runtime}"
+              />
+              <p
+                th:if="${#fields.hasErrors('runtime')}"
+                th:errors="*{runtime}"
+                class="form-text text-danger"
+              ></p>
+            </div>
+
+            <div class="mb-3">
+              <label for="plot" class="form-label">Plot Description</label>
+              <textarea
+                class="form-control"
+                rows="3"
+                id="plot"
+                th:field="*{plot}"
+              ></textarea>
+              <p
+                th:if="${#fields.hasErrors('plot')}"
+                th:errors="*{plot}"
+                class="form-text text-danger"
+              ></p>
+            </div>
+
+            <div class="mb-3">
+              <label for="language" class="form-label">Language</label>
+              <input
+                type="text"
+                class="form-control"
+                id="language"
+                th:field="*{language}"
+              />
+              <p
+                th:if="${#fields.hasErrors('language')}"
+                th:errors="*{language}"
+                class="form-text text-danger"
+              ></p>
+            </div>
+
+            <div class="mb-3">
+              <label for="country" class="form-label">Country</label>
+              <input
+                type="text"
+                class="form-control"
+                id="country"
+                th:field="*{country}"
+              />
+              <p
+                th:if="${#fields.hasErrors('country')}"
+                th:errors="*{country}"
+                class="form-text text-danger"
+              ></p>
+            </div>
+
+            <div class="mb-3">
+              <label for="awards" class="form-label">Awards</label>
+              <input
+                type="text"
+                class="form-control"
+                id="awards"
+                th:field="*{awards}"
+              />
+              <p
+                th:if="${#fields.hasErrors('awards')}"
+                th:errors="*{awards}"
+                class="form-text text-danger"
+              ></p>
+            </div>
+
+            <div class="mb-3">
+              <label for="poster" class="form-label">Poster URL</label>
+              <input
+                type="url"
+                class="form-control"
+                id="poster"
+                th:field="*{poster}"
+              />
+              <p
+                th:if="${#fields.hasErrors('poster')}"
+                th:errors="*{poster}"
+                class="form-text text-danger"
+              ></p>
+            </div>
+
+            <div class="mb-3">
+              <label for="metaScore" class="form-label">Metascore</label>
+              <input
+                type="text"
+                class="form-control"
+                id="metaScore"
+                th:field="*{metaScore}"
+              />
+              <p
+                th:if="${#fields.hasErrors('metaScore')}"
+                th:errors="*{metaScore}"
+                class="form-text text-danger"
+              ></p>
+            </div>
+
+            <div class="mb-3">
+              <label for="dvd" class="form-label">Dvd</label>
+              <input
+                type="text"
+                class="form-control"
+                id="dvd"
+                th:field="*{dvd}"
+              />
+              <p
+                th:if="${#fields.hasErrors('dvd')}"
+                th:errors="*{dvd}"
+                class="form-text text-danger"
+              ></p>
+            </div>
+
+            <div class="mb-3">
+              <label for="boxOffice" class="form-label">Box Office</label>
+              <input
+                type="text"
+                class="form-control"
+                id="boxOffice"
+                th:field="*{boxOffice}"
+              />
+              <p
+                th:if="${#fields.hasErrors('boxOffice')}"
+                th:errors="*{boxOffice}"
+                class="form-text text-danger"
+              ></p>
+            </div>
+
+            <div class="mb-3">
+              <label for="website" class="form-label">Website</label>
+              <input
+                type="url"
+                class="form-control"
+                id="website"
+                th:field="*{website}"
+              />
+              <p
+                th:if="${#fields.hasErrors('website')}"
+                th:errors="*{website}"
+                class="form-text text-danger"
+              ></p>
+            </div>
+
+            <div class="mb-3">
+              <label for="genres" class="form-label">Genres</label>
+              <select
+                class="form-select"
+                multiple
+                id="genres"
+                th:field="*{genreIds}"
+              >
+                <option
+                  th:each="genre : ${genreOptions}"
+                  th:value="${genre.id}"
+                  th:text="${genre.name}"
+                ></option>
+              </select>
+              <p
+                th:if="${#fields.hasErrors('genreIds')}"
+                class="form-text text-danger"
+              >
+                You have to select at least one genre.
+              </p>
+            </div>
+
+            <div class="mb-3">
+              <label for="directors" class="form-label">Directors</label>
+              <select
+                class="form-select"
+                multiple
+                id="directors"
+                th:field="*{directorIds}"
+              >
+                <option
+                  th:each="director : ${directorOptions}"
+                  th:value="${director.id}"
+                  th:text="${director.name}"
+                ></option>
+              </select>
+              <p
+                th:if="${#fields.hasErrors('directorIds')}"
+                th:errors="*{directorIds}"
+                class="form-text text-danger"
+              ></p>
+            </div>
+
+            <div class="mb-3">
+              <label for="writers" class="form-label">Writers</label>
+              <select
+                class="form-select"
+                multiple
+                id="writers"
+                th:field="*{writerIds}"
+              >
+                <option
+                  th:each="writer : ${writerOptions}"
+                  th:value="${writer.id}"
+                  th:text="${writer.name}"
+                ></option>
+              </select>
+              <p
+                th:if="${#fields.hasErrors('writerIds')}"
+                th:errors="*{writerIds}"
+                class="form-text text-danger"
+              ></p>
+            </div>
+
+            <div class="mb-3">
+              <label for="actors" class="form-label">Actors</label>
+              <select
+                class="form-select"
+                multiple
+                id="actors"
+                th:field="*{actorIds}"
+              >
+                <option
+                  th:each="actor : ${actorOptions}"
+                  th:value="${actor.id}"
+                  th:text="${actor.name}"
+                ></option>
+              </select>
+              <p
+                th:if="${#fields.hasErrors('actorIds')}"
+                th:errors="*{actorIds}"
+                class="form-text text-danger"
+              ></p>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
