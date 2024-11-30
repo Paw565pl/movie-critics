@@ -1,0 +1,46 @@
+<!doctype html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{core/layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User list</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Email</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="user : ${users}">
+            <td th:text="${user.username}"></td>
+            <td th:text="${user.email}"></td>
+            <td>
+              <form
+                th:action="@{/admin/users/{id}/delete(id=${user.id})}"
+                method="post"
+              >
+                <button
+                  type="submit"
+                  class="btn btn-danger btn-sm"
+                  th:attr="disabled=${user.username == currentUsername} ? 'true' : 'false'"
+                >
+                  Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

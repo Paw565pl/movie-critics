@@ -6,6 +6,8 @@ import dev.paw565pl.movie_critics.user.model.OAuthProvider;
 import dev.paw565pl.movie_critics.user.model.UserEntity;
 import dev.paw565pl.movie_critics.user.repository.UserRepository;
 import java.util.UUID;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -20,6 +22,10 @@ public class UserService {
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    public Page<UserEntity> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     public UserEntity findById(UUID id) {
@@ -50,5 +56,12 @@ public class UserService {
         user.setProvider(provider);
 
         return userRepository.save(user);
+    }
+
+    @Transactional
+    public void deleteById(UUID id) {
+        var userEntity =
+                userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        userRepository.delete(userEntity);
     }
 }

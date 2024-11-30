@@ -1,6 +1,7 @@
 package dev.paw565pl.movie_critics.admin.controller;
 
 import dev.paw565pl.movie_critics.auth.annotation.IsAdmin;
+import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.movie.dto.MovieDto;
 import dev.paw565pl.movie_critics.movie.dto.MovieFormDto;
 import dev.paw565pl.movie_critics.movie.model.ActorEntity;
@@ -12,8 +13,13 @@ import dev.paw565pl.movie_critics.movie.repository.DirectorRepository;
 import dev.paw565pl.movie_critics.movie.repository.GenreRepository;
 import dev.paw565pl.movie_critics.movie.repository.WriterRepository;
 import dev.paw565pl.movie_critics.movie.service.MovieService;
+import dev.paw565pl.movie_critics.user.service.UserService;
 import jakarta.validation.Valid;
+import java.util.UUID;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,18 +34,21 @@ public class AdminViewController {
     private final DirectorRepository directorRepository;
     private final WriterRepository writerRepository;
     private final ActorRepository actorRepository;
+    private final UserService userService;
 
     public AdminViewController(
             MovieService movieService,
             GenreRepository genreRepository,
             DirectorRepository directorRepository,
             WriterRepository writerRepository,
-            ActorRepository actorRepository) {
+            ActorRepository actorRepository,
+            UserService userService) {
         this.movieService = movieService;
         this.genreRepository = genreRepository;
         this.directorRepository = directorRepository;
         this.writerRepository = writerRepository;
         this.actorRepository = actorRepository;
+        this.userService = userService;
     }
 
     private void populateMovieForm(Model model) {
@@ -149,5 +158,24 @@ public class AdminViewController {
             populateMovieForm(model);
             return "admin/movie-form";
         }
+    }
+
+    @IsAdmin
+    @GetMapping("/users")
+    public String getUserListView(@AuthenticationPrincipal OidcUser oidcUser, Model model) {
+        var user = UserDetailsImpl.fromOidcUser(oidcUser);
+        var users = userService.findAll(Pageable.ofSize(50));
+
+        model.addAttribute("users", users);
+        model.addAttribute("currentUsername", user.getUsername());
+
+        return "admin/user-list";
+    }
+
+    @IsAdmin
+    @PostMapping("/users/{id}/delete")
+    public String deleteUser(@PathVariable UUID id) {
+        userService.deleteById(id);
+        return "redirect:/admin/users";
     }
 }
