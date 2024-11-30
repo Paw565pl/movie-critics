@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -28,6 +26,5 @@ public class WriterEntity {
     private String name;
 
     @ManyToMany(mappedBy = "writers")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<MovieEntity> movies = new ArrayList<>();
 }

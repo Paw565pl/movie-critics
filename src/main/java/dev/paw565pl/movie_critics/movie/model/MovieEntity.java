@@ -10,8 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
 import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 @Getter
 @Setter
@@ -76,33 +74,53 @@ public class MovieEntity {
     @NonNull @ManyToMany
     @JoinTable(
             name = "movie_genres",
-            joinColumns = {@JoinColumn(name = "movie_id")},
-            inverseJoinColumns = {@JoinColumn(name = "genre_id")})
-    @OnDelete(action = OnDeleteAction.CASCADE)
+            joinColumns =
+                    @JoinColumn(
+                            name = "movie_id",
+                            foreignKey =
+                                    @ForeignKey(
+                                            foreignKeyDefinition =
+                                                    "FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE")),
+            inverseJoinColumns = @JoinColumn(name = "genre_id"))
     private List<GenreEntity> genres;
 
     @ManyToMany
     @JoinTable(
             name = "movie_directors",
-            joinColumns = {@JoinColumn(name = "movie_id")},
-            inverseJoinColumns = {@JoinColumn(name = "director_id")})
-    @OnDelete(action = OnDeleteAction.CASCADE)
+            joinColumns =
+                    @JoinColumn(
+                            name = "movie_id",
+                            foreignKey =
+                                    @ForeignKey(
+                                            foreignKeyDefinition =
+                                                    "FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE")),
+            inverseJoinColumns = @JoinColumn(name = "director_id"))
     private List<DirectorEntity> directors = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
             name = "movie_writers",
-            joinColumns = {@JoinColumn(name = "movie_id")},
-            inverseJoinColumns = {@JoinColumn(name = "writer_id")})
-    @OnDelete(action = OnDeleteAction.CASCADE)
+            joinColumns =
+                    @JoinColumn(
+                            name = "movie_id",
+                            foreignKey =
+                                    @ForeignKey(
+                                            foreignKeyDefinition =
+                                                    "FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE")),
+            inverseJoinColumns = @JoinColumn(name = "writer_id"))
     private List<WriterEntity> writers = new ArrayList<>();
 
     @ManyToMany
     @JoinTable(
             name = "movie_actors",
-            joinColumns = {@JoinColumn(name = "movie_id")},
-            inverseJoinColumns = {@JoinColumn(name = "actor_id")})
-    @OnDelete(action = OnDeleteAction.CASCADE)
+            joinColumns =
+                    @JoinColumn(
+                            name = "movie_id",
+                            foreignKey =
+                                    @ForeignKey(
+                                            foreignKeyDefinition =
+                                                    "FOREIGN KEY (movie_id) REFERENCES movies(id) ON DELETE CASCADE")),
+            inverseJoinColumns = @JoinColumn(name = "actor_id"))
     private List<ActorEntity> actors = new ArrayList<>();
 
     @OneToMany(mappedBy = "movie")
@@ -120,14 +138,11 @@ public class MovieEntity {
     private List<CommentEntity> comments = new ArrayList<>();
 
     @ManyToMany(mappedBy = "moviesToWatch")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<UserEntity> usersWhoWantToWatch = new ArrayList<>();
 
     @ManyToMany(mappedBy = "favoriteMovies")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<UserEntity> usersWhoFavorited = new ArrayList<>();
 
     @ManyToMany(mappedBy = "ignoredMovies")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private List<UserEntity> usersWhoIgnored = new ArrayList<>();
 }
