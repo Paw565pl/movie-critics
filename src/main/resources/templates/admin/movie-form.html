@@ -156,16 +156,16 @@
             </div>
 
             <div class="mb-3">
-              <label for="posterUrl" class="form-label">posterUrl URL</label>
+              <label for="posterUrl" class="form-label">Poster URL</label>
               <input
                 type="url"
                 class="form-control"
                 id="posterUrl"
-                th:field="*{posterUrlUrl}"
+                th:field="*{posterUrl}"
               />
               <p
                 th:if="${#fields.hasErrors('posterUrl')}"
-                th:errors="*{posterUrlUrl}"
+                th:errors="*{posterUrl}"
                 class="form-text text-danger"
               ></p>
             </div>
