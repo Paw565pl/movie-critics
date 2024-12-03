@@ -89,11 +89,12 @@ public class MovieService {
 
         var updatedMovieEntity = movieMapper.toEntity(dto);
         updatedMovieEntity.setId(movieEntity.getId());
+
         if (poster != null && !poster.isEmpty()) {
             var posterUrl = imageService.saveFile(poster);
             updatedMovieEntity.setPosterUrl(posterUrl);
         } else {
-            updatedMovieEntity.setPosterUrl(null);
+            updatedMovieEntity.setPosterUrl(movieEntity.getPosterUrl());
         }
 
         try {
