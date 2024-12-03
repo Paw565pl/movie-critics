@@ -1,5 +1,6 @@
 package dev.paw565pl.movie_critics.admin.controller;
 
+import dev.paw565pl.movie_critics.admin.service.AdminService;
 import dev.paw565pl.movie_critics.auth.annotation.IsAdmin;
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.movie.dto.MovieDto;
@@ -15,9 +16,15 @@ import dev.paw565pl.movie_critics.movie.repository.WriterRepository;
 import dev.paw565pl.movie_critics.movie.service.MovieService;
 import dev.paw565pl.movie_critics.user.service.UserService;
 import jakarta.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.stereotype.Controller;
@@ -35,6 +42,7 @@ public class AdminViewController {
     private final WriterRepository writerRepository;
     private final ActorRepository actorRepository;
     private final UserService userService;
+    private final AdminService adminService;
 
     public AdminViewController(
             MovieService movieService,
@@ -42,13 +50,15 @@ public class AdminViewController {
             DirectorRepository directorRepository,
             WriterRepository writerRepository,
             ActorRepository actorRepository,
-            UserService userService) {
+            UserService userService,
+            AdminService adminService) {
         this.movieService = movieService;
         this.genreRepository = genreRepository;
         this.directorRepository = directorRepository;
         this.writerRepository = writerRepository;
         this.actorRepository = actorRepository;
         this.userService = userService;
+        this.adminService = adminService;
     }
 
     private void populateMovieForm(Model model) {
@@ -164,6 +174,20 @@ public class AdminViewController {
     @GetMapping("/movies/import-export")
     public String getMoviesImportExportView() {
         return "admin/movies-import-export";
+    }
+
+    @IsAdmin
+    @GetMapping("/movies/export")
+    public ResponseEntity<ByteArrayResource> exportMovies() {
+        var file = adminService.exportMoviesToJson();
+        var formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
+        var fileName = "movies_" + formattedDateTime + ".json";
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                .contentLength(file.contentLength())
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(file);
     }
 
     @IsAdmin
