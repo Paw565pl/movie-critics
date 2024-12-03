@@ -45,7 +45,7 @@ public class AdminRestController {
     }
 
     @IsAdmin
-    @PostMapping("/import-movies")
+    @PostMapping(path = "/import-movies", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Map<String, String> importMovies(@RequestParam("file") MultipartFile file) {
         adminService.importMoviesFromJson(file);
         return Map.of("message", "Movies imported successfully.");
