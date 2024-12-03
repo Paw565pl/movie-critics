@@ -10,6 +10,8 @@ import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie.specification.MovieSpecification;
+import java.util.Optional;
+import java.util.Set;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,9 +20,6 @@ import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class MovieService {
@@ -114,6 +113,13 @@ public class MovieService {
 
         var updatedMovieEntity = movieRepository.saveAndFlush(movieEntity);
         return movieMapper.toResponse(updatedMovieEntity);
+    }
+
+    @Transactional
+    public void deletePoster(Long id) {
+        var movieEntity = findEntity(id);
+        movieEntity.setPosterUrl(null);
+        movieRepository.saveAndFlush(movieEntity);
     }
 
     @Transactional

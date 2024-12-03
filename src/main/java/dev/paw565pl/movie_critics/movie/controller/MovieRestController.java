@@ -52,8 +52,15 @@ public class MovieRestController {
 
     @IsAdmin
     @PatchMapping(path = "/{id}/poster", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public MovieResponse updatePosterUrl(@PathVariable Long id, @RequestParam(value = "poster") MultipartFile poster) {
+    public MovieResponse updatePoster(@PathVariable Long id, @RequestParam(value = "poster") MultipartFile poster) {
         return movieService.updatePoster(id, poster);
+    }
+
+    @IsAdmin
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}/poster")
+    public void deletePoster(@PathVariable Long id) {
+        movieService.deletePoster(id);
     }
 
     @IsAdmin
