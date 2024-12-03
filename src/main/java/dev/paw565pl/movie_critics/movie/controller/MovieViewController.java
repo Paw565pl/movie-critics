@@ -123,8 +123,7 @@ public class MovieViewController {
         return "movie/movie-list";
     }
 
-    @GetMapping("/movies/{id}")
-    public String getMovieDetailView(@PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser, Model model) {
+    private void addAttributesToMovieDetailView(Long id, OidcUser oidcUser, Model model) {
         var movie = movieService.findById(id);
         var movieComments = commentService.findAllByMovieId(id, Pageable.ofSize(20));
 
@@ -164,7 +163,11 @@ public class MovieViewController {
             } catch (ResponseStatusException ignored) {
             }
         }
+    }
 
+    @GetMapping("/movies/{id}")
+    public String getMovieDetailView(@PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser, Model model) {
+        addAttributesToMovieDetailView(id, oidcUser, model);
         return "movie/movie-detail";
     }
 
@@ -216,14 +219,8 @@ public class MovieViewController {
         try {
             commentService.create(id, user, commentDto);
         } catch (DataIntegrityViolationException e) {
-            var movie = movieService.findById(id);
-            var movieComments = commentService.findAllByMovieId(id, Pageable.ofSize(20));
-
-            model.addAttribute("movie", movie);
-            model.addAttribute("movieComments", movieComments);
-
+            addAttributesToMovieDetailView(id, oidcUser, model);
             bindingResult.rejectValue("text", "", e.getMessage());
-
             return "movie/movie-detail";
         }
 
