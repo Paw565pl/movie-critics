@@ -25,4 +25,7 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long>, JpaSp
 
     @Query("SELECT DISTINCT m.ageRating FROM MovieEntity m WHERE m.ageRating IS NOT NULL")
     Set<String> findDistinctAgeRatings();
+
+    @Query("SELECT DISTINCT m.posterUrl FROM MovieEntity m WHERE m.posterUrl IS NOT NULL")
+    Set<String> findDistinctPosterUrls();
 }
