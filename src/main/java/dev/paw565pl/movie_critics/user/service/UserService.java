@@ -1,10 +1,11 @@
 package dev.paw565pl.movie_critics.user.service;
 
-import dev.paw565pl.movie_critics.auth.utils.KeycloakJwtUtils;
-import dev.paw565pl.movie_critics.auth.utils.KeycloakOidcUserUtils;
+import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
+import dev.paw565pl.movie_critics.user.mapper.UserMapper;
 import dev.paw565pl.movie_critics.user.model.OAuthProvider;
 import dev.paw565pl.movie_critics.user.model.UserEntity;
 import dev.paw565pl.movie_critics.user.repository.UserRepository;
+import dev.paw565pl.movie_critics.user.response.UserResponse;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,13 +20,23 @@ import org.springframework.web.server.ResponseStatusException;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
-    public Page<UserEntity> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<UserResponse> findAll(Pageable pageable) {
+        return userRepository.findAll(pageable).map(userMapper::toResponse);
+    }
+
+    public UserResponse findById(UUID id) {
+        return userRepository
+                .findById(id)
+                .map(userMapper::toResponse)
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User with given id does not exist."));
     }
 
     public UserEntity findEntityById(UUID id) {
@@ -34,34 +45,37 @@ public class UserService {
 
     @Transactional
     public UserEntity createOrUpdate(Jwt jwt, OAuthProvider provider) {
-        var id = KeycloakJwtUtils.getUserId(jwt);
-        var user = userRepository.findById(id).orElse(new UserEntity());
+        var user = UserDetailsImpl.fromJwt(jwt);
+        var userId = user.getId();
 
-        user.setId(id);
-        user.setUsername(KeycloakJwtUtils.getUsername(jwt));
-        user.setEmail(KeycloakJwtUtils.getEmail(jwt));
-        user.setProvider(provider);
+        var userEntity = userRepository.findById(userId).orElse(new UserEntity());
 
-        return userRepository.save(user);
+        userEntity.setId(userId);
+        userEntity.setUsername(user.getUsername());
+        userEntity.setEmail(user.getEmail());
+        userEntity.setProvider(provider);
+
+        return userRepository.save(userEntity);
     }
 
     @Transactional
     public UserEntity createOrUpdate(OidcUser oidcUser, OAuthProvider provider) {
-        var id = KeycloakOidcUserUtils.getUserId(oidcUser);
-        var user = userRepository.findById(id).orElse(new UserEntity());
+        var user = UserDetailsImpl.fromOidcUser(oidcUser);
+        var userId = user.getId();
 
-        user.setId(id);
-        user.setUsername(KeycloakOidcUserUtils.getUsername(oidcUser));
-        user.setEmail(KeycloakOidcUserUtils.getEmail(oidcUser));
-        user.setProvider(provider);
+        var userEntity = userRepository.findById(userId).orElse(new UserEntity());
 
-        return userRepository.save(user);
+        userEntity.setId(userId);
+        userEntity.setUsername(user.getUsername());
+        userEntity.setEmail(user.getEmail());
+        userEntity.setProvider(provider);
+
+        return userRepository.save(userEntity);
     }
 
     @Transactional
     public void deleteById(UUID id) {
-        var userEntity =
-                userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        userRepository.delete(userEntity);
+        var userResponse = findById(id);
+        userRepository.deleteById(userResponse.getId());
     }
 }
