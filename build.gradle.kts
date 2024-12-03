@@ -52,6 +52,7 @@ val springdocVersion = "2.7.0"
 val modelMapperVersion = "3.2.1"
 val modelMapperRecordVersion = "1.0.0"
 val thumbnailatorVersion = "0.4.20"
+val datafakerVersion = "2.3.1"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -75,6 +76,11 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("org.springframework.boot:spring-boot-testcontainers")
+    testImplementation("org.testcontainers:postgresql")
+    testImplementation("org.testcontainers:junit-jupiter")
+    testImplementation("io.rest-assured:rest-assured")
+    testImplementation("net.datafaker:datafaker:${datafakerVersion}")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 
