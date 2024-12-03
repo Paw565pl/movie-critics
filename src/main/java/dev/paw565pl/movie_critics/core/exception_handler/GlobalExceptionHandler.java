@@ -1,5 +1,6 @@
 package dev.paw565pl.movie_critics.core.exception_handler;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,7 +18,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         var errors = new HashMap<String, List<String>>();
-        e.getBindingResult().getFieldErrors().forEach((f) -> {
+        e.getFieldErrors().forEach((f) -> {
             var fieldName = f.getField();
             var errorMessage = f.getDefaultMessage();
 
@@ -26,7 +27,7 @@ public class GlobalExceptionHandler {
             if (errors.containsKey(fieldName)) {
                 errors.get(fieldName).add(errorMessage);
             } else {
-                errors.put(fieldName, List.of(errorMessage));
+                errors.put(fieldName, new ArrayList<>(List.of(errorMessage)));
             }
         });
 
