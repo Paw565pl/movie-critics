@@ -161,6 +161,12 @@ public class AdminViewController {
     }
 
     @IsAdmin
+    @GetMapping("/movies/import-export")
+    public String getMoviesImportExportView() {
+        return "admin/movies-import-export";
+    }
+
+    @IsAdmin
     @GetMapping("/users")
     public String getUserListView(@AuthenticationPrincipal OidcUser oidcUser, Model model) {
         var user = UserDetailsImpl.fromOidcUser(oidcUser);
