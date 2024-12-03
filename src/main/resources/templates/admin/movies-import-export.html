@@ -13,6 +13,22 @@
   </head>
   <body>
     <div layout:fragment="content">
+      <!-- import movies success alert -->
+      <div
+        class="alert alert-success alert-dismissible fade show"
+        role="alert"
+        th:if="${param.importSuccess != null && param.importSuccess[0] == 'true'}"
+      >
+        <h4 class="alert-heading">Success!</h4>
+        <p>Import operation has been performed successfully.</p>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+
       <div class="d-flex flex-wrap gap-3">
         <a
           role="button"
@@ -26,13 +42,23 @@
       </div>
       <hr />
       <div>
-        <form class="mb-3" method="post" enctype="multipart/form-data">
+        <form
+          class="mb-3"
+          th:action="@{/admin/movies/import}"
+          method="post"
+          enctype="multipart/form-data"
+        >
           <input
             type="file"
             name="moviesJsonFile"
             class="form-control mb-3"
             accept="application/json"
           />
+          <p
+            th:if="${moviesImportError != null}"
+            th:text="${moviesImportError}"
+            class="form-text text-danger"
+          ></p>
           <button type="submit" class="btn btn-primary">
             Import movies from JSON
           </button>
@@ -45,6 +71,11 @@
             class="form-control mb-3"
             accept=".zip"
           />
+          <p
+            th:if="${moviesPostersImportError != null}"
+            th:text="${moviesPostersImportError}"
+            class="form-text text-danger"
+          ></p>
           <button type="submit" class="btn btn-primary">
             Import movie's posters from ZIP
           </button>

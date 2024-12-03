@@ -16,9 +16,6 @@ import dev.paw565pl.movie_critics.movie.repository.WriterRepository;
 import dev.paw565pl.movie_critics.movie.service.MovieService;
 import dev.paw565pl.movie_critics.user.service.UserService;
 import jakarta.validation.Valid;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.UUID;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
@@ -33,6 +30,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/admin")
@@ -197,7 +198,7 @@ public class AdminViewController {
     public String importMovies(@RequestParam("moviesJsonFile") MultipartFile moviesJsonFile, Model model) {
         try {
             adminService.importMoviesFromJson(moviesJsonFile);
-            return "redirect:/admin/movies/import-export?moviesImportSuccess=true";
+            return "redirect:/admin/movies/import-export?importSuccess=true";
         } catch (RuntimeException e) {
             String message;
             if (e instanceof ResponseStatusException responseStatusException) {
