@@ -53,7 +53,7 @@ public class RatingService {
         var movieEntity = movieService.findEntity(movieId);
 
         var userId = user.getId();
-        var userEntity = userService.findById(userId);
+        var userEntity = userService.findEntityById(userId);
 
         var ratingEntity = ratingMapper.toEntity(dto);
         ratingEntity.setAuthor(userEntity);

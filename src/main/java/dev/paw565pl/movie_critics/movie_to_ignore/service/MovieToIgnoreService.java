@@ -66,7 +66,7 @@ public class MovieToIgnoreService {
         var movieEntity = findMovieEntity(dto.movieId());
 
         var userId = user.getId();
-        var userEntity = userService.findById(userId);
+        var userEntity = userService.findEntityById(userId);
 
         try {
             userEntity.getIgnoredMovies().add(movieEntity);
@@ -83,7 +83,7 @@ public class MovieToIgnoreService {
         var userId = user.getId();
         var movieToIgnore = findMovieToIgnoreEntity(movieId, userId);
 
-        var userEntity = userService.findById(userId);
+        var userEntity = userService.findEntityById(userId);
         userEntity.getIgnoredMovies().remove(movieToIgnore);
 
         userRepository.save(userEntity);

@@ -61,7 +61,7 @@ public class CommentService {
         var movieEntity = movieService.findEntity(movieId);
 
         var userId = user.getId();
-        var userEntity = userService.findById(userId);
+        var userEntity = userService.findEntityById(userId);
 
         var commentEntity = commentMapper.toEntity(dto);
         commentEntity.setAuthor(userEntity);

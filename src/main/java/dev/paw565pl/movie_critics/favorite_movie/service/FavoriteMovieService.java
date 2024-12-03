@@ -66,7 +66,7 @@ public class FavoriteMovieService {
         var movieEntity = findMovieEntity(dto.movieId());
 
         var userId = user.getId();
-        var userEntity = userService.findById(userId);
+        var userEntity = userService.findEntityById(userId);
 
         try {
             userEntity.getFavoriteMovies().add(movieEntity);
@@ -83,7 +83,7 @@ public class FavoriteMovieService {
         var userId = user.getId();
         var favoriteMovie = findFavoriteMovieEntity(movieId, userId);
 
-        var userEntity = userService.findById(userId);
+        var userEntity = userService.findEntityById(userId);
         userEntity.getFavoriteMovies().remove(favoriteMovie);
 
         userRepository.save(userEntity);

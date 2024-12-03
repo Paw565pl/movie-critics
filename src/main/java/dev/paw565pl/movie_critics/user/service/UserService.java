@@ -28,7 +28,7 @@ public class UserService {
         return userRepository.findAll(pageable);
     }
 
-    public UserEntity findById(UUID id) {
+    public UserEntity findEntityById(UUID id) {
         return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED));
     }
 
