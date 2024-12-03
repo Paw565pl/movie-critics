@@ -9,7 +9,9 @@ import dev.paw565pl.movie_critics.movie.repository.WriterRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import java.util.ArrayList;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.web.server.ResponseStatusException;
 
 @Component
 public class MovieMapper {
@@ -39,24 +41,24 @@ public class MovieMapper {
         var actorIds = dto.actorIds() != null ? dto.actorIds() : new ArrayList<Long>();
         var actors = actorRepository.findAllById(actorIds);
         if (actors.size() != actorIds.size()) {
-            throw new IllegalArgumentException("Invalid actor ids.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid actor ids.");
         }
 
         var directorIds = dto.directorIds() != null ? dto.directorIds() : new ArrayList<Long>();
         var directors = directorRepository.findAllById(directorIds);
         if (directors.size() != directorIds.size()) {
-            throw new IllegalArgumentException("Invalid director ids.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid director ids.");
         }
 
         var genres = genreRepository.findAllById(dto.genreIds());
         if (genres.size() != dto.genreIds().size()) {
-            throw new IllegalArgumentException("Invalid genre ids.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid genre ids.");
         }
 
         var writerIds = dto.writerIds() != null ? dto.writerIds() : new ArrayList<Long>();
         var writers = writerRepository.findAllById(writerIds);
         if (writers.size() != writerIds.size()) {
-            throw new IllegalArgumentException("Invalid writer ids.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid writer ids.");
         }
 
         movie.setActors(actors);
