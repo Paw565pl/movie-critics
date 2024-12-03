@@ -154,7 +154,18 @@
         </header>
 
         <dl class="row row-cols-auto gap-2">
-          <div class="col">
+          <div class="col" th:if="${!movie.genres.isEmpty()}">
+            <dt>Genres</dt>
+            <dd>
+              <ul>
+                <li th:each="genre : ${movie.genres}">
+                  <span th:text="${genre.name}"></span>
+                </li>
+              </ul>
+            </dd>
+          </div>
+
+          <div class="col" th:if="${!movie.directors.isEmpty()}">
             <dt>Directors</dt>
             <dd>
               <ul>
@@ -165,7 +176,7 @@
             </dd>
           </div>
 
-          <div class="col">
+          <div class="col" th:if="${!movie.writers.isEmpty()}">
             <dt>Writers</dt>
             <dd>
               <ul>
@@ -176,7 +187,7 @@
             </dd>
           </div>
 
-          <div class="col">
+          <div class="col" th:if="${!movie.actors.isEmpty()}">
             <dt>Actors</dt>
             <dd>
               <ul>
