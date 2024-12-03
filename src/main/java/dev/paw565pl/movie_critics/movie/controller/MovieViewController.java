@@ -96,8 +96,8 @@ public class MovieViewController {
         var sortOptions = List.of(
                 new SortOption("Title (A-Z)", "title,asc"),
                 new SortOption("Title (Z-A)", "title,desc"),
-                new SortOption("Year (Newest)", "year,desc"),
-                new SortOption("Year (Oldest)", "year,asc"),
+                new SortOption("Released Date (Newest)", "released,desc"),
+                new SortOption("Released Date (Oldest)", "released,asc"),
                 new SortOption("Metascore (Highest)", "metaScore,desc"),
                 new SortOption("Metascore (Lowest)", "metaScore,asc"),
                 new SortOption("Ratings (Most)", "ratingsCount,desc"),
