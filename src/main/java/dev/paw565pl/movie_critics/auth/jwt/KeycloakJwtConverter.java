@@ -1,6 +1,6 @@
 package dev.paw565pl.movie_critics.auth.jwt;
 
-import static dev.paw565pl.movie_critics.auth.utils.KeycloakJwtUtils.getAuthorities;
+import static dev.paw565pl.movie_critics.auth.util.KeycloakJwtUtil.getAuthorities;
 
 import dev.paw565pl.movie_critics.user.model.OAuthProvider;
 import dev.paw565pl.movie_critics.user.service.UserService;

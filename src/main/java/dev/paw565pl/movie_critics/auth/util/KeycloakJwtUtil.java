@@ -1,4 +1,4 @@
-package dev.paw565pl.movie_critics.auth.utils;
+package dev.paw565pl.movie_critics.auth.util;
 
 import java.util.Collection;
 import java.util.List;
@@ -8,7 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtClaimNames;
 
-public abstract class KeycloakJwtUtils {
+public abstract class KeycloakJwtUtil {
 
     public static UUID getUserId(Jwt jwt) {
         return UUID.fromString(jwt.getClaimAsString(JwtClaimNames.SUB));

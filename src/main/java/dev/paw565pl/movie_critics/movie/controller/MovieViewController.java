@@ -1,6 +1,6 @@
 package dev.paw565pl.movie_critics.movie.controller;
 
-import static dev.paw565pl.movie_critics.auth.utils.AuthUtils.hasRole;
+import static dev.paw565pl.movie_critics.auth.util.AuthUtil.hasRole;
 
 import dev.paw565pl.movie_critics.auth.annotation.IsAdmin;
 import dev.paw565pl.movie_critics.auth.annotation.IsAuthenticated;

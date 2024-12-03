@@ -1,6 +1,6 @@
 package dev.paw565pl.movie_critics.comment.service;
 
-import static dev.paw565pl.movie_critics.auth.utils.AuthUtils.hasRole;
+import static dev.paw565pl.movie_critics.auth.util.AuthUtil.hasRole;
 
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.auth.role.Role;

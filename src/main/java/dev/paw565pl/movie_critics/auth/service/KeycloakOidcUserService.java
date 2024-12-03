@@ -1,6 +1,6 @@
 package dev.paw565pl.movie_critics.auth.service;
 
-import static dev.paw565pl.movie_critics.auth.utils.KeycloakOidcUserUtils.getAuthorities;
+import static dev.paw565pl.movie_critics.auth.util.KeycloakOidcUserUtil.getAuthorities;
 
 import dev.paw565pl.movie_critics.user.model.OAuthProvider;
 import dev.paw565pl.movie_critics.user.service.UserService;

@@ -1,7 +1,7 @@
 package dev.paw565pl.movie_critics.auth.details;
 
-import dev.paw565pl.movie_critics.auth.utils.KeycloakJwtUtils;
-import dev.paw565pl.movie_critics.auth.utils.KeycloakOidcUserUtils;
+import dev.paw565pl.movie_critics.auth.util.KeycloakJwtUtil;
+import dev.paw565pl.movie_critics.auth.util.KeycloakOidcUserUtil;
 import java.util.Collection;
 import java.util.UUID;
 import lombok.Getter;
@@ -31,19 +31,19 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     public static UserDetailsImpl fromJwt(Jwt jwt) {
-        var id = KeycloakJwtUtils.getUserId(jwt);
-        var username = KeycloakJwtUtils.getUsername(jwt);
-        var email = KeycloakJwtUtils.getEmail(jwt);
-        var authorities = KeycloakJwtUtils.getAuthorities(jwt);
+        var id = KeycloakJwtUtil.getUserId(jwt);
+        var username = KeycloakJwtUtil.getUsername(jwt);
+        var email = KeycloakJwtUtil.getEmail(jwt);
+        var authorities = KeycloakJwtUtil.getAuthorities(jwt);
 
         return new UserDetailsImpl(id, username, email, authorities);
     }
 
     public static UserDetailsImpl fromOidcUser(OidcUser oidcUser) {
-        var id = KeycloakOidcUserUtils.getUserId(oidcUser);
-        var username = KeycloakOidcUserUtils.getUsername(oidcUser);
-        var email = KeycloakOidcUserUtils.getEmail(oidcUser);
-        var authorities = KeycloakOidcUserUtils.getAuthorities(oidcUser);
+        var id = KeycloakOidcUserUtil.getUserId(oidcUser);
+        var username = KeycloakOidcUserUtil.getUsername(oidcUser);
+        var email = KeycloakOidcUserUtil.getEmail(oidcUser);
+        var authorities = KeycloakOidcUserUtil.getAuthorities(oidcUser);
 
         return new UserDetailsImpl(id, username, email, authorities);
     }
