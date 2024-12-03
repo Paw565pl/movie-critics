@@ -31,6 +31,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 @Controller
 @RequestMapping("/admin")
@@ -188,6 +190,25 @@ public class AdminViewController {
                 .contentLength(file.contentLength())
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(file);
+    }
+
+    @IsAdmin
+    @PostMapping("/movies/import")
+    public String importMovies(@RequestParam("moviesJsonFile") MultipartFile moviesJsonFile, Model model) {
+        try {
+            adminService.importMoviesFromJson(moviesJsonFile);
+            return "redirect:/admin/movies/import-export?moviesImportSuccess=true";
+        } catch (RuntimeException e) {
+            String message;
+            if (e instanceof ResponseStatusException responseStatusException) {
+                message = responseStatusException.getReason();
+            } else {
+                message = e.getMessage();
+            }
+
+            model.addAttribute("moviesImportError", message);
+            return "admin/movies-import-export";
+        }
     }
 
     @IsAdmin

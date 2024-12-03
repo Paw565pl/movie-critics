@@ -49,8 +49,27 @@ public class AdminService {
     }
 
     public ByteArrayResource exportMoviesToJson() {
-        var movies =
-                movieRepository.findAll().stream().map(movieMapper::toResponse).toList();
+        var movies = movieRepository.findAll().stream()
+                .map((movie) -> {
+                    var movieResponse = movieMapper.toResponse(movie);
+
+                    movieResponse.setId(null);
+                    movieResponse.setGenres(movieResponse.getGenres().stream()
+                            .peek((genre) -> genre.setId(null))
+                            .toList());
+                    movieResponse.setDirectors(movieResponse.getDirectors().stream()
+                            .peek((director) -> director.setId(null))
+                            .toList());
+                    movieResponse.setWriters(movieResponse.getWriters().stream()
+                            .peek((writer) -> writer.setId(null))
+                            .toList());
+                    movieResponse.setActors(movieResponse.getActors().stream()
+                            .peek((actor) -> actor.setId(null))
+                            .toList());
+
+                    return movieResponse;
+                })
+                .toList();
 
         try {
             var moviesBytes = objectMapper.writeValueAsBytes(movies);
