@@ -106,6 +106,17 @@ public class MovieService {
     }
 
     @Transactional
+    public MovieResponse updatePoster(Long id, MultipartFile poster) {
+        var movieEntity = findEntity(id);
+
+        var posterUrl = imageService.saveFile(poster);
+        movieEntity.setPosterUrl(posterUrl);
+
+        var updatedMovieEntity = movieRepository.saveAndFlush(movieEntity);
+        return movieMapper.toResponse(updatedMovieEntity);
+    }
+
+    @Transactional
     public void delete(Long id) {
         var movieEntity = findEntity(id);
         movieRepository.deleteById(movieEntity.getId());

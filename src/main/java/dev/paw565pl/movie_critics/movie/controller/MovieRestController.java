@@ -11,9 +11,11 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/v1/movies")
@@ -34,7 +36,7 @@ public class MovieRestController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MovieResponse create(@Valid @RequestBody MovieDto dto) {
-        return movieService.create(dto);
+        return movieService.create(dto, null);
     }
 
     @GetMapping("/{id}")
@@ -45,7 +47,13 @@ public class MovieRestController {
     @IsAdmin
     @PutMapping("/{id}")
     public MovieResponse update(@PathVariable Long id, @Valid @RequestBody MovieDto dto) {
-        return movieService.update(id, dto);
+        return movieService.update(id, dto, null);
+    }
+
+    @IsAdmin
+    @PatchMapping(path = "/{id}/poster", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public MovieResponse updatePosterUrl(@PathVariable Long id, @RequestParam(value = "poster") MultipartFile poster) {
+        return movieService.updatePoster(id, poster);
     }
 
     @IsAdmin
