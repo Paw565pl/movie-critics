@@ -82,8 +82,8 @@
               th:each="movie : ${moviesToWatch}"
             >
               <img
-                th:src="${movie.poster}"
-                th:alt="${movie.title + ' poster'}"
+                th:src="${movie.posterUrl}"
+                th:alt="${movie.title + ' posterUrl'}"
                 class="card-img-top w-100"
               />
               <div class="card-body">
@@ -135,8 +135,8 @@
               th:each="movie : ${favoriteMovies}"
             >
               <img
-                th:src="${movie.poster}"
-                th:alt="${movie.title + ' poster'}"
+                th:src="${movie.posterUrl}"
+                th:alt="${movie.title + ' posterUrl'}"
                 class="card-img-top w-100"
               />
               <div class="card-body">
@@ -188,8 +188,8 @@
               th:each="movie : ${moviesToIgnore}"
             >
               <img
-                th:src="${movie.poster}"
-                th:alt="${movie.title + ' poster'}"
+                th:src="${movie.posterUrl}"
+                th:alt="${movie.title + ' posterUrl'}"
                 class="card-img-top w-100"
               />
               <div class="card-body">

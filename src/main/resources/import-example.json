@@ -1,8 +1,7 @@
 [
   {
     "title": "Die hard 5",
-    "year": "2006",
-    "rated": "R",
+    "ageRating": "R",
     "released": "2006-03-24",
     "runtime": "179 min",
     "genres": [
@@ -41,7 +40,7 @@
     "language": "English",
     "country": "United States",
     "awards": null,
-    "poster": null,
+    "posterUrl": null,
     "metaScore": "94",
     "dvd": null,
     "boxOffice": null,

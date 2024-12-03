@@ -16,7 +16,7 @@ public class MovieResponse {
     private String language;
     private String country;
     private String awards;
-    private String poster;
+    private String posterUrl;
     private Short metaScore;
     private String dvd;
     private String boxOffice;

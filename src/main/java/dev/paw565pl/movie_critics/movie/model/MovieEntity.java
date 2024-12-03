@@ -52,8 +52,8 @@ public class MovieEntity {
     @Column(name = "awards")
     private String awards;
 
-    @Column(name = "poster")
-    private String poster;
+    @Column(name = "poster_url")
+    private String posterUrl;
 
     @Column(name = "metascore")
     private Short metaScore;

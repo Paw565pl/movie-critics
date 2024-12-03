@@ -1233,7 +1233,8 @@ values (1, 'Stephen King'),
        (441, 'Giovanni Arpino'),
        (442, 'Ruggero Maccari');
 
-insert into public.movies (id, awards, boxoffice, country, dvd, language, metascore, plot, poster, age_rating, released,
+insert into public.movies (id, awards, boxoffice, country, dvd, language, metascore, plot, poster_url, age_rating,
+                           released,
                            runtime, title, website)
 values (1, 'Nominated for 7 Oscars. 21 wins & 42 nominations total', '$28,767,189', 'United States', null, 'English',
         '82',
