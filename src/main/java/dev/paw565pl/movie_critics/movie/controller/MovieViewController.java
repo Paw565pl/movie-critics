@@ -129,7 +129,6 @@ public class MovieViewController {
 
         model.addAttribute("movie", movie);
         model.addAttribute("movieComments", movieComments);
-        model.addAttribute("newComment", new CommentDto(""));
 
         if (oidcUser != null) {
             var user = UserDetailsImpl.fromOidcUser(oidcUser);
@@ -168,6 +167,8 @@ public class MovieViewController {
     @GetMapping("/movies/{id}")
     public String getMovieDetailView(@PathVariable Long id, @AuthenticationPrincipal OidcUser oidcUser, Model model) {
         addAttributesToMovieDetailView(id, oidcUser, model);
+        model.addAttribute("newComment", new CommentDto(""));
+
         return "movie/movie-detail";
     }
 
