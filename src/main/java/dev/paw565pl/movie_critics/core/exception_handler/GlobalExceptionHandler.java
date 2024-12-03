@@ -3,6 +3,7 @@ package dev.paw565pl.movie_critics.core.exception_handler;
 import java.util.HashMap;
 import java.util.List;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -46,6 +47,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleIllegalArgumentException(DataIntegrityViolationException e) {
         var status = HttpStatus.CONFLICT;
+        var response = new ErrorResponse(status.value(), status.getReasonPhrase(), e.getMessage());
+
+        return ResponseEntity.status(status).body(response);
+    }
+
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ErrorResponse> handlePropertyReferenceException(PropertyReferenceException e) {
+        var status = HttpStatus.BAD_REQUEST;
         var response = new ErrorResponse(status.value(), status.getReasonPhrase(), e.getMessage());
 
         return ResponseEntity.status(status).body(response);
