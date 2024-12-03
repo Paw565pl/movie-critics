@@ -1,6 +1,7 @@
 package dev.paw565pl.movie_critics.movie.service;
 
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
+import dev.paw565pl.movie_critics.image.service.ImageService;
 import dev.paw565pl.movie_critics.movie.dto.MovieDto;
 import dev.paw565pl.movie_critics.movie.dto.MovieFilterDto;
 import dev.paw565pl.movie_critics.movie.exception.MovieNotFoundException;
@@ -9,24 +10,29 @@ import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import dev.paw565pl.movie_critics.movie.repository.MovieRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie.specification.MovieSpecification;
-import java.util.Optional;
-import java.util.Set;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class MovieService {
 
     private final MovieRepository movieRepository;
     private final MovieMapper movieMapper;
+    private final ImageService imageService;
 
-    public MovieService(MovieRepository movieRepository, MovieMapper movieMapper) {
+    public MovieService(MovieRepository movieRepository, MovieMapper movieMapper, ImageService imageService) {
         this.movieRepository = movieRepository;
         this.movieMapper = movieMapper;
+        this.imageService = imageService;
     }
 
     public MovieEntity findEntity(Long id) {
@@ -63,8 +69,12 @@ public class MovieService {
     }
 
     @Transactional
-    public MovieResponse create(MovieDto dto) {
+    public MovieResponse create(MovieDto dto, @Nullable MultipartFile poster) {
         var movieEntity = movieMapper.toEntity(dto);
+        if (poster != null && !poster.isEmpty()) {
+            var posterUrl = imageService.saveFile(poster);
+            movieEntity.setPosterUrl(posterUrl);
+        }
 
         try {
             var savedMovieEntity = movieRepository.saveAndFlush(movieEntity);
@@ -75,11 +85,17 @@ public class MovieService {
     }
 
     @Transactional
-    public MovieResponse update(Long id, MovieDto dto) {
+    public MovieResponse update(Long id, MovieDto dto, @Nullable MultipartFile poster) {
         var movieEntity = findEntity(id);
 
         var updatedMovieEntity = movieMapper.toEntity(dto);
         updatedMovieEntity.setId(movieEntity.getId());
+        if (poster != null && !poster.isEmpty()) {
+            var posterUrl = imageService.saveFile(poster);
+            updatedMovieEntity.setPosterUrl(posterUrl);
+        } else {
+            updatedMovieEntity.setPosterUrl(null);
+        }
 
         try {
             var savedMovieEntity = movieRepository.saveAndFlush(updatedMovieEntity);

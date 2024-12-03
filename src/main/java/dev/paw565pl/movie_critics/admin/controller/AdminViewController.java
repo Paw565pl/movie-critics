@@ -3,7 +3,6 @@ package dev.paw565pl.movie_critics.admin.controller;
 import dev.paw565pl.movie_critics.admin.service.AdminService;
 import dev.paw565pl.movie_critics.auth.annotation.IsAdmin;
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
-import dev.paw565pl.movie_critics.image.service.ImageService;
 import dev.paw565pl.movie_critics.movie.dto.MovieDto;
 import dev.paw565pl.movie_critics.movie.dto.MovieFormDto;
 import dev.paw565pl.movie_critics.movie.model.ActorEntity;
@@ -46,7 +45,6 @@ public class AdminViewController {
     private final ActorRepository actorRepository;
     private final UserService userService;
     private final AdminService adminService;
-    private final ImageService imageService;
 
     public AdminViewController(
             MovieService movieService,
@@ -55,8 +53,7 @@ public class AdminViewController {
             WriterRepository writerRepository,
             ActorRepository actorRepository,
             UserService userService,
-            AdminService adminService,
-            ImageService imageService) {
+            AdminService adminService) {
         this.movieService = movieService;
         this.genreRepository = genreRepository;
         this.directorRepository = directorRepository;
@@ -64,7 +61,6 @@ public class AdminViewController {
         this.actorRepository = actorRepository;
         this.userService = userService;
         this.adminService = adminService;
-        this.imageService = imageService;
     }
 
     private void populateMovieForm(Model model) {
@@ -141,24 +137,6 @@ public class AdminViewController {
             return "admin/movie-form";
         }
 
-        String posterUrl = null;
-        if (!poster.isEmpty()) {
-            try {
-                posterUrl = imageService.saveFile(poster);
-            } catch (RuntimeException e) {
-                String message;
-                if (e instanceof ResponseStatusException responseStatusException) {
-                    message = responseStatusException.getReason();
-                } else {
-                    message = e.getMessage();
-                }
-
-                populateMovieForm(model);
-                model.addAttribute("posterError", message);
-                return "admin/movie-form";
-            }
-        }
-
         var movieDto = new MovieDto(
                 movieFormDto.title(),
                 movieFormDto.ageRating().isBlank() ? null : movieFormDto.ageRating(),
@@ -168,7 +146,6 @@ public class AdminViewController {
                 movieFormDto.language().isBlank() ? null : movieFormDto.language(),
                 movieFormDto.country().isBlank() ? null : movieFormDto.country(),
                 movieFormDto.awards().isBlank() ? null : movieFormDto.awards(),
-                posterUrl,
                 movieFormDto.metaScore(),
                 movieFormDto.dvd().isBlank() ? null : movieFormDto.dvd(),
                 movieFormDto.boxOffice().isBlank() ? null : movieFormDto.boxOffice(),
@@ -180,16 +157,20 @@ public class AdminViewController {
 
         try {
             if (editedMovieId == null) {
-                var createdMovie = movieService.create(movieDto);
+                var createdMovie = movieService.create(movieDto, poster);
                 return "redirect:/movies/" + createdMovie.getId();
             } else {
-                var updatedMovie = movieService.update(editedMovieId, movieDto);
+                var updatedMovie = movieService.update(editedMovieId, movieDto, poster);
                 return "redirect:/movies/" + updatedMovie.getId();
             }
         } catch (DataIntegrityViolationException e) {
             bindingResult.rejectValue("title", "", e.getMessage());
             model.addAttribute("editedMovieId", editedMovieId);
             populateMovieForm(model);
+            return "admin/movie-form";
+        } catch (ResponseStatusException e) {
+            populateMovieForm(model);
+            model.addAttribute("posterError", e.getReason());
             return "admin/movie-form";
         }
     }
