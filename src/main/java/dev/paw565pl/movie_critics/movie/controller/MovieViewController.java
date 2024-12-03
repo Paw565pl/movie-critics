@@ -102,8 +102,8 @@ public class MovieViewController {
                 new SortOption("Metascore (Lowest)", "metaScore,asc"),
                 new SortOption("Ratings (Most)", "ratingsCount,desc"),
                 new SortOption("Ratings (Least)", "ratingsCount,asc"),
-                new SortOption("Average RatingEntity (Highest)", "averageRating,desc"),
-                new SortOption("Average RatingEntity (Lowest)", "averageRating,asc"));
+                new SortOption("Average Rating (Highest)", "averageRating,desc"),
+                new SortOption("Average Rating (Lowest)", "averageRating,asc"));
         var selectedSortOption = sortOptions.stream()
                 .filter((option) -> option.value().equals(sort))
                 .findFirst()
