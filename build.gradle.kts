@@ -51,6 +51,7 @@ repositories {
 val springdocVersion = "2.7.0"
 val modelMapperVersion = "3.2.1"
 val modelMapperRecordVersion = "1.0.0"
+val thumbnailatorVersion = "0.4.20"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -66,6 +67,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity6")
     implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
+    implementation("net.coobird:thumbnailator:${thumbnailatorVersion}")
     compileOnly("org.projectlombok:lombok")
     runtimeOnly("org.postgresql:postgresql")
     developmentOnly("org.springframework.boot:spring-boot-devtools")

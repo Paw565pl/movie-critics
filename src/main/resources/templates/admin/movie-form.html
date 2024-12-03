@@ -21,6 +21,7 @@
             th:object="${movieFormDto}"
             th:action="@{/admin/movie/save}"
             method="post"
+            enctype="multipart/form-data"
           >
             <input
               type="hidden"
@@ -156,16 +157,17 @@
             </div>
 
             <div class="mb-3">
-              <label for="posterUrl" class="form-label">Poster URL</label>
+              <label for="poster" class="form-label">Poster</label>
               <input
-                type="url"
+                type="file"
+                accept="image/png, image/jpeg"
                 class="form-control"
-                id="posterUrl"
-                th:field="*{posterUrl}"
+                id="poster"
+                name="poster"
               />
               <p
-                th:if="${#fields.hasErrors('posterUrl')}"
-                th:errors="*{posterUrl}"
+                th:if="${posterError != null}"
+                th:text="${posterError}"
                 class="form-text text-danger"
               ></p>
             </div>

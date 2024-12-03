@@ -16,7 +16,6 @@ public record MovieFormDto(
         @Size(max = 255, message = "Language must be at most 255 characters.") String language,
         @Size(max = 255, message = "Country must be at most 255 characters.") String country,
         @Size(max = 255, message = "Awards must be at most 255 characters.") String awards,
-        @Size(max = 255, message = "Poster url must be at most 255 characters.") String posterUrl,
         @Max(value = 100, message = "Metascore must be less than or equal to 100.")
                 @Min(value = 0, message = "Metascore must be greater than or equal to 0.")
                 Short metaScore,

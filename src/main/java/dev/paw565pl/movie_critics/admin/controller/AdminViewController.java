@@ -3,6 +3,7 @@ package dev.paw565pl.movie_critics.admin.controller;
 import dev.paw565pl.movie_critics.admin.service.AdminService;
 import dev.paw565pl.movie_critics.auth.annotation.IsAdmin;
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
+import dev.paw565pl.movie_critics.image.service.ImageService;
 import dev.paw565pl.movie_critics.movie.dto.MovieDto;
 import dev.paw565pl.movie_critics.movie.dto.MovieFormDto;
 import dev.paw565pl.movie_critics.movie.model.ActorEntity;
@@ -16,6 +17,9 @@ import dev.paw565pl.movie_critics.movie.repository.WriterRepository;
 import dev.paw565pl.movie_critics.movie.service.MovieService;
 import dev.paw565pl.movie_critics.user.service.UserService;
 import jakarta.validation.Valid;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Pageable;
@@ -31,10 +35,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.UUID;
-
 @Controller
 @RequestMapping("/admin")
 public class AdminViewController {
@@ -46,6 +46,7 @@ public class AdminViewController {
     private final ActorRepository actorRepository;
     private final UserService userService;
     private final AdminService adminService;
+    private final ImageService imageService;
 
     public AdminViewController(
             MovieService movieService,
@@ -54,7 +55,8 @@ public class AdminViewController {
             WriterRepository writerRepository,
             ActorRepository actorRepository,
             UserService userService,
-            AdminService adminService) {
+            AdminService adminService,
+            ImageService imageService) {
         this.movieService = movieService;
         this.genreRepository = genreRepository;
         this.directorRepository = directorRepository;
@@ -62,6 +64,7 @@ public class AdminViewController {
         this.actorRepository = actorRepository;
         this.userService = userService;
         this.adminService = adminService;
+        this.imageService = imageService;
     }
 
     private void populateMovieForm(Model model) {
@@ -89,7 +92,7 @@ public class AdminViewController {
     public String getNewMovieForm(Model model) {
         populateMovieForm(model);
         var movieFormDto = new MovieFormDto(
-                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
         model.addAttribute("movieFormDto", movieFormDto);
 
         return "admin/movie-form";
@@ -108,7 +111,6 @@ public class AdminViewController {
                 movieEntity.getLanguage(),
                 movieEntity.getCountry(),
                 movieEntity.getAwards(),
-                movieEntity.getPosterUrl(),
                 movieEntity.getMetaScore(),
                 movieEntity.getDvd(),
                 movieEntity.getBoxOffice(),
@@ -129,6 +131,7 @@ public class AdminViewController {
     @PostMapping("/movie/save")
     public String saveMovie(
             @RequestParam(value = "editedMovieId", required = false) Long editedMovieId,
+            @RequestParam("poster") MultipartFile poster,
             @Valid @ModelAttribute("movieFormDto") MovieFormDto movieFormDto,
             BindingResult bindingResult,
             Model model) {
@@ -136,6 +139,24 @@ public class AdminViewController {
             populateMovieForm(model);
             model.addAttribute("editedMovieId", editedMovieId);
             return "admin/movie-form";
+        }
+
+        String posterUrl = null;
+        if (!poster.isEmpty()) {
+            try {
+                posterUrl = imageService.saveFile(poster);
+            } catch (RuntimeException e) {
+                String message;
+                if (e instanceof ResponseStatusException responseStatusException) {
+                    message = responseStatusException.getReason();
+                } else {
+                    message = e.getMessage();
+                }
+
+                populateMovieForm(model);
+                model.addAttribute("posterError", message);
+                return "admin/movie-form";
+            }
         }
 
         var movieDto = new MovieDto(
@@ -147,7 +168,7 @@ public class AdminViewController {
                 movieFormDto.language().isBlank() ? null : movieFormDto.language(),
                 movieFormDto.country().isBlank() ? null : movieFormDto.country(),
                 movieFormDto.awards().isBlank() ? null : movieFormDto.awards(),
-                movieFormDto.posterUrl().isBlank() ? null : movieFormDto.posterUrl(),
+                posterUrl,
                 movieFormDto.metaScore(),
                 movieFormDto.dvd().isBlank() ? null : movieFormDto.dvd(),
                 movieFormDto.boxOffice().isBlank() ? null : movieFormDto.boxOffice(),
