@@ -1,0 +1,62 @@
+<!doctype html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+  layout:decorate="~{core/layout}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin panel</title>
+  </head>
+  <body>
+    <div layout:fragment="content">
+      <form
+        th:action="@{${createActionUrl}}"
+        th:object="${formData}"
+        method="post"
+        class="mb-4"
+      >
+        <div class="mb-3">
+          <label for="name">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="name"
+            th:field="*{name}"
+          />
+          <p
+            th:if="${#fields.hasErrors('name')}"
+            th:errors="*{name}"
+            class="form-text text-danger"
+          ></p>
+        </div>
+        <button type="submit" class="btn btn-primary">Add</button>
+      </form>
+
+      <p
+        th:if="${deleteError != null}"
+        th:text="${deleteError}"
+        class="form-text text-danger mb-2"
+      ></p>
+
+      <ul class="list-group">
+        <p th:if="${entites.isEmpty()}">This list is currently empty.</p>
+        <li
+          th:each="entity : ${entites}"
+          class="list-group-item d-flex align-items-center gap-3"
+        >
+          <span th:text="${entity.name}"></span>
+          <form
+            th:action="@{/admin/{entityName}/{id}/delete(entityName=${entityName}, id=${entity.id})}"
+            method="post"
+          >
+            <button class="btn btn-danger btn-sm">Delete</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </body>
+</html>
