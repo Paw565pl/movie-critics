@@ -5,7 +5,6 @@ import dev.paw565pl.movie_critics.actor.response.ActorResponse;
 import dev.paw565pl.movie_critics.actor.service.ActorService;
 import dev.paw565pl.movie_critics.auth.annotation.IsAdmin;
 import jakarta.validation.Valid;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
@@ -45,10 +44,6 @@ public class ActorRestController {
     @IsAdmin
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
-        try {
-            actorService.deleteById(id);
-        } catch (DataIntegrityViolationException e) {
-            throw new DataIntegrityViolationException("Actor with given id is associated with one or more movies.");
-        }
+        actorService.deleteById(id);
     }
 }

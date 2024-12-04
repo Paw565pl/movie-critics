@@ -27,8 +27,8 @@ public class ActorService {
     private ActorEntity findEntity(Long id) {
         return actorRepository
                 .findById(id)
-                .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Actor with given id does not exist."));
+                .orElseThrow(
+                        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Actor with given id does not exist."));
     }
 
     public Page<ActorResponse> findAll(Pageable pageable) {
@@ -70,6 +70,11 @@ public class ActorService {
     @Transactional
     public void deleteById(Long id) {
         var actorEntity = findEntity(id);
-        actorRepository.deleteById(actorEntity.getId());
+
+        try {
+            actorRepository.deleteById(actorEntity.getId());
+        } catch (DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("Actor with given id is associated with one or more movies.");
+        }
     }
 }
