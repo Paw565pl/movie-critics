@@ -2,8 +2,8 @@ package dev.paw565pl.movie_critics.movie.data;
 
 import dev.paw565pl.movie_critics.config.TestConfig;
 import dev.paw565pl.movie_critics.data.TestDataFactory;
-import dev.paw565pl.movie_critics.movie.model.GenreEntity;
-import dev.paw565pl.movie_critics.movie.repository.GenreRepository;
+import dev.paw565pl.movie_critics.genre.model.GenreEntity;
+import dev.paw565pl.movie_critics.genre.repository.GenreRepository;
 import java.util.ArrayList;
 import java.util.List;
 import net.datafaker.Faker;

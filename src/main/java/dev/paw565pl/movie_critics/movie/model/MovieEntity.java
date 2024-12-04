@@ -1,6 +1,7 @@
 package dev.paw565pl.movie_critics.movie.model;
 
 import dev.paw565pl.movie_critics.comment.model.CommentEntity;
+import dev.paw565pl.movie_critics.genre.model.GenreEntity;
 import dev.paw565pl.movie_critics.rating.model.RatingEntity;
 import dev.paw565pl.movie_critics.user.model.UserEntity;
 import jakarta.persistence.*;
