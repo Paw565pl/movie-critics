@@ -11,8 +11,10 @@ import dev.paw565pl.movie_critics.director.dto.DirectorDto;
 import dev.paw565pl.movie_critics.director.model.DirectorEntity;
 import dev.paw565pl.movie_critics.director.repository.DirectorRepository;
 import dev.paw565pl.movie_critics.director.service.DirectorService;
+import dev.paw565pl.movie_critics.genre.dto.GenreDto;
 import dev.paw565pl.movie_critics.genre.model.GenreEntity;
 import dev.paw565pl.movie_critics.genre.repository.GenreRepository;
+import dev.paw565pl.movie_critics.genre.service.GenreService;
 import dev.paw565pl.movie_critics.movie.dto.MovieDto;
 import dev.paw565pl.movie_critics.movie.dto.MovieFormDto;
 import dev.paw565pl.movie_critics.movie.service.MovieService;
@@ -51,6 +53,7 @@ public class AdminViewController {
     private final AdminService adminService;
     private final ActorService actorService;
     private final DirectorService directorService;
+    private final GenreService genreService;
 
     public AdminViewController(
             MovieService movieService,
@@ -61,7 +64,8 @@ public class AdminViewController {
             UserService userService,
             AdminService adminService,
             ActorService actorService,
-            DirectorService directorService) {
+            DirectorService directorService,
+            GenreService genreService) {
         this.movieService = movieService;
         this.genreRepository = genreRepository;
         this.directorRepository = directorRepository;
@@ -71,6 +75,7 @@ public class AdminViewController {
         this.adminService = adminService;
         this.actorService = actorService;
         this.directorService = directorService;
+        this.genreService = genreService;
     }
 
     private void populateMovieForm(Model model) {
@@ -331,6 +336,53 @@ public class AdminViewController {
             return "redirect:/admin/directors";
         } catch (DataIntegrityViolationException e) {
             populateDirectorView(model);
+            model.addAttribute("formData", new DirectorDto(""));
+            model.addAttribute("deleteError", e.getMessage());
+            return "admin/list-group";
+        }
+    }
+
+    private void populateGenreView(Model model) {
+        model.addAttribute("entites", genreRepository.findAll());
+        model.addAttribute("createActionUrl", "/admin/genres/create");
+        model.addAttribute("entityName", "genres");
+    }
+
+    @IsAdmin
+    @GetMapping("/genres")
+    public String getGenresView(Model model) {
+        populateGenreView(model);
+        model.addAttribute("formData", new GenreDto(""));
+        return "admin/list-group";
+    }
+
+    @IsAdmin
+    @PostMapping("/genres/create")
+    public String createGenre(
+            @Valid @ModelAttribute("formData") GenreDto genreDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            populateGenreView(model);
+            return "admin/list-group";
+        }
+
+        try {
+            genreService.create(genreDto);
+            return "redirect:/admin/genres";
+        } catch (DataIntegrityViolationException e) {
+            populateGenreView(model);
+            bindingResult.rejectValue("name", "", e.getMessage());
+            return "admin/list-group";
+        }
+    }
+
+    @IsAdmin
+    @PostMapping("/genres/{id}/delete")
+    public String deleteGenre(@PathVariable Long id, Model model) {
+        try {
+            genreService.deleteById(id);
+            return "redirect:/admin/directors";
+        } catch (DataIntegrityViolationException e) {
+            populateGenreView(model);
             model.addAttribute("formData", new DirectorDto(""));
             model.addAttribute("deleteError", e.getMessage());
             return "admin/list-group";
