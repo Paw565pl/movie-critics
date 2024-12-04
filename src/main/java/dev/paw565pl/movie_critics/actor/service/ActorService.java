@@ -28,7 +28,7 @@ public class ActorService {
         return actorRepository
                 .findById(id)
                 .orElseThrow(() ->
-                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Actor with id given id does not exist."));
+                        new ResponseStatusException(HttpStatus.NOT_FOUND, "Actor with given id does not exist."));
     }
 
     public Page<ActorResponse> findAll(Pageable pageable) {
