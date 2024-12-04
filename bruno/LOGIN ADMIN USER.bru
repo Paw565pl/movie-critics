@@ -1,0 +1,19 @@
+meta {
+  name: LOGIN ADMIN USER
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:9000/realms/movie-critics/protocol/openid-connect/token
+  body: formUrlEncoded
+  auth: none
+}
+
+body:form-urlencoded {
+  grant_type: password
+  client_id: spring-boot-api
+  username: admin
+  password: Qwerty123
+  client_secret: MKHz0Kw82cGhDIwmz3vZ8fO6AmY87eQn
+}

@@ -1,0 +1,15 @@
+meta {
+  name: ADMIN IMPORT MOVIES
+  type: http
+  seq: 28
+}
+
+post {
+  url: http://localhost:8080/api/v1/admin/import-movies
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  file: 
+}

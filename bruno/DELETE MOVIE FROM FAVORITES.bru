@@ -1,0 +1,11 @@
+meta {
+  name: DELETE MOVIE FROM FAVORITES
+  type: http
+  seq: 24
+}
+
+delete {
+  url: http://localhost:8080/api/v1/favorite-movies/1
+  body: none
+  auth: inherit
+}

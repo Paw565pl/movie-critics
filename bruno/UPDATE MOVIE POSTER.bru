@@ -1,0 +1,15 @@
+meta {
+  name: UPDATE MOVIE POSTER
+  type: http
+  seq: 8
+}
+
+patch {
+  url: http://localhost:8080/api/v1/movies/1/poster
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  poster:
+}

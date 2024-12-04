@@ -1,0 +1,17 @@
+meta {
+  name: ADD MOVIE TO IGNORED
+  type: http
+  seq: 26
+}
+
+post {
+  url: http://localhost:8080/api/v1/ignored-movies
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "movieId": 5
+  }
+}
