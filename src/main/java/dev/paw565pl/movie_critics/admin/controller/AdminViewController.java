@@ -7,8 +7,10 @@ import dev.paw565pl.movie_critics.actor.service.ActorService;
 import dev.paw565pl.movie_critics.admin.service.AdminService;
 import dev.paw565pl.movie_critics.auth.annotation.IsAdmin;
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
+import dev.paw565pl.movie_critics.director.dto.DirectorDto;
 import dev.paw565pl.movie_critics.director.model.DirectorEntity;
 import dev.paw565pl.movie_critics.director.repository.DirectorRepository;
+import dev.paw565pl.movie_critics.director.service.DirectorService;
 import dev.paw565pl.movie_critics.genre.model.GenreEntity;
 import dev.paw565pl.movie_critics.genre.repository.GenreRepository;
 import dev.paw565pl.movie_critics.movie.dto.MovieDto;
@@ -48,6 +50,7 @@ public class AdminViewController {
     private final UserService userService;
     private final AdminService adminService;
     private final ActorService actorService;
+    private final DirectorService directorService;
 
     public AdminViewController(
             MovieService movieService,
@@ -57,7 +60,8 @@ public class AdminViewController {
             ActorRepository actorRepository,
             UserService userService,
             AdminService adminService,
-            ActorService actorService) {
+            ActorService actorService,
+            DirectorService directorService) {
         this.movieService = movieService;
         this.genreRepository = genreRepository;
         this.directorRepository = directorRepository;
@@ -66,6 +70,7 @@ public class AdminViewController {
         this.userService = userService;
         this.adminService = adminService;
         this.actorService = actorService;
+        this.directorService = directorService;
     }
 
     private void populateMovieForm(Model model) {
@@ -280,6 +285,53 @@ public class AdminViewController {
         } catch (DataIntegrityViolationException e) {
             populateActorView(model);
             model.addAttribute("formData", new ActorDto(""));
+            model.addAttribute("deleteError", e.getMessage());
+            return "admin/list-group";
+        }
+    }
+
+    private void populateDirectorView(Model model) {
+        model.addAttribute("entites", directorRepository.findAll());
+        model.addAttribute("createActionUrl", "/admin/directors/create");
+        model.addAttribute("entityName", "directors");
+    }
+
+    @IsAdmin
+    @GetMapping("/directors")
+    public String getDirectorsView(Model model) {
+        populateDirectorView(model);
+        model.addAttribute("formData", new DirectorDto(""));
+        return "admin/list-group";
+    }
+
+    @IsAdmin
+    @PostMapping("/directors/create")
+    public String createDirector(
+            @Valid @ModelAttribute("formData") DirectorDto directorDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            populateDirectorView(model);
+            return "admin/list-group";
+        }
+
+        try {
+            directorService.create(directorDto);
+            return "redirect:/admin/directors";
+        } catch (DataIntegrityViolationException e) {
+            populateDirectorView(model);
+            bindingResult.rejectValue("name", "", e.getMessage());
+            return "admin/list-group";
+        }
+    }
+
+    @IsAdmin
+    @PostMapping("/directors/{id}/delete")
+    public String deleteDirector(@PathVariable Long id, Model model) {
+        try {
+            directorService.deleteById(id);
+            return "redirect:/admin/directors";
+        } catch (DataIntegrityViolationException e) {
+            populateDirectorView(model);
+            model.addAttribute("formData", new DirectorDto(""));
             model.addAttribute("deleteError", e.getMessage());
             return "admin/list-group";
         }
