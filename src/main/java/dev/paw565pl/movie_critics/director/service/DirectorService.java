@@ -73,6 +73,7 @@ public class DirectorService {
 
         try {
             directorRepository.deleteById(directorEntity.getId());
+            directorRepository.flush();
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Director with given id is associated with one or more movies.");
         }

@@ -58,6 +58,7 @@ public class GenreService {
 
         try {
             genreRepository.deleteById(genreEntity.getId());
+            genreRepository.flush();
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Genre with given id is associated with one or more movies.");
         }

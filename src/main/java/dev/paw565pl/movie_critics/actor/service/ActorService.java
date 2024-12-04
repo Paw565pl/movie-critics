@@ -73,6 +73,7 @@ public class ActorService {
 
         try {
             actorRepository.deleteById(actorEntity.getId());
+            actorRepository.flush();
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Actor with given id is associated with one or more movies.");
         }

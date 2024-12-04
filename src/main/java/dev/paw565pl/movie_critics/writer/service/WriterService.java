@@ -73,6 +73,7 @@ public class WriterService {
 
         try {
             writerRepository.deleteById(writerEntity.getId());
+            writerRepository.flush();
         } catch (DataIntegrityViolationException e) {
             throw new DataIntegrityViolationException("Writer with given id is associated with one or more movies.");
         }
