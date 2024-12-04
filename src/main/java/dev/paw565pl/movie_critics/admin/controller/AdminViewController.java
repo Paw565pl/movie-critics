@@ -19,8 +19,10 @@ import dev.paw565pl.movie_critics.movie.dto.MovieDto;
 import dev.paw565pl.movie_critics.movie.dto.MovieFormDto;
 import dev.paw565pl.movie_critics.movie.service.MovieService;
 import dev.paw565pl.movie_critics.user.service.UserService;
+import dev.paw565pl.movie_critics.writer.dto.WriterDto;
 import dev.paw565pl.movie_critics.writer.model.WriterEntity;
 import dev.paw565pl.movie_critics.writer.repository.WriterRepository;
+import dev.paw565pl.movie_critics.writer.service.WriterService;
 import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -54,6 +56,7 @@ public class AdminViewController {
     private final ActorService actorService;
     private final DirectorService directorService;
     private final GenreService genreService;
+    private final WriterService writerService;
 
     public AdminViewController(
             MovieService movieService,
@@ -65,7 +68,8 @@ public class AdminViewController {
             AdminService adminService,
             ActorService actorService,
             DirectorService directorService,
-            GenreService genreService) {
+            GenreService genreService,
+            WriterService writerService) {
         this.movieService = movieService;
         this.genreRepository = genreRepository;
         this.directorRepository = directorRepository;
@@ -76,6 +80,7 @@ public class AdminViewController {
         this.actorService = actorService;
         this.directorService = directorService;
         this.genreService = genreService;
+        this.writerService = writerService;
     }
 
     private void populateMovieForm(Model model) {
@@ -251,7 +256,7 @@ public class AdminViewController {
     private void populateActorView(Model model) {
         model.addAttribute("entites", actorRepository.findAll());
         model.addAttribute("createActionUrl", "/admin/actors/create");
-        model.addAttribute("entityName", "actors");
+        model.addAttribute("deleteUrlParam", "actors");
     }
 
     @IsAdmin
@@ -298,7 +303,7 @@ public class AdminViewController {
     private void populateDirectorView(Model model) {
         model.addAttribute("entites", directorRepository.findAll());
         model.addAttribute("createActionUrl", "/admin/directors/create");
-        model.addAttribute("entityName", "directors");
+        model.addAttribute("deleteUrlParam", "directors");
     }
 
     @IsAdmin
@@ -345,7 +350,7 @@ public class AdminViewController {
     private void populateGenreView(Model model) {
         model.addAttribute("entites", genreRepository.findAll());
         model.addAttribute("createActionUrl", "/admin/genres/create");
-        model.addAttribute("entityName", "genres");
+        model.addAttribute("deleteUrlParam", "genres");
     }
 
     @IsAdmin
@@ -380,9 +385,56 @@ public class AdminViewController {
     public String deleteGenre(@PathVariable Long id, Model model) {
         try {
             genreService.deleteById(id);
-            return "redirect:/admin/directors";
+            return "redirect:/admin/genres";
         } catch (DataIntegrityViolationException e) {
             populateGenreView(model);
+            model.addAttribute("formData", new DirectorDto(""));
+            model.addAttribute("deleteError", e.getMessage());
+            return "admin/list-group";
+        }
+    }
+
+    private void populateWriterView(Model model) {
+        model.addAttribute("entites", writerRepository.findAll());
+        model.addAttribute("createActionUrl", "/admin/writers/create");
+        model.addAttribute("deleteUrlParam", "writers");
+    }
+
+    @IsAdmin
+    @GetMapping("/writers")
+    public String getWritersView(Model model) {
+        populateWriterView(model);
+        model.addAttribute("formData", new WriterDto(""));
+        return "admin/list-group";
+    }
+
+    @IsAdmin
+    @PostMapping("/writers/create")
+    public String createWriter(
+            @Valid @ModelAttribute("formData") WriterDto writerDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            populateWriterView(model);
+            return "admin/list-group";
+        }
+
+        try {
+            writerService.create(writerDto);
+            return "redirect:/admin/writers";
+        } catch (DataIntegrityViolationException e) {
+            populateWriterView(model);
+            bindingResult.rejectValue("name", "", e.getMessage());
+            return "admin/list-group";
+        }
+    }
+
+    @IsAdmin
+    @PostMapping("/writers/{id}/delete")
+    public String deleteWriter(@PathVariable Long id, Model model) {
+        try {
+            writerService.deleteById(id);
+            return "redirect:/admin/writers";
+        } catch (DataIntegrityViolationException e) {
+            populateWriterView(model);
             model.addAttribute("formData", new DirectorDto(""));
             model.addAttribute("deleteError", e.getMessage());
             return "admin/list-group";
