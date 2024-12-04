@@ -1,7 +1,9 @@
 package dev.paw565pl.movie_critics.admin.controller;
 
+import dev.paw565pl.movie_critics.actor.dto.ActorDto;
 import dev.paw565pl.movie_critics.actor.model.ActorEntity;
 import dev.paw565pl.movie_critics.actor.repository.ActorRepository;
+import dev.paw565pl.movie_critics.actor.service.ActorService;
 import dev.paw565pl.movie_critics.admin.service.AdminService;
 import dev.paw565pl.movie_critics.auth.annotation.IsAdmin;
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
@@ -45,6 +47,7 @@ public class AdminViewController {
     private final ActorRepository actorRepository;
     private final UserService userService;
     private final AdminService adminService;
+    private final ActorService actorService;
 
     public AdminViewController(
             MovieService movieService,
@@ -53,7 +56,8 @@ public class AdminViewController {
             WriterRepository writerRepository,
             ActorRepository actorRepository,
             UserService userService,
-            AdminService adminService) {
+            AdminService adminService,
+            ActorService actorService) {
         this.movieService = movieService;
         this.genreRepository = genreRepository;
         this.directorRepository = directorRepository;
@@ -61,6 +65,7 @@ public class AdminViewController {
         this.actorRepository = actorRepository;
         this.userService = userService;
         this.adminService = adminService;
+        this.actorService = actorService;
     }
 
     private void populateMovieForm(Model model) {
@@ -231,5 +236,52 @@ public class AdminViewController {
     public String deleteUser(@PathVariable UUID id) {
         userService.deleteById(id);
         return "redirect:/admin/users";
+    }
+
+    private void populateActorView(Model model) {
+        model.addAttribute("entites", actorRepository.findAll());
+        model.addAttribute("createActionUrl", "/admin/actors/create");
+        model.addAttribute("entityName", "actors");
+    }
+
+    @IsAdmin
+    @GetMapping("/actors")
+    public String getActorsView(Model model) {
+        populateActorView(model);
+        model.addAttribute("formData", new ActorDto(""));
+        return "admin/list-group";
+    }
+
+    @IsAdmin
+    @PostMapping("/actors/create")
+    public String createActor(
+            @Valid @ModelAttribute("formData") ActorDto actorDto, BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            populateActorView(model);
+            return "admin/list-group";
+        }
+
+        try {
+            actorService.create(actorDto);
+            return "redirect:/admin/actors";
+        } catch (DataIntegrityViolationException e) {
+            populateActorView(model);
+            bindingResult.rejectValue("name", "", e.getMessage());
+            return "admin/list-group";
+        }
+    }
+
+    @IsAdmin
+    @PostMapping("/actors/{id}/delete")
+    public String deleteActor(@PathVariable Long id, Model model) {
+        try {
+            actorService.deleteById(id);
+            return "redirect:/admin/actors";
+        } catch (DataIntegrityViolationException e) {
+            populateActorView(model);
+            model.addAttribute("formData", new ActorDto(""));
+            model.addAttribute("deleteError", e.getMessage());
+            return "admin/list-group";
+        }
     }
 }
