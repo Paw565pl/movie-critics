@@ -1,4 +1,4 @@
-package dev.paw565pl.movie_critics.movie.response;
+package dev.paw565pl.movie_critics.director.response;
 
 import lombok.Data;
 

@@ -1,6 +1,6 @@
-package dev.paw565pl.movie_critics.movie.repository;
+package dev.paw565pl.movie_critics.director.repository;
 
-import dev.paw565pl.movie_critics.movie.model.DirectorEntity;
+import dev.paw565pl.movie_critics.director.model.DirectorEntity;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 

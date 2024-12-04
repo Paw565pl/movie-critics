@@ -1,5 +1,6 @@
-package dev.paw565pl.movie_critics.movie.model;
+package dev.paw565pl.movie_critics.director.model;
 
+import dev.paw565pl.movie_critics.movie.model.MovieEntity;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;

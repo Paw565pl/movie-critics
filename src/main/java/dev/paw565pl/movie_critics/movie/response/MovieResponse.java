@@ -1,6 +1,7 @@
 package dev.paw565pl.movie_critics.movie.response;
 
 import dev.paw565pl.movie_critics.actor.response.ActorResponse;
+import dev.paw565pl.movie_critics.director.response.DirectorResponse;
 import dev.paw565pl.movie_critics.genre.response.GenreResponse;
 import dev.paw565pl.movie_critics.writer.response.WriterResponse;
 import java.time.LocalDate;

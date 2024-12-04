@@ -1,10 +1,10 @@
 package dev.paw565pl.movie_critics.movie.mapper;
 
 import dev.paw565pl.movie_critics.actor.repository.ActorRepository;
+import dev.paw565pl.movie_critics.director.repository.DirectorRepository;
 import dev.paw565pl.movie_critics.genre.repository.GenreRepository;
 import dev.paw565pl.movie_critics.movie.dto.MovieDto;
 import dev.paw565pl.movie_critics.movie.model.MovieEntity;
-import dev.paw565pl.movie_critics.movie.repository.DirectorRepository;
 import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.writer.repository.WriterRepository;
 import java.util.ArrayList;
