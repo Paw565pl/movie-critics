@@ -5,6 +5,7 @@ import dev.paw565pl.movie_critics.comment.model.CommentEntity;
 import dev.paw565pl.movie_critics.genre.model.GenreEntity;
 import dev.paw565pl.movie_critics.rating.model.RatingEntity;
 import dev.paw565pl.movie_critics.user.model.UserEntity;
+import dev.paw565pl.movie_critics.writer.model.WriterEntity;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
