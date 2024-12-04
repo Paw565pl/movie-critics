@@ -50,7 +50,7 @@
         >
           <span th:text="${entity.name}"></span>
           <form
-            th:action="@{/admin/{entityName}/{id}/delete(entityName=${entityName}, id=${entity.id})}"
+            th:action="@{/admin/{deleteUrlParam}/{id}/delete(deleteUrlParam=${deleteUrlParam}, id=${entity.id})}"
             method="post"
           >
             <button class="btn btn-danger btn-sm">Delete</button>
