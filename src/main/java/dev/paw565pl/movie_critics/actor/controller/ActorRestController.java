@@ -7,6 +7,7 @@ import dev.paw565pl.movie_critics.auth.annotation.IsAdmin;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,6 +26,7 @@ public class ActorRestController {
     }
 
     @IsAdmin
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public ActorResponse create(@Valid @RequestBody ActorDto actorDto) {
         return actorService.create(actorDto);
@@ -42,6 +44,7 @@ public class ActorRestController {
     }
 
     @IsAdmin
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{id}")
     public void deleteById(@PathVariable Long id) {
         actorService.deleteById(id);
