@@ -14,7 +14,7 @@ class MovieRetrieveTest extends MovieTest {
 
     @Test
     void shouldReturnMovie() {
-        var movie = movieDataFixture.createOne();
+        var movie = movieTestDataFactory.createOne();
 
         given().when().get("/{id}", movie.getId()).then().statusCode(200).body("title", equalTo(movie.getTitle()));
     }

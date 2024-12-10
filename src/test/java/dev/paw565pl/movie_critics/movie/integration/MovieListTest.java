@@ -15,13 +15,13 @@ class MovieListTest extends MovieTest {
 
     @Test
     void shouldReturnAllMovies() {
-        var moviesCount = movieDataFixture.createMany(3).size();
+        var moviesCount = movieTestDataFactory.createMany(3).size();
         given().when().get().then().statusCode(200).body("page.totalElements", equalTo(moviesCount));
     }
 
     @Test
     void shouldReturnFilteredMovies() {
-        var movies = movieDataFixture.createMany(3);
+        var movies = movieTestDataFactory.createMany(3);
         var title = movies.getFirst().getTitle();
 
         given().param("title", title)
@@ -34,7 +34,7 @@ class MovieListTest extends MovieTest {
 
     @Test
     void shouldUseSizeParameter() {
-        var moviesCount = movieDataFixture.createMany(2).size();
+        var moviesCount = movieTestDataFactory.createMany(2).size();
         var pageSize = 1;
 
         given().param("size", pageSize)

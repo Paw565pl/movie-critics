@@ -25,7 +25,7 @@ class MovieCreateTest extends MovieTest {
     JwtDecoder jwtDecoder;
 
     private String getJsonData() {
-        var genre = genreDataFixture.createOne();
+        var genre = genreTestDataFactory.createOne();
         var data = new MovieDto(
                 "title",
                 null,
