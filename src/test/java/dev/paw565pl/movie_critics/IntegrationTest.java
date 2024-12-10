@@ -14,6 +14,7 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 @Testcontainers
 @ActiveProfiles("test")
@@ -26,7 +27,8 @@ public abstract class IntegrationTest {
 
     @Container
     @ServiceConnection
-    private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:17-alpine");
+    private static final PostgreSQLContainer<?> postgres =
+            new PostgreSQLContainer<>(DockerImageName.parse("postgres:17-alpine"));
 
     protected void setBaseUrl(String baseUrl) {
         RestAssured.baseURI = "http://localhost:" + port + baseUrl;
