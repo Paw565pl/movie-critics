@@ -1,6 +1,7 @@
 package dev.paw565pl.movie_critics;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
+import static org.springframework.test.annotation.DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD;
 
 import io.restassured.RestAssured;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,9 +16,9 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 @Testcontainers
-@DirtiesContext
 @ActiveProfiles("test")
 @SpringBootTest(webEnvironment = RANDOM_PORT)
+@DirtiesContext(classMode = BEFORE_EACH_TEST_METHOD)
 public abstract class IntegrationTest {
 
     @LocalServerPort
