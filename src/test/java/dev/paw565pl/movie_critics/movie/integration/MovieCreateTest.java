@@ -1,7 +1,6 @@
 package dev.paw565pl.movie_critics.movie.integration;
 
 import static io.restassured.RestAssured.given;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -63,14 +62,14 @@ class MovieCreateTest extends MovieTest {
     }
 
     @Test
-    void shouldReturn403IfUserIsNotAdmin() throws Exception {
+    void shouldReturn403IfUserIsNotAdmin() {
         var jsonData = getJsonData();
 
         var mockToken = JwtMock.getToken(List.of());
-        when(jwtDecoder.decode(anyString())).thenReturn(mockToken);
+        when(jwtDecoder.decode(mockToken.getTokenValue())).thenReturn(mockToken);
 
         given().auth()
-                .oauth2(JwtMock.getTokenString(List.of()))
+                .oauth2(mockToken.getTokenValue())
                 .contentType(ContentType.JSON)
                 .body(jsonData)
                 .when()
