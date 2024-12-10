@@ -12,10 +12,10 @@ import org.springframework.context.annotation.Import;
 abstract class MovieTest extends IntegrationTest {
 
     @Autowired
-    MovieTestDataFactory movieDataFixture;
+    MovieTestDataFactory movieTestDataFactory;
 
     @Autowired
-    GenreTestDataFactory genreDataFixture;
+    GenreTestDataFactory genreTestDataFactory;
 
     @BeforeEach
     void setUp() {
