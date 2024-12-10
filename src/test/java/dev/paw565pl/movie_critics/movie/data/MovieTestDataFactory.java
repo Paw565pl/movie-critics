@@ -27,15 +27,15 @@ public class MovieTestDataFactory implements TestDataFactory<MovieEntity> {
 
     private MovieEntity generateFakeMovie() {
         var genre = genreDataFixture.createOne();
-        var movieEntity = new MovieEntity(faker.book().title(), LocalDate.now(), List.of(genre));
-
-        return movieEntity;
+        return new MovieEntity(faker.book().title(), LocalDate.now(), List.of(genre));
     }
 
+    @Override
     public MovieEntity createOne() {
         return movieRepository.save(generateFakeMovie());
     }
 
+    @Override
     public List<MovieEntity> createMany(int count) {
         var movies = new ArrayList<MovieEntity>();
         for (int i = 0; i < count; i++) {
@@ -45,6 +45,7 @@ public class MovieTestDataFactory implements TestDataFactory<MovieEntity> {
         return movieRepository.saveAll(movies);
     }
 
+    @Override
     public void clear() {
         movieRepository.deleteAll();
         genreDataFixture.clear();

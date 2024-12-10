@@ -26,10 +26,12 @@ public class GenreTestDataFactory implements TestDataFactory<GenreEntity> {
         return new GenreEntity(faker.funnyName().name());
     }
 
+    @Override
     public GenreEntity createOne() {
         return genreRepository.save(generateFakeGenre());
     }
 
+    @Override
     public List<GenreEntity> createMany(int count) {
         var genres = new ArrayList<GenreEntity>();
         for (int i = 0; i < count; i++) {
@@ -39,6 +41,7 @@ public class GenreTestDataFactory implements TestDataFactory<GenreEntity> {
         return genreRepository.saveAll(genres);
     }
 
+    @Override
     public void clear() {
         genreRepository.deleteAll();
     }
