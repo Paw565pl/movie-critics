@@ -3,7 +3,7 @@ import com.diffplug.spotless.LineEnding
 plugins {
     java
     idea
-    id("org.springframework.boot") version "3.4.0"
+    id("org.springframework.boot") version "3.4.1"
     id("io.spring.dependency-management") version "1.1.6"
     id("com.diffplug.spotless") version "6.25.0"
 }
@@ -49,10 +49,10 @@ repositories {
 }
 
 val springdocVersion = "2.7.0"
-val modelMapperVersion = "3.2.1"
+val modelMapperVersion = "3.2.2"
 val modelMapperRecordVersion = "1.0.0"
 val thumbnailatorVersion = "0.4.20"
-val datafakerVersion = "2.3.1"
+val datafakerVersion = "2.4.2"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
