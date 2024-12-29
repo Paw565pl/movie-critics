@@ -38,6 +38,7 @@ public class MovieService {
         return movieRepository.findById(id).orElseThrow(MovieNotFoundException::new);
     }
 
+    @Transactional(readOnly = true)
     public Page<MovieResponse> findAll(Optional<UserDetailsImpl> user, MovieFilterDto filters, Pageable pageable) {
         var specification = Specification.where(MovieSpecification.titleContainsIgnoreCase(filters.title()))
                 .and(MovieSpecification.ageRatingEqualsIgnoreCase(filters.ageRating()))
@@ -55,7 +56,15 @@ public class MovieService {
             specification = specification.and(MovieSpecification.notIgnoredByUser(userId));
         }
 
-        return movieRepository.findAll(specification, pageable).map(movieMapper::toResponse);
+        var movies = movieRepository.findAll(specification, pageable);
+        var movieIds = movies.stream().map(MovieEntity::getId).toList();
+
+        movieRepository.findAllWithGenresByIds(movieIds);
+        movieRepository.findAllWithDirectorsByIds(movieIds);
+        movieRepository.findAllWithWritersByIds(movieIds);
+        movieRepository.findAllWithActorsByIds(movieIds);
+
+        return movies.map(movieMapper::toResponse);
     }
 
     public MovieResponse findById(Long id) {

@@ -9,7 +9,6 @@ import dev.paw565pl.movie_critics.movie.response.MovieResponse;
 import dev.paw565pl.movie_critics.movie_to_ignore.dto.MovieToIgnoreDto;
 import dev.paw565pl.movie_critics.user.repository.UserRepository;
 import dev.paw565pl.movie_critics.user.service.UserService;
-import java.util.UUID;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.util.UUID;
 
 @Service
 public class MovieToIgnoreService {
@@ -51,9 +52,19 @@ public class MovieToIgnoreService {
                         HttpStatus.NOT_FOUND, "Movie with given id is not in your ignored list."));
     }
 
+    @Transactional(readOnly = true)
     public Page<MovieResponse> findAll(UserDetailsImpl user, Pageable pageable) {
         var userId = user.getId();
-        return movieRepository.findAllByUsersWhoIgnoredId(userId, pageable).map(movieMapper::toResponse);
+
+        var movies = movieRepository.findAllByUsersWhoIgnoredId(userId, pageable);
+        var movieIds = movies.stream().map(MovieEntity::getId).toList();
+
+        movieRepository.findAllWithGenresByIds(movieIds);
+        movieRepository.findAllWithDirectorsByIds(movieIds);
+        movieRepository.findAllWithWritersByIds(movieIds);
+        movieRepository.findAllWithActorsByIds(movieIds);
+
+        return movies.map(movieMapper::toResponse);
     }
 
     public MovieResponse findByMovieIdAndUserId(Long movieId, UserDetailsImpl user) {
