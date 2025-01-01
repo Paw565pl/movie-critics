@@ -8,7 +8,7 @@ public record MovieDto(
         @NotBlank(message = "Title cannot be empty.")
                 @Size(min = 2, max = 200, message = "Title must be between 2 and 200 characters.")
                 String title,
-        @Size(min = 2, max = 255, message = "Age rating must be between 2 and 255 characters.") String ageRating,
+        @Size(min = 1, max = 255, message = "Age rating must be between 1 and 255 characters.") String ageRating,
         @NotNull(message = "Released date cannot be null.") LocalDate released,
         @Size(min = 2, max = 255, message = "Runtime must be between 2 and 255 characters.") String runtime,
         @Size(min = 10, max = 1000, message = "Plot must be between 10 and 1000 characters.") String plot,
