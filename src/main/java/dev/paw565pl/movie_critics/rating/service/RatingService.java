@@ -43,7 +43,8 @@ public class RatingService {
 
     public RatingResponse findByMovieIdAndUserId(Long movieId, UserDetailsImpl user) {
         movieService.findEntity(movieId);
-        var ratingEntity = findEntity(movieId, user.getId());
+        var ratingEntity =
+                ratingRepository.findByMovieIdAndAuthorId(movieId, user.getId()).orElse(new RatingEntity());
 
         return ratingMapper.toResponse(ratingEntity);
     }
