@@ -1,0 +1,17 @@
+meta {
+  name: UPDATE MOVIE RATING
+  type: http
+  seq: 3
+}
+
+put {
+  url: http://localhost:8080/api/v1/movies/1/rate
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "value": 5
+  }
+}
