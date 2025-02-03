@@ -62,7 +62,8 @@ public class ImageService {
         }
 
         var originalFileName = imageFile.getOriginalFilename();
-        var fileName = StringUtils.cleanPath(originalFileName.substring(0, originalFileName.lastIndexOf(".")));
+        var fileName = StringUtils.cleanPath(
+                originalFileName.substring(0, originalFileName.lastIndexOf(".")).replaceAll("\\s+", "_"));
         var uniqueFileName = UUID.randomUUID() + "_" + fileName;
         var targetLocation = Paths.get(imagesDirectory).resolve(uniqueFileName);
 
