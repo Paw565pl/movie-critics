@@ -1,6 +1,7 @@
 package dev.paw565pl.movie_critics.comment.service;
 
 import static dev.paw565pl.movie_critics.auth.util.AuthUtil.hasRole;
+import static java.lang.Boolean.FALSE;
 
 import dev.paw565pl.movie_critics.auth.details.UserDetailsImpl;
 import dev.paw565pl.movie_critics.auth.role.Role;
@@ -11,6 +12,7 @@ import dev.paw565pl.movie_critics.comment.repository.CommentRepository;
 import dev.paw565pl.movie_critics.comment.response.CommentResponse;
 import dev.paw565pl.movie_critics.movie.service.MovieService;
 import dev.paw565pl.movie_critics.user.service.UserService;
+import java.util.Optional;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -80,8 +82,10 @@ public class CommentService {
         movieService.findEntity(movieId);
         var commentEntity = findEntity(id, movieId);
 
-        var isAuthor = commentEntity.getAuthor().getId().equals(user.getId());
-        if (!isAuthor) {
+        var isAuthor = Optional.ofNullable(commentEntity.getAuthor())
+                .map(author -> author.getId().equals(user.getId()))
+                .orElse(false);
+        if (isAuthor.equals(FALSE)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to update this comment.");
         }
 
@@ -96,7 +100,9 @@ public class CommentService {
         movieService.findEntity(movieId);
         var commentEntity = findEntity(id, movieId);
 
-        var isAuthor = commentEntity.getAuthor().getId().equals(user.getId());
+        var isAuthor = Optional.ofNullable(commentEntity.getAuthor())
+                .map(author -> author.getId().equals(user.getId()))
+                .orElse(false);
         var isAdmin = hasRole(user.getAuthorities(), Role.ADMIN);
         if (!(isAuthor || isAdmin)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You are not allowed to delete this comment.");
