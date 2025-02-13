@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.lang.Nullable;
 
 @Getter
 @Setter
@@ -30,7 +31,7 @@ public class RatingEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    private UserEntity author;
+    @Nullable private UserEntity author;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
